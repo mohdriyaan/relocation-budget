@@ -13,35 +13,65 @@ const Calculator = () => {
     savings: ""
   })
 
-  const [errors,setErrors] = useState({
+  const [errors, setErrors] = useState({
     savings: "",
+    currencyPair: ""
   })
+
+  function checkSavingsError(value) {
+    if (value === "") {
+      setErrors((prev) => ({
+        ...prev,
+        savings: "Savings should not be empty"
+      }))
+      setShowSummary(false)
+      return false;
+    } else if (value <= 0) {
+      setErrors((prev) => ({
+        ...prev,
+        savings: "Savings should be greater than 0"
+      }))
+      setShowSummary(false)
+      return false;
+    } else {
+      setErrors((prev) => ({
+        ...prev,
+        savings: ""
+      }))
+      return true
+    }
+  }
+
+  function checkCurrencyPairError(originCurrency, destinationCurrency) {
+    if (originCurrency === destinationCurrency) {
+      setErrors((prev) => ({
+        ...prev,
+        currencyPair: "Same currency selected — no conversion required"
+      }))
+      setShowSummary(false)
+      return false;
+    } else {
+      setErrors((prev) => ({
+        ...prev,
+        currencyPair: ""
+      }))
+      return true
+    }
+  }
 
   function changeHandler(event) {
     const { name, value } = event.target
 
-    
-    
-    // Savings error
-    if(name==="savings"){
-      if(value===""){
-      setErrors((prev)=>({
-        ...prev,
-        savings : "Savings should not be empty"
-      }))
-      setShowSummary(false)
-      }else if(value<0){
-        setErrors((prev)=>({
-        ...prev,
-        savings : "Savings should be greater than 0"
-      }))
-      setShowSummary(false)
-      }else{
-        setErrors((prev)=>({
-          ...prev,
-          savings : ""
-        }))
-      }
+    if (name === "savings") {
+      checkSavingsError(value)
+    }
+
+    if (name === "originCurrency") {
+      checkCurrencyPairError(value, formData.destinationCurrency)
+    }
+
+    if (name === "destinationCurrency") {
+      checkCurrencyPairError(formData.originCurrency, value)
     }
 
     setFormData((prev) => ({
@@ -50,26 +80,13 @@ const Calculator = () => {
     }))
   }
 
-
   function handleSubmit(event) {
     event.preventDefault()
 
-    // savings error
-    if(formData.savings===""){
-      setErrors((prev)=>({
-        ...prev,
-        savings : "Savings should not be empty"
-      }))
-      setShowSummary(false)
-      return;
-    }else if(formData.savings < 0){
-      setErrors((prev)=>({
-        ...prev,
-        savings : "Savings should be greater than 0"
-      }))
-      setShowSummary(false)
-      return;
-    }else{
+    const isSavingsValid = checkSavingsError(formData.savings)
+    const isPairValid = checkCurrencyPairError(formData.originCurrency, formData.destinationCurrency)
+
+    if (isSavingsValid && isPairValid) {
       setShowSummary(true)
     }
   }
@@ -99,31 +116,35 @@ const Calculator = () => {
               />
             </div>
 
-            {
-               formData.originCurrency!==formData.destinationCurrency ?
-                <>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">
-                      Total Savings
-                    </label>
-                    <SavingsInput
-                      name="savings"
-                      onChange={changeHandler}
-                      placeholder="1500000.00"
-                      value={formData.savings}
-                      error={errors.savings}
-                    />
-                  </div>
+            {/* Currency Pair Warning Banner */}
+            {errors.currencyPair && (
+              <div 
+                role="alert" 
+                className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-sm flex items-center gap-2 font-medium"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                <span>{errors.currencyPair}</span>
+              </div>
+            )}
 
-                  <button
-                    type="submit"
-                    className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900 mt-4"
-                  >
-                    Calculate
-                  </button>
-                </> :
-                <p>Same Coversion Not Applied</p>
-            }
+            {/* Savings Input with Integrated Label & Error Message */}
+            <SavingsInput
+              label="Total Savings"
+              name="savings"
+              onChange={changeHandler}
+              placeholder="1500000.00"
+              value={formData.savings}
+              error={errors.savings}
+            />
+
+            <button
+              type="submit"
+              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900 mt-4"
+            >
+              Calculate
+            </button>
 
             {showSummary ? (
               <div className="mt-8 pt-6 border-t border-slate-800">
@@ -141,4 +162,5 @@ const Calculator = () => {
     </div>
   )
 }
+
 export default Calculator
