@@ -7,7 +7,7 @@ const SavingsInput = ({name, onChange, placeholder, value,error}) => {
         name={name} 
         type="number" 
         // min="0.01"
-        // step="0.01"
+        step="0.01"
         placeholder={placeholder} 
         onChange={onChange} 
         value={value}
