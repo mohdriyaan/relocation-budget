@@ -19,7 +19,7 @@ const CalculatorSummary = ({originCurrency, destinationCurrency, savings}) => {
         
         <div className="flex justify-between items-center bg-slate-900 p-3 rounded-lg border border-slate-800">
           <span className="text-slate-400">Savings:</span>
-          <span className="font-mono text-white font-medium">{savings || "0"}</span>
+          <span className="font-mono text-white font-medium">{savings}</span>
         </div>
       </div>
     </div>
