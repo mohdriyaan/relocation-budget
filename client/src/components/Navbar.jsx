@@ -1,6 +1,6 @@
 // src/components/Navbar.jsx
 import { useState } from "react";
-import { Link, NavLink,Navigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,12 +21,12 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="shrink-0 font-bold text-lg text-white tracking-wide">
-            <NavLink to="/home">App</NavLink>
+            <NavLink to="/">App</NavLink>
           </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-2">
-            <NavLink to="/home" className={navLinkStyles}>
+            <NavLink to="/" className={navLinkStyles}>
               Home
             </NavLink>
             <NavLink to="/calculator" className={navLinkStyles}>
@@ -75,7 +75,7 @@ const Navbar = () => {
       {/* Mobile Menu Dropdown */}
       {isOpen && (
         <div className="md:hidden border-t border-slate-800 bg-slate-900 px-4 pt-2 pb-4 space-y-2">
-          <NavLink to="/home" className={navLinkStyles} onClick={closeMenu}>
+          <NavLink to="/" className={navLinkStyles} onClick={closeMenu}>
             Home
           </NavLink>
           <NavLink
