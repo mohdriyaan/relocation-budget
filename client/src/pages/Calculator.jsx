@@ -3,9 +3,12 @@ import CalculatorSummary from "../components/CalculatorSummary.jsx"
 import CurrencySelector from "../components/CurrencySelector.jsx"
 import SavingsInput from "../components/SavingsInput.jsx"
 import { useState } from "react"
+import calculateSavings from "../utils/calculateSavings.js"
 
 const Calculator = () => {
   const [showSummary, setShowSummary] = useState(false)
+
+  const exchangeRate = 0.019
 
   const [formData, setFormData] = useState({
     originCurrency: "INR",
@@ -17,6 +20,8 @@ const Calculator = () => {
     savings: "",
     currencyPair: ""
   })
+
+  const [result, setResult] = useState(null)
 
   function checkSavingsError(value) {
     if (value === "") {
@@ -91,6 +96,16 @@ const Calculator = () => {
     }
   }
 
+  function convertAmount(){
+    if(formData.originCurrency==="INR" && formData.destinationCurrency==="NZD"){
+      return calculateSavings(formData.savings,exchangeRate)
+    }
+    if(formData.originCurrency===formData.destinationCurrency){
+      return formData.savings
+    }
+    return "Exchange rate unavailable.Please try again."
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 py-10 px-4 sm:px-6">
       <div className="max-w-xl mx-auto">
@@ -142,6 +157,7 @@ const Calculator = () => {
             <button
               type="submit"
               className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900 mt-4"
+              onClick={()=>setResult(convertAmount())}
             >
               Calculate
             </button>
@@ -152,6 +168,7 @@ const Calculator = () => {
                   originCurrency={formData.originCurrency}
                   destinationCurrency={formData.destinationCurrency}
                   savings={formData.savings}
+                  convertedAmount={result}
                 />
               </div>
             ) : null}
