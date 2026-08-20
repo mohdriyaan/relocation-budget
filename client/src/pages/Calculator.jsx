@@ -53,14 +53,11 @@ const Calculator = () => {
         ...prev,
         currencyPair: "Same currency selected — no conversion required"
       }))
-      setShowSummary(false)
-      return false;
     } else {
       setErrors((prev) => ({
         ...prev,
         currencyPair: ""
       }))
-      return true
     }
   }
 
@@ -89,9 +86,8 @@ const Calculator = () => {
     event.preventDefault()
 
     const isSavingsValid = checkSavingsError(formData.savings)
-    const isPairValid = checkCurrencyPairError(formData.originCurrency, formData.destinationCurrency)
 
-    if (isSavingsValid && isPairValid) {
+    if (isSavingsValid) {
       setShowSummary(true)
     }
   }
@@ -105,6 +101,7 @@ const Calculator = () => {
     }
     return "Exchange rate unavailable.Please try again."
   }
+
 
   return (
     <div className="min-h-screen bg-slate-950 py-10 px-4 sm:px-6">
@@ -157,10 +154,11 @@ const Calculator = () => {
             <button
               type="submit"
               className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900 mt-4"
-              onClick={()=>setResult(convertAmount())}
+              onClick={()=>setResult(convertAmount)}
             >
               Calculate
             </button>
+
 
             {showSummary ? (
               <div className="mt-8 pt-6 border-t border-slate-800">
@@ -168,7 +166,7 @@ const Calculator = () => {
                   originCurrency={formData.originCurrency}
                   destinationCurrency={formData.destinationCurrency}
                   savings={formData.savings}
-                  convertedAmount={result}
+                  result={result}
                 />
               </div>
             ) : null}

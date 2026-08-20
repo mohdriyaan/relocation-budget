@@ -1,6 +1,6 @@
 // components/CalculatorSummary.jsx
 
-const CalculatorSummary = ({ originCurrency, destinationCurrency, savings }) => {
+const CalculatorSummary = ({ originCurrency, destinationCurrency, savings, result }) => {
   return (
     <div className="bg-slate-950 rounded-2xl p-6 border border-indigo-500/30 shadow-xl text-center space-y-4">
       <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-400">
@@ -19,7 +19,7 @@ const CalculatorSummary = ({ originCurrency, destinationCurrency, savings }) => 
 
       <div className="bg-slate-900/80 rounded-xl p-4 border border-slate-800">
         <p className="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono tracking-tight">
-          ≈ {destinationCurrency}${savings}
+          ≈ {destinationCurrency} ${result}
         </p>
       </div>
     </div>
