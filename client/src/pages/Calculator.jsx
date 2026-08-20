@@ -100,7 +100,7 @@ const Calculator = () => {
     }
 
     if (formData.originCurrency === "INR" && formData.destinationCurrency === "NZD") {
-      return calculateSavings(formData.savings, exchangeRate)
+      return calculateSavings(amount, exchangeRate)
     }
 
     return null
@@ -117,13 +117,13 @@ const Calculator = () => {
 
     const convertedAmount = convertAmount()
 
-    if(convertAmount===null){
+    if(convertedAmount===null){
       setResult(null)
       setShowSummary(false)
       return;
     }
 
-    setResult(convertAmount)
+    setResult(convertedAmount)
     setShowSummary(true)
   }
 

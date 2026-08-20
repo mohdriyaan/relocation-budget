@@ -19,7 +19,7 @@ const CalculatorSummary = ({ originCurrency, destinationCurrency, savings, resul
 
       <div className="bg-slate-900/80 rounded-xl p-4 border border-slate-800">
         <p className="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono tracking-tight">
-          ≈ {destinationCurrency} ${result}
+          ≈ {destinationCurrency} {result}
         </p>
       </div>
     </div>
