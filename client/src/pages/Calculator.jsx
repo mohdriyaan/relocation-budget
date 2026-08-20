@@ -29,22 +29,29 @@ const Calculator = () => {
         ...prev,
         savings: "Savings should not be empty"
       }))
+
       setShowSummary(false)
+      setResult(null)
+
       return false;
-    } else if (value <= 0) {
+    }
+
+    if (value <= 0) {
       setErrors((prev) => ({
         ...prev,
         savings: "Savings should be greater than 0"
       }))
+
       setShowSummary(false)
+      setResult(null)
       return false;
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        savings: ""
-      }))
-      return true
     }
+
+    setErrors((prev) => ({
+      ...prev,
+      savings: ""
+    }))
+    return true
   }
 
   function checkCurrencyPairError(originCurrency, destinationCurrency) {
@@ -53,12 +60,14 @@ const Calculator = () => {
         ...prev,
         currencyPair: "Same currency selected — no conversion required"
       }))
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        currencyPair: ""
-      }))
+      return false
     }
+
+    setErrors((prev) => ({
+      ...prev,
+      currencyPair: ""
+    }))
+    return true
   }
 
   function changeHandler(event) {
@@ -82,24 +91,40 @@ const Calculator = () => {
     }))
   }
 
+
+  function convertAmount() {
+    const amount = Number(formData.savings)
+
+    if (formData.originCurrency === formData.destinationCurrency) {
+      return amount
+    }
+
+    if (formData.originCurrency === "INR" && formData.destinationCurrency === "NZD") {
+      return calculateSavings(formData.savings, exchangeRate)
+    }
+
+    return null
+  }
+
   function handleSubmit(event) {
     event.preventDefault()
 
     const isSavingsValid = checkSavingsError(formData.savings)
 
-    if (isSavingsValid) {
-      setShowSummary(true)
+    if (!isSavingsValid) {
+      return;
     }
-  }
 
-  function convertAmount(){
-    if(formData.originCurrency==="INR" && formData.destinationCurrency==="NZD"){
-      return calculateSavings(formData.savings,exchangeRate)
+    const convertedAmount = convertAmount()
+
+    if(convertAmount===null){
+      setResult(null)
+      setShowSummary(false)
+      return;
     }
-    if(formData.originCurrency===formData.destinationCurrency){
-      return formData.savings
-    }
-    return "Exchange rate unavailable.Please try again."
+
+    setResult(convertAmount)
+    setShowSummary(true)
   }
 
 
@@ -130,8 +155,8 @@ const Calculator = () => {
 
             {/* Currency Pair Warning Banner */}
             {errors.currencyPair && (
-              <div 
-                role="alert" 
+              <div
+                role="alert"
                 className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-sm flex items-center gap-2 font-medium"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
@@ -154,13 +179,12 @@ const Calculator = () => {
             <button
               type="submit"
               className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900 mt-4"
-              onClick={()=>setResult(convertAmount)}
             >
               Calculate
             </button>
 
 
-            {showSummary ? (
+            {showSummary && result!==null && (
               <div className="mt-8 pt-6 border-t border-slate-800">
                 <CalculatorSummary
                   originCurrency={formData.originCurrency}
@@ -169,7 +193,7 @@ const Calculator = () => {
                   result={result}
                 />
               </div>
-            ) : null}
+            ) }
 
           </form>
         </div>
