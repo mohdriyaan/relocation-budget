@@ -23,6 +23,8 @@ const Calculator = () => {
 
   const [result, setResult] = useState(null)
 
+  const [expenses, setExpenses] = useState([])
+
   function checkSavingsError(value) {
     if (value === "") {
       setErrors((prev) => ({
@@ -104,6 +106,29 @@ const Calculator = () => {
     }
 
     return null
+  }
+
+  function addExpenses(){
+    const newExpense = {
+      id : crypto.randomUUID(),
+      category : "",
+      name : "",
+      amount : "",
+      notes
+    } 
+
+    setExpenses((prevExpenses)=>([
+      ...prevExpenses,
+      newExpense
+    ]))
+  }
+
+  function deleteExpense(idToDelete){
+    setExpenses((prevExpenses)=>(
+      prevExpenses.filter(
+        (expense) => expense.id !== idToDelete
+      )
+    ))
   }
 
   function handleSubmit(event) {
