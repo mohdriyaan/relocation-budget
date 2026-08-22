@@ -114,7 +114,7 @@ const Calculator = () => {
       category : "",
       name : "",
       amount : "",
-      notes
+      notes : ""
     } 
 
     setExpenses((prevExpenses)=>([
