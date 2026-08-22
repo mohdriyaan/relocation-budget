@@ -46,10 +46,10 @@ const ExpenseForm = ({ addExpense }) => {
       return false
     }
     
-    if(name.includes(" ")){
+    if(name.startsWith(" ")){
       setErrors((prevErrors) => ({
         ...prevErrors,
-        name: "Invalid name"
+        name: "Meaningful text is required"
       }))
       return false
     }
@@ -106,9 +106,14 @@ const ExpenseForm = ({ addExpense }) => {
 
   function submitHandler(event) {
     event.preventDefault()
-    const isValid = checkNameError(formData.name) && checkAmountError(formData.amount) && checkCategoryError(formData.category)
 
-    if(!isValid){
+    if(!formData.name){
+      if(!formData.amount){
+        if(!formData.category){
+          return;
+        }
+        return;
+      }
       return;
     }
     
