@@ -4,6 +4,8 @@ import CurrencySelector from "../components/CurrencySelector.jsx"
 import SavingsInput from "../components/SavingsInput.jsx"
 import { useState } from "react"
 import calculateSavings from "../utils/calculateSavings.js"
+import ExpenseForm from "../components/ExpenseForm.jsx"
+import ExpenseList from "../components/ExpenseList.jsx"
 
 const Calculator = () => {
   const [showSummary, setShowSummary] = useState(false)
@@ -93,7 +95,6 @@ const Calculator = () => {
     }))
   }
 
-
   function convertAmount() {
     const amount = Number(formData.savings)
 
@@ -108,23 +109,20 @@ const Calculator = () => {
     return null
   }
 
-  function addExpenses(){
+  function addExpense(expenseData) {
     const newExpense = {
-      id : crypto.randomUUID(),
-      category : "",
-      name : "",
-      amount : "",
-      notes : ""
-    } 
+      id: crypto.randomUUID(),
+      ...expenseData
+    }
 
-    setExpenses((prevExpenses)=>([
+    setExpenses((prevExpenses) => [
       ...prevExpenses,
       newExpense
-    ]))
+    ])
   }
 
-  function deleteExpense(idToDelete){
-    setExpenses((prevExpenses)=>(
+  function deleteExpense(idToDelete) {
+    setExpenses((prevExpenses) => (
       prevExpenses.filter(
         (expense) => expense.id !== idToDelete
       )
@@ -142,7 +140,7 @@ const Calculator = () => {
 
     const convertedAmount = convertAmount()
 
-    if(convertedAmount===null){
+    if (convertedAmount === null) {
       setResult(null)
       setShowSummary(false)
       return;
@@ -152,65 +150,79 @@ const Calculator = () => {
     setShowSummary(true)
   }
 
-
   return (
-    <div className="min-h-screen bg-slate-950 py-10 px-4 sm:px-6">
-      <div className="max-w-xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-8 text-center tracking-tight">
-          Exchange Calculator
-        </h1>
+    <div className="min-h-screen bg-slate-950 py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto space-y-8">
+        
+        {/* Header Section */}
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Exchange & Budget Calculator
+          </h1>
+          <p className="text-slate-400 text-sm sm:text-base max-w-lg mx-auto">
+            Convert currency savings and track upcoming trip or relocation expenses in one place.
+          </p>
+        </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-6 sm:p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        {/* 2-Column Responsive Dashboard Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Left Column: Currency Conversion Form */}
+          <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
+            <h2 className="text-xl font-bold text-white tracking-wide border-b border-slate-800 pb-4">
+              1. Currency Conversion
+            </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <CurrencySelector
-                name="originCurrency"
-                label="Origin Currency"
-                value={formData.originCurrency}
-                onChange={changeHandler}
-              />
-              <CurrencySelector
-                name="destinationCurrency"
-                label="Destination Currency"
-                value={formData.destinationCurrency}
-                onChange={changeHandler}
-              />
-            </div>
-
-            {/* Currency Pair Warning Banner */}
-            {errors.currencyPair && (
-              <div
-                role="alert"
-                className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-sm flex items-center gap-2 font-medium"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-                <span>{errors.currencyPair}</span>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <CurrencySelector
+                  name="originCurrency"
+                  label="Origin Currency"
+                  value={formData.originCurrency}
+                  onChange={changeHandler}
+                />
+                <CurrencySelector
+                  name="destinationCurrency"
+                  label="Destination Currency"
+                  value={formData.destinationCurrency}
+                  onChange={changeHandler}
+                />
               </div>
-            )}
 
-            {/* Savings Input with Integrated Label & Error Message */}
-            <SavingsInput
-              label="Total Savings"
-              name="savings"
-              onChange={changeHandler}
-              placeholder="1500000.00"
-              value={formData.savings}
-              error={errors.savings}
-            />
+              {/* Currency Pair Warning Banner */}
+              {errors.currencyPair && (
+                <div
+                  role="alert"
+                  className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-sm flex items-center gap-2 font-medium"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  <span>{errors.currencyPair}</span>
+                </div>
+              )}
 
-            <button
-              type="submit"
-              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900 mt-4"
-            >
-              Calculate
-            </button>
+              {/* Savings Input */}
+              <SavingsInput
+                label="Total Savings"
+                name="savings"
+                onChange={changeHandler}
+                placeholder="1500000.00"
+                value={formData.savings}
+                error={errors.savings}
+              />
 
+              <button
+                type="submit"
+                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+              >
+                Calculate Conversion
+              </button>
+            </form>
 
-            {showSummary && result!==null && (
-              <div className="mt-8 pt-6 border-t border-slate-800">
+            {/* Conversion Summary Output */}
+            {showSummary && result !== null && (
+              <div className="pt-6 border-t border-slate-800">
                 <CalculatorSummary
                   originCurrency={formData.originCurrency}
                   destinationCurrency={formData.destinationCurrency}
@@ -218,9 +230,35 @@ const Calculator = () => {
                   result={result}
                 />
               </div>
-            ) }
+            )}
+          </div>
 
-          </form>
+          {/* Right Column: Expense Management */}
+          <div className="lg:col-span-7 space-y-6">
+            
+            {/* Add Expense Card */}
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
+              <h2 className="text-xl font-bold text-white tracking-wide border-b border-slate-800 pb-4">
+                2. Add Expense
+              </h2>
+              <ExpenseForm addExpense={addExpense} />
+            </div>
+
+            {/* Expense List Card */}
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+                <h2 className="text-xl font-bold text-white tracking-wide">
+                  Planned Expenses
+                </h2>
+                <span className="text-xs font-mono px-3 py-1 bg-slate-800 text-slate-300 rounded-full border border-slate-700">
+                  Total Items: {expenses.length}
+                </span>
+              </div>
+              <ExpenseList expenses={expenses} onDeleteExpense={deleteExpense} />
+            </div>
+
+          </div>
+
         </div>
       </div>
     </div>
