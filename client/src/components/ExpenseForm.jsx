@@ -46,14 +46,6 @@ const ExpenseForm = ({ addExpense }) => {
       return false
     }
     
-    if(name.startsWith(" ")){
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        name: "Name cannot start with a space"
-      }))
-      return false
-    }
-
     setErrors((prevErrors) => ({
       ...prevErrors,
       name: ""
@@ -108,8 +100,8 @@ const ExpenseForm = ({ addExpense }) => {
     event.preventDefault()
 
     const isNameValid = checkNameError(formData.name)
-    const isAmountValid = checkNameError(formData.amount)
-    const isCategoryValid = checkNameError(formData.category)
+    const isAmountValid = checkAmountError(formData.amount)
+    const isCategoryValid = checkCategoryError(formData.category)
 
     if(!isNameValid || !isAmountValid || !isCategoryValid){
       return;
@@ -119,7 +111,7 @@ const ExpenseForm = ({ addExpense }) => {
       ...formData,
       name : formData.name.trim()
     })
-    
+
     setFormData({
       name: "",
       category: "Other",
