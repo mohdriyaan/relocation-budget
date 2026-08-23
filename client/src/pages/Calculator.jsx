@@ -6,6 +6,8 @@ import { useState } from "react"
 import calculateSavings from "../utils/calculateSavings.js"
 import ExpenseForm from "../components/ExpenseForm.jsx"
 import ExpenseList from "../components/ExpenseList.jsx"
+import calculateTotalExpenses from "../utils/calculateTotalExpenses.js"
+import calculateRemainingBudget from "../utils/calculateRemaingBudget.js"
 
 const Calculator = () => {
   const [showSummary, setShowSummary] = useState(false)
@@ -150,6 +152,9 @@ const Calculator = () => {
     setShowSummary(true)
   }
 
+  const totalExpenses = calculateTotalExpenses(expenses)
+  const remainingBudget = calculateRemainingBudget(formData.savings,totalExpenses)
+
   return (
     <div className="min-h-screen bg-slate-950 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-8">
@@ -228,6 +233,8 @@ const Calculator = () => {
                   destinationCurrency={formData.destinationCurrency}
                   savings={formData.savings}
                   result={result}
+                  totalExpenses={totalExpenses}
+                  remainingBudget={remainingBudget}
                 />
               </div>
             )}
