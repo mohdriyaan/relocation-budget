@@ -5,8 +5,9 @@ const CalculatorSummary = ({ originCurrency, destinationCurrency, savings, resul
 
   return (
     <div
-      className={`bg-slate-950 rounded-2xl p-6 border shadow-xl text-center space-y-6 transition-colors ${isOverBudget ? "border-rose-500/40" : "border-indigo-500/30"
-        }`}
+      className={`bg-slate-950 rounded-2xl p-6 border shadow-xl text-center space-y-6 transition-colors ${
+        isOverBudget ? "border-rose-500/40" : "border-indigo-500/30"
+      }`}
     >
       {/* 1. Conversion Result Section */}
       <div className="space-y-3">
@@ -17,7 +18,7 @@ const CalculatorSummary = ({ originCurrency, destinationCurrency, savings, resul
         <div>
           <span className="text-xs text-slate-400 block mb-1">Savings</span>
           <p className="text-xl sm:text-2xl font-bold text-slate-100 font-mono tracking-tight">
-            ₹{savings} {originCurrency}
+            {savings} {originCurrency}
           </p>
         </div>
 
@@ -64,27 +65,29 @@ const CalculatorSummary = ({ originCurrency, destinationCurrency, savings, resul
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-          {/* Total Expenses Card */}
+          {/* Total Expenses Card (using originCurrency) */}
           <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex flex-col items-center justify-center">
             <span className="text-xs text-slate-400 mb-1">Total Expenses</span>
             <span className="font-mono text-slate-100 font-bold text-base">
-              {destinationCurrency} {totalExpenses}
+              {originCurrency} {totalExpenses}
             </span>
           </div>
 
-          {/* Remaining Budget Card */}
+          {/* Remaining Budget Card (using originCurrency) */}
           <div
-            className={`p-3.5 rounded-xl border flex flex-col items-center justify-center ${isOverBudget
+            className={`p-3.5 rounded-xl border flex flex-col items-center justify-center ${
+              isOverBudget
                 ? "bg-rose-500/10 border-rose-500/30"
                 : "bg-slate-900 border-slate-800"
-              }`}
+            }`}
           >
             <span className="text-xs text-slate-400 mb-1">Remaining Budget</span>
             <span
-              className={`font-mono font-bold text-base ${isOverBudget ? "text-rose-400" : "text-emerald-400"
-                }`}
+              className={`font-mono font-bold text-base ${
+                isOverBudget ? "text-rose-400" : "text-emerald-400"
+              }`}
             >
-              {destinationCurrency} {remainingBudget}
+              {originCurrency} {remainingBudget}
             </span>
           </div>
         </div>
