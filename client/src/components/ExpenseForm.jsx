@@ -38,7 +38,7 @@ const ExpenseForm = ({ addExpense }) => {
   }
 
   function checkNameError(name){
-    if(name === "" && name.length === 0){
+    if(name.trim() === ""){
       setErrors((prevErrors) => ({
         ...prevErrors,
         name: "Name is required"
@@ -49,7 +49,7 @@ const ExpenseForm = ({ addExpense }) => {
     if(name.startsWith(" ")){
       setErrors((prevErrors) => ({
         ...prevErrors,
-        name: "Meaningful text is required"
+        name: "Name cannot start with a space"
       }))
       return false
     }
@@ -107,17 +107,19 @@ const ExpenseForm = ({ addExpense }) => {
   function submitHandler(event) {
     event.preventDefault()
 
-    if(!formData.name){
-      if(!formData.amount){
-        if(!formData.category){
-          return;
-        }
-        return;
-      }
+    const isNameValid = checkNameError(formData.name)
+    const isAmountValid = checkNameError(formData.amount)
+    const isCategoryValid = checkNameError(formData.category)
+
+    if(!isNameValid || !isAmountValid || !isCategoryValid){
       return;
     }
     
-    addExpense(formData)
+    addExpense({
+      ...formData,
+      name : formData.name.trim()
+    })
+    
     setFormData({
       name: "",
       category: "Other",
