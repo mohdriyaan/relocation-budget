@@ -1,15 +1,24 @@
 // components/ExpenseItem.jsx
 
 const ExpenseItem = ({ expense, onDeleteExpense }) => {
-  const { id, category, name, amount, notes } = expense;
+  const { id, category, name, amount, notes, frequency } = expense;
 
   return (
     <div className="flex items-center justify-between p-4 bg-slate-900 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
-      {/* Category, Name, and Notes */}
+      {/* Category, Frequency, Name, and Notes */}
       <div className="flex-1 min-w-0 mr-4">
-        <div className="flex items-center gap-2 mb-1">
+        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
           <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
             {category || "General"}
+          </span>
+          <span
+            className={`text-xs font-medium px-2.5 py-0.5 rounded-full border ${
+              frequency === "monthly"
+                ? "bg-purple-500/10 text-purple-400 border-purple-500/20"
+                : "bg-slate-800 text-slate-400 border-slate-700"
+            }`}
+          >
+            {frequency === "monthly" ? "Monthly" : "One-time"}
           </span>
         </div>
         <h3 className="text-base font-semibold text-white truncate">{name}</h3>

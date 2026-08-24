@@ -7,7 +7,8 @@ const ExpenseForm = ({ addExpense }) => {
     name: "",
     category: "Other",
     amount: "",
-    notes: ""
+    notes: "",
+    frequency: "one-time"
   })
 
   const [errors, setErrors] = useState({
@@ -116,7 +117,8 @@ const ExpenseForm = ({ addExpense }) => {
       name: "",
       category: "Other",
       amount: "",
-      notes: ""
+      notes: "",
+      frequency: "one-time"
     })
   }
 
@@ -194,42 +196,59 @@ const ExpenseForm = ({ addExpense }) => {
             </span>
           )}
         </div>
-      </div>
 
-      {/* Amount Input */}
-      <div className="flex flex-col">
-        <label htmlFor="amount" className="block text-sm font-medium text-slate-300 mb-2">
-          Amount
-        </label>
-        <input
-          type="number"
-          name="amount"
-          id="amount"
-          value={formData.amount}
-          onChange={changeHandler}
-          placeholder="0.00"
-          min="0"
-          step="0.01"
-          aria-invalid={Boolean(errors.amount)}
-          aria-describedby={errors.amount ? "amount-error" : undefined}
-          className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 placeholder-slate-600 transition-colors focus:outline-none focus:ring-2 ${
-            errors.amount
-              ? "border border-rose-500 focus:border-rose-500 focus:ring-rose-500/40"
-              : "border border-slate-700 focus:border-indigo-500 focus:ring-indigo-500"
-          }`}
-        />
-        {errors.amount && (
-          <span
-            id="amount-error"
-            role="alert"
-            className="mt-2 text-xs sm:text-sm text-rose-400 flex items-center gap-1.5 font-medium"
+        {/* Amount Input */}
+        <div className="flex flex-col">
+          <label htmlFor="amount" className="block text-sm font-medium text-slate-300 mb-2">
+            Amount
+          </label>
+          <input
+            type="number"
+            name="amount"
+            id="amount"
+            value={formData.amount}
+            onChange={changeHandler}
+            placeholder="0.00"
+            min="0"
+            step="0.01"
+            aria-invalid={Boolean(errors.amount)}
+            aria-describedby={errors.amount ? "amount-error" : undefined}
+            className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 placeholder-slate-600 transition-colors focus:outline-none focus:ring-2 ${
+              errors.amount
+                ? "border border-rose-500 focus:border-rose-500 focus:ring-rose-500/40"
+                : "border border-slate-700 focus:border-indigo-500 focus:ring-indigo-500"
+            }`}
+          />
+          {errors.amount && (
+            <span
+              id="amount-error"
+              role="alert"
+              className="mt-2 text-xs sm:text-sm text-rose-400 flex items-center gap-1.5 font-medium"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              <span>{errors.amount}</span>
+            </span>
+          )}
+        </div>
+
+        {/* Frequency Selector */}
+        <div className="flex flex-col">
+          <label htmlFor="frequency" className="block text-sm font-medium text-slate-300 mb-2">
+            Frequency
+          </label>
+          <select
+            name="frequency"
+            id="frequency"
+            value={formData.frequency}
+            onChange={changeHandler}
+            className="w-full bg-slate-950 border border-slate-700 text-white text-sm rounded-lg p-3 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-            </svg>
-            <span>{errors.amount}</span>
-          </span>
-        )}
+            <option value="one-time">One-time</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
       </div>
 
       {/* Notes Textarea */}
