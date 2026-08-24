@@ -1,4 +1,5 @@
 import express from "express"
+import healthRoute from "./routes/healthRoutes.js"
 
 const app = express()
 const PORT = 5000
@@ -9,12 +10,7 @@ app.get("/",(req,res)=>{
   res.send("Relocation Budget API")
 })
 
-app.get("/api/health",(req,res)=>{
-  res.json({
-    status: "ok",
-    message: "Relocation Budget API is running"
-  })
-})
+app.use("/api/health",healthRoute)
 
 app.listen(PORT,()=>{
   console.log(`Server started running on ${PORT}`)
