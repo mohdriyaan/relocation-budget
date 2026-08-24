@@ -1,6 +1,15 @@
 // components/CalculatorSummary.jsx
 
-const CalculatorSummary = ({ originCurrency, destinationCurrency, savings, result, remainingBudget, totalExpenses }) => {
+const CalculatorSummary = ({
+  originCurrency,
+  destinationCurrency,
+  savings,
+  result,
+  remainingBudget,
+  totalExpenses,
+  oneTimeExpenses,
+  monthlyExpenses
+}) => {
   const isOverBudget = remainingBudget < 0
 
   return (
@@ -64,8 +73,9 @@ const CalculatorSummary = ({ originCurrency, destinationCurrency, savings, resul
           </div>
         )}
 
+        {/* 2x2 Grid for Budget Breakdown */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-          {/* Total Expenses Card (using originCurrency) */}
+          {/* Total Expenses Card */}
           <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex flex-col items-center justify-center">
             <span className="text-xs text-slate-400 mb-1">Total Expenses</span>
             <span className="font-mono text-slate-100 font-bold text-base">
@@ -73,7 +83,23 @@ const CalculatorSummary = ({ originCurrency, destinationCurrency, savings, resul
             </span>
           </div>
 
-          {/* Remaining Budget Card (using originCurrency) */}
+          {/* One-Time Costs Card */}
+          <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex flex-col items-center justify-center">
+            <span className="text-xs text-slate-400 mb-1">One-Time Costs</span>
+            <span className="font-mono text-slate-100 font-bold text-base">
+              {originCurrency} {oneTimeExpenses}
+            </span>
+          </div>
+
+          {/* Monthly Living Costs Card */}
+          <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex flex-col items-center justify-center">
+            <span className="text-xs text-slate-400 mb-1">Monthly Living Costs</span>
+            <span className="font-mono text-slate-100 font-bold text-base">
+              {originCurrency} {monthlyExpenses}
+            </span>
+          </div>
+
+          {/* Remaining Budget Card */}
           <div
             className={`p-3.5 rounded-xl border flex flex-col items-center justify-center ${
               isOverBudget

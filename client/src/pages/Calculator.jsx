@@ -7,6 +7,8 @@ import calculateSavings from "../utils/calculateSavings.js"
 import ExpenseForm from "../components/ExpenseForm.jsx"
 import ExpenseList from "../components/ExpenseList.jsx"
 import calculateTotalExpenses from "../utils/calculateTotalExpenses.js"
+import calculateMonthlyExpenses from "../utils/calculateMonthlyExpenses.js"
+import calculateOneTimeExpenses from "../utils/calculateOneTimeExpenses.js"
 import calculateRemainingBudget from "../utils/calculateRemainingBudget.js"
 
 const Calculator = () => {
@@ -153,6 +155,8 @@ const Calculator = () => {
   }
 
   const totalExpenses = calculateTotalExpenses(expenses)
+  const oneTimeExpenses = calculateOneTimeExpenses(expenses)
+  const monthlyExpenses = calculateMonthlyExpenses(expenses)
   const remainingBudget = calculateRemainingBudget(formData.savings,totalExpenses)
 
   return (
@@ -235,6 +239,8 @@ const Calculator = () => {
                   result={result}
                   totalExpenses={totalExpenses}
                   remainingBudget={remainingBudget}
+                  oneTimeExpenses={oneTimeExpenses}
+                  monthlyExpenses={monthlyExpenses}
                 />
               </div>
             )}
