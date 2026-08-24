@@ -8,15 +8,39 @@ const CalculatorSummary = ({
   remainingBudget,
   totalExpenses,
   oneTimeExpenses,
-  monthlyExpenses
+  monthlyExpenses,
+  runway
 }) => {
   const isOverBudget = remainingBudget < 0
 
+  // Format runway text & visual state dynamically
+  const getRunwayDisplay = () => {
+    if (typeof runway === "number") {
+      return {
+        text: `${runway.toFixed(1)} months`,
+        style: "text-indigo-400 bg-indigo-500/10 border-indigo-500/30"
+      }
+    }
+
+    if (runway === "Over Budget" || isOverBudget) {
+      return {
+        text: "Over Budget",
+        style: "text-rose-400 bg-rose-500/10 border-rose-500/30"
+      }
+    }
+
+    return {
+      text: runway || "N/A",
+      style: "text-slate-400 bg-slate-900 border-slate-800"
+    }
+  }
+
+  const runwayDisplay = getRunwayDisplay()
+
   return (
     <div
-      className={`bg-slate-950 rounded-2xl p-6 border shadow-xl text-center space-y-6 transition-colors ${
-        isOverBudget ? "border-rose-500/40" : "border-indigo-500/30"
-      }`}
+      className={`bg-slate-950 rounded-2xl p-6 border shadow-xl text-center space-y-6 transition-colors ${isOverBudget ? "border-rose-500/40" : "border-indigo-500/30"
+        }`}
     >
       {/* 1. Conversion Result Section */}
       <div className="space-y-3">
@@ -73,7 +97,7 @@ const CalculatorSummary = ({
           </div>
         )}
 
-        {/* 2x2 Grid for Budget Breakdown */}
+        {/* 2x2 Grid for Core Budget Metrics */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
           {/* Total Expenses Card */}
           <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex flex-col items-center justify-center">
@@ -101,21 +125,31 @@ const CalculatorSummary = ({
 
           {/* Remaining Budget Card */}
           <div
-            className={`p-3.5 rounded-xl border flex flex-col items-center justify-center ${
-              isOverBudget
+            className={`p-3.5 rounded-xl border flex flex-col items-center justify-center ${isOverBudget
                 ? "bg-rose-500/10 border-rose-500/30"
                 : "bg-slate-900 border-slate-800"
-            }`}
+              }`}
           >
             <span className="text-xs text-slate-400 mb-1">Remaining Budget</span>
             <span
-              className={`font-mono font-bold text-base ${
-                isOverBudget ? "text-rose-400" : "text-emerald-400"
-              }`}
+              className={`font-mono font-bold text-base ${isOverBudget ? "text-rose-400" : "text-emerald-400"
+                }`}
             >
               {originCurrency} {remainingBudget}
             </span>
           </div>
+        </div>
+
+        {/* Highlighted Estimated Runway Card */}
+        <div
+          className={`p-4 rounded-xl border flex flex-col items-center justify-center transition-colors ${runwayDisplay.style}`}
+        >
+          <span className="text-xs text-slate-400 mb-1 font-medium uppercase tracking-wider">
+            Estimated Runway
+          </span>
+          <span className="font-mono text-lg sm:text-xl font-bold">
+            {runwayDisplay.text}
+          </span>
         </div>
       </div>
     </div>

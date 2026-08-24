@@ -10,6 +10,7 @@ import calculateTotalExpenses from "../utils/calculateTotalExpenses.js"
 import calculateMonthlyExpenses from "../utils/calculateMonthlyExpenses.js"
 import calculateOneTimeExpenses from "../utils/calculateOneTimeExpenses.js"
 import calculateRemainingBudget from "../utils/calculateRemainingBudget.js"
+import calculateRunway from "../utils/calculateRunway.js"
 
 const Calculator = () => {
   const [showSummary, setShowSummary] = useState(false)
@@ -158,6 +159,7 @@ const Calculator = () => {
   const oneTimeExpenses = calculateOneTimeExpenses(expenses)
   const monthlyExpenses = calculateMonthlyExpenses(expenses)
   const remainingBudget = calculateRemainingBudget(formData.savings,totalExpenses)
+  const runway = calculateRunway(remainingBudget, monthlyExpenses)
 
   return (
     <div className="min-h-screen bg-slate-950 py-10 px-4 sm:px-6 lg:px-8">
@@ -241,6 +243,7 @@ const Calculator = () => {
                   remainingBudget={remainingBudget}
                   oneTimeExpenses={oneTimeExpenses}
                   monthlyExpenses={monthlyExpenses}
+                  runway={runway}
                 />
               </div>
             )}
