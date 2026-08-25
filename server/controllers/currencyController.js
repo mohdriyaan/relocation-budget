@@ -1,15 +1,7 @@
-function validateCurrency(currencyCode){
-  currencyCode = currencyCode.toUpperCase()
-  if(/^[A-Z]{3}$/.test(currencyCode)){
-    return currencyCode
-  }
-  return false
-}
-
+import validateCurrency from "../utils/validateCurrency.js"
 
 const currencyController = (req,res) => {
-  let currency = req.params.code
-  currency = validateCurrency(currency)
+  const currency = validateCurrency(req.params.code)
 
   if(currency){
     return res.status(200).json({
