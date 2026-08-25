@@ -1,10 +1,13 @@
+import getExchangeRate from "../services/exchangeRateService.js"
 import validateCurrency from "../utils/validateCurrency.js"
 
-const exchangeRateRouteController = (req,res) => {
+const exchangeRateController = async(req,res) => {
   const from = validateCurrency(req.params.from)
   const to = validateCurrency(req.params.to)
 
   if(from && to){
+    const rate = await getExchangeRate(from,to)
+    console.log(rate)
     return res.status(200).json({
       from,
       to
@@ -17,4 +20,4 @@ const exchangeRateRouteController = (req,res) => {
 
 }
 
-export default exchangeRateRouteController
+export default exchangeRateController

@@ -1,8 +1,8 @@
 import express from "express"
-import exchangeRateRouteController from "../controllers/exchangeRateController.js"
+import exchangeRateController from "../controllers/exchangeRateController.js"
 
 const router = express.Router()
 
-router.get("/:from/:to",exchangeRateRouteController)
+router.get("/:from/:to",exchangeRateController)
 
 export default router
