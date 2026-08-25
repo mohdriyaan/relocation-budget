@@ -1,5 +1,6 @@
 import express from "express"
 import healthRoute from "./routes/healthRoutes.js"
+import currencyRoute from "./routes/currencyRoutes.js"
 
 const app = express()
 const PORT = 5000
@@ -11,6 +12,7 @@ app.get("/",(req,res)=>{
 })
 
 app.use("/api/health",healthRoute)
+app.use("/api/currency",currencyRoute)
 
 app.listen(PORT,()=>{
   console.log(`Server started running on ${PORT}`)
