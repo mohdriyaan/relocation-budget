@@ -38,6 +38,8 @@ const Calculator = () => {
 
   const [isRateLoading, setIsRateLoading] = useState(false)
 
+  const [exchangeRateError, setExchangeRateError] = useState(null)
+
   useEffect(()=>{
     fetchRate(formData.originCurrency, formData.destinationCurrency)
   },[formData.originCurrency,formData.destinationCurrency])
@@ -47,8 +49,9 @@ const Calculator = () => {
       setIsRateLoading(true)
       const result = await getExchangeRate(from,to)
       setExchangeRateData(result.rate)
+      setExchangeRateError(null)
     } catch (error) {
-      setIsRateLoading(false)
+      setExchangeRateError("Unable to retrieve exchange rate.")
     } finally {
       setIsRateLoading(false)
     }   
