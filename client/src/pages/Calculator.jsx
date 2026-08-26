@@ -32,6 +32,8 @@ const Calculator = () => {
 
   const [expenses, setExpenses] = useState([])
 
+  const [exchangeRate, setExchangeRate] = useState(null)
+
   function checkSavingsError(value) {
     if (value === "") {
       setErrors((prev) => ({
