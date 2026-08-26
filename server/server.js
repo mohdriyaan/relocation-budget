@@ -2,11 +2,13 @@ import express from "express"
 import healthRoute from "./routes/healthRoutes.js"
 import currencyRoute from "./routes/currencyRoutes.js"
 import exchangeRateRoute from "./routes/exchangeRateRoutes.js"
+import cors from "cors"
 
 const app = express()
 const PORT = 5000
 
 app.use(express.json())
+app.use(cors())
 
 app.get("/",(req,res)=>{
   res.send("Relocation Budget API")

@@ -11,6 +11,8 @@ import calculateMonthlyExpenses from "../utils/calculateMonthlyExpenses.js"
 import calculateOneTimeExpenses from "../utils/calculateOneTimeExpenses.js"
 import calculateRemainingBudget from "../utils/calculateRemainingBudget.js"
 import calculateRunway from "../utils/calculateRunway.js"
+import { useEffect } from "react"
+import getExchangeRate from "../services/exchangeRateApi.js"
 
 const Calculator = () => {
   const [showSummary, setShowSummary] = useState(false)
@@ -32,7 +34,17 @@ const Calculator = () => {
 
   const [expenses, setExpenses] = useState([])
 
-  const [exchangeRate, setExchangeRate] = useState(null)
+  const [exchangeRateData, setExchangeRateData] = useState(null)
+
+  useEffect(()=>{
+    fetchRate(formData.originCurrency, formData.destinationCurrency)
+  },[formData.originCurrency,formData.destinationCurrency])
+
+  async function fetchRate(from,to){
+    const result = await getExchangeRate(from,to)
+    const rate = await result.rate
+    setExchangeRateData(rate) 
+  }
 
   function checkSavingsError(value) {
     if (value === "") {
