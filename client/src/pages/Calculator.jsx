@@ -36,13 +36,26 @@ const Calculator = () => {
 
   const [exchangeRateData, setExchangeRateData] = useState(null)
 
+  const [loading, setLoading] = useState(false)
+
   useEffect(()=>{
     fetchRate(formData.originCurrency, formData.destinationCurrency)
   },[formData.originCurrency,formData.destinationCurrency])
 
   async function fetchRate(from,to){
-    const result = await getExchangeRate(from,to)
-    setExchangeRateData(result.rate) 
+    try {
+      setLoading(true)
+      const result = await getExchangeRate(from,to)
+      
+      if(result){
+        setExchangeRateData(result.rate)
+        setLoading(false)
+      }
+    } catch (error) {
+      setLoading(false)
+    } finally {
+      setLoading(false)
+    }   
   }
 
   function checkSavingsError(value) {
