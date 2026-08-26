@@ -42,8 +42,7 @@ const Calculator = () => {
 
   async function fetchRate(from,to){
     const result = await getExchangeRate(from,to)
-    const rate = await result.rate
-    setExchangeRateData(rate) 
+    setExchangeRateData(result.rate) 
   }
 
   function checkSavingsError(value) {
