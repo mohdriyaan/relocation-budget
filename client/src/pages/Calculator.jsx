@@ -132,11 +132,8 @@ const Calculator = () => {
       return amount
     }
 
-    if (formData.originCurrency === "INR" && formData.destinationCurrency === "NZD") {
-      return calculateSavings(amount, rate)
-    }
+    return calculateSavings(amount, rate)
 
-    return null
   }
 
   function addExpense(expenseData) {
