@@ -7,7 +7,11 @@ const exchangeRateController = async(req,res) => {
 
   if(from && to){
     const rate = await getExchangeRate(from,to)
-    console.log(rate)
+    if(!rate){
+      return res.status(404).json({
+        error : "Frankfurter unavailable"
+      })
+    }
     return res.status(200).json({
       from,
       to
