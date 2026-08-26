@@ -162,26 +162,34 @@ const Calculator = () => {
   }
 
   async function handleSubmit(event) {
-    event.preventDefault()
+    
+    try {
+      event.preventDefault()
+      const isSavingsValid = checkSavingsError(formData.savings)
+      const isPairValid = checkCurrencyPairError(formData.originCurrency, formData.destinationCurrency)
 
-    const isSavingsValid = checkSavingsError(formData.savings)
-    const isPairValid = checkCurrencyPairError(formData.originCurrency, formData.destinationCurrency)
+      if (!isSavingsValid || !isPairValid) {
+        return;
+      }
 
-    if (!isSavingsValid || !isPairValid) {
-      return;
+      const rate = await fetchRate(formData.originCurrency, formData.destinationCurrency)
+
+      const convertedAmount = convertAmount(rate)
+
+      if (convertedAmount === null) {
+        setResult(null)
+        setShowSummary(false)
+        return;
+      }
+
+      setResult(convertedAmount)
+      await fetchRate(formData.originCurrency, formData.destinationCurrency)
+      setShowSummary(true)
+      
+    } catch (error) {
+      console.log(error.message)
     }
-
-    const convertedAmount = convertAmount()
-
-    if (convertedAmount === null) {
-      setResult(null)
-      setShowSummary(false)
-      return;
-    }
-
-    setResult(convertedAmount)
-    await fetchRate(formData.originCurrency, formData.destinationCurrency)
-    setShowSummary(true)
+    
   }
 
   const totalExpenses = calculateTotalExpenses(expenses)
@@ -310,6 +318,7 @@ const Calculator = () => {
                   savings={formData.savings}
                   result={result}
                   totalExpenses={totalExpenses}
+                  rate = {exchangeRateData}
                   remainingBudget={remainingBudget}
                   oneTimeExpenses={oneTimeExpenses}
                   monthlyExpenses={monthlyExpenses}

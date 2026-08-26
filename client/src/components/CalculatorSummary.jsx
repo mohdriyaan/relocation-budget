@@ -9,7 +9,8 @@ const CalculatorSummary = ({
   totalExpenses,
   oneTimeExpenses,
   monthlyExpenses,
-  runway
+  runway,
+  rate
 }) => {
   const isOverBudget = remainingBudget < 0
 
@@ -56,7 +57,7 @@ const CalculatorSummary = ({
         </div>
 
         <div className="inline-block bg-slate-900 border border-slate-800 text-slate-400 text-xs px-3.5 py-1.5 rounded-full font-mono">
-          1 {originCurrency} = 0.019 {destinationCurrency}
+          1 {originCurrency} = {rate} {destinationCurrency}
         </div>
 
         <div className="bg-slate-900/80 rounded-xl p-4 border border-slate-800">
