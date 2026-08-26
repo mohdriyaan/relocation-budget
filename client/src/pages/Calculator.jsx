@@ -158,6 +158,12 @@ const Calculator = () => {
 
   async function handleSubmit(event) {
     event.preventDefault()
+    
+    // invalidating previous results
+    setResult(null)
+    setShowSummary(false)
+
+    
     const isSavingsValid = checkSavingsError(formData.savings)
     const isPairValid = checkCurrencyPairError(formData.originCurrency, formData.destinationCurrency)
 
@@ -168,12 +174,6 @@ const Calculator = () => {
     const rate = await fetchRate(formData.originCurrency, formData.destinationCurrency)
 
     const convertedAmount = convertAmount(rate)
-
-    if (convertedAmount === null) {
-      setResult(null)
-      setShowSummary(false)
-      return;
-    }
 
     setResult(convertedAmount)
     setShowSummary(true)
