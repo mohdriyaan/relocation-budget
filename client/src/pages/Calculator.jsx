@@ -165,6 +165,8 @@ const Calculator = () => {
       return;
     }
 
+    await fetchRate(formData.originCurrency, formData.destinationCurrency)
+
     const convertedAmount = convertAmount()
 
     if (convertedAmount === null) {
@@ -174,7 +176,6 @@ const Calculator = () => {
     }
 
     setResult(convertedAmount)
-    await fetchRate(formData.originCurrency, formData.destinationCurrency)
     setShowSummary(true)
   }
 
@@ -246,7 +247,7 @@ const Calculator = () => {
                 error={errors.savings}
               />
 
-              {/* Submit Button with Loading Spinner */}
+              {/* Submit Button with Loading Indicator */}
               <button
                 type="submit"
                 disabled={isRateLoading}
@@ -295,28 +296,20 @@ const Calculator = () => {
               </div>
             )}
 
-            {/* Loading Skeleton / Summary Card */}
-            {showSummary && (
+            {/* Direct Summary Render */}
+            {showSummary && result !== null && (
               <div className="pt-6 border-t border-slate-800">
-                {isRateLoading ? (
-                  <div className="bg-slate-950 rounded-2xl p-8 border border-slate-800 shadow-xl text-center space-y-4 animate-pulse">
-                    <div className="h-4 bg-slate-800 rounded w-1/3 mx-auto"></div>
-                    <div className="h-8 bg-slate-800 rounded w-2/3 mx-auto"></div>
-                    <div className="h-10 bg-slate-900 rounded-xl w-full"></div>
-                  </div>
-                ) : result !== null ? (
-                  <CalculatorSummary
-                    originCurrency={formData.originCurrency}
-                    destinationCurrency={formData.destinationCurrency}
-                    savings={formData.savings}
-                    result={result}
-                    totalExpenses={totalExpenses}
-                    remainingBudget={remainingBudget}
-                    oneTimeExpenses={oneTimeExpenses}
-                    monthlyExpenses={monthlyExpenses}
-                    runway={runway}
-                  />
-                ) : null}
+                <CalculatorSummary
+                  originCurrency={formData.originCurrency}
+                  destinationCurrency={formData.destinationCurrency}
+                  savings={formData.savings}
+                  result={result}
+                  totalExpenses={totalExpenses}
+                  remainingBudget={remainingBudget}
+                  oneTimeExpenses={oneTimeExpenses}
+                  monthlyExpenses={monthlyExpenses}
+                  runway={runway}
+                />
               </div>
             )}
           </div>
