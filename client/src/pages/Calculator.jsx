@@ -40,14 +40,10 @@ const Calculator = () => {
 
   const [exchangeRateError, setExchangeRateError] = useState(null)
 
-  useEffect(()=>{
-    fetchRate(formData.originCurrency, formData.destinationCurrency)
-  },[formData.originCurrency,formData.destinationCurrency])
-
-  async function fetchRate(from,to){
+  async function fetchRate(from, to) {
     try {
       setIsRateLoading(true)
-      const result = await getExchangeRate(from,to)
+      const result = await getExchangeRate(from, to)
       setExchangeRateData(result.rate)
       setExchangeRateError(null)
     } catch (error) {
@@ -159,12 +155,13 @@ const Calculator = () => {
     ))
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
 
     const isSavingsValid = checkSavingsError(formData.savings)
+    const isPairValid = checkCurrencyPairError(formData.originCurrency, formData.destinationCurrency)
 
-    if (!isSavingsValid) {
+    if (!isSavingsValid || !isPairValid) {
       return;
     }
 
@@ -177,13 +174,14 @@ const Calculator = () => {
     }
 
     setResult(convertedAmount)
+    await fetchRate(formData.originCurrency, formData.destinationCurrency)
     setShowSummary(true)
   }
 
   const totalExpenses = calculateTotalExpenses(expenses)
   const oneTimeExpenses = calculateOneTimeExpenses(expenses)
   const monthlyExpenses = calculateMonthlyExpenses(expenses)
-  const remainingBudget = calculateRemainingBudget(formData.savings,totalExpenses)
+  const remainingBudget = calculateRemainingBudget(formData.savings, totalExpenses)
   const runway = calculateRunway(remainingBudget, monthlyExpenses)
 
   return (
@@ -248,28 +246,77 @@ const Calculator = () => {
                 error={errors.savings}
               />
 
+              {/* Submit Button with Loading Spinner */}
               <button
                 type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+                disabled={isRateLoading}
+                className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-600/50 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900 flex items-center justify-center gap-2"
               >
-                Calculate Conversion
+                {isRateLoading ? (
+                  <>
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    <span>Fetching Rates...</span>
+                  </>
+                ) : (
+                  "Calculate Conversion"
+                )}
               </button>
             </form>
 
-            {/* Conversion Summary Output */}
-            {showSummary && result !== null && (
+            {/* API Exchange Rate Error Banner */}
+            {exchangeRateError && (
+              <div
+                role="alert"
+                className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm flex items-center gap-2 font-medium"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                <span>{exchangeRateError}</span>
+              </div>
+            )}
+
+            {/* Loading Skeleton / Summary Card */}
+            {showSummary && (
               <div className="pt-6 border-t border-slate-800">
-                <CalculatorSummary
-                  originCurrency={formData.originCurrency}
-                  destinationCurrency={formData.destinationCurrency}
-                  savings={formData.savings}
-                  result={result}
-                  totalExpenses={totalExpenses}
-                  remainingBudget={remainingBudget}
-                  oneTimeExpenses={oneTimeExpenses}
-                  monthlyExpenses={monthlyExpenses}
-                  runway={runway}
-                />
+                {isRateLoading ? (
+                  <div className="bg-slate-950 rounded-2xl p-8 border border-slate-800 shadow-xl text-center space-y-4 animate-pulse">
+                    <div className="h-4 bg-slate-800 rounded w-1/3 mx-auto"></div>
+                    <div className="h-8 bg-slate-800 rounded w-2/3 mx-auto"></div>
+                    <div className="h-10 bg-slate-900 rounded-xl w-full"></div>
+                  </div>
+                ) : result !== null ? (
+                  <CalculatorSummary
+                    originCurrency={formData.originCurrency}
+                    destinationCurrency={formData.destinationCurrency}
+                    savings={formData.savings}
+                    result={result}
+                    totalExpenses={totalExpenses}
+                    remainingBudget={remainingBudget}
+                    oneTimeExpenses={oneTimeExpenses}
+                    monthlyExpenses={monthlyExpenses}
+                    runway={runway}
+                  />
+                ) : null}
               </div>
             )}
           </div>
