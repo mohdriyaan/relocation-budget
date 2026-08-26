@@ -11,7 +11,6 @@ import calculateMonthlyExpenses from "../utils/calculateMonthlyExpenses.js"
 import calculateOneTimeExpenses from "../utils/calculateOneTimeExpenses.js"
 import calculateRemainingBudget from "../utils/calculateRemainingBudget.js"
 import calculateRunway from "../utils/calculateRunway.js"
-import { useEffect } from "react"
 import getExchangeRate from "../services/exchangeRateApi.js"
 
 const Calculator = () => {
@@ -43,11 +42,18 @@ const Calculator = () => {
   async function fetchRate(from, to) {
     try {
       setIsRateLoading(true)
+      
       const result = await getExchangeRate(from, to)
-      setExchangeRateData(result.rate)
+      const rate = result.rate 
+
+      setExchangeRateData(rate)
       setExchangeRateError(null)
+
+      return rate
+
     } catch (error) {
       setExchangeRateError("Unable to retrieve exchange rate.")
+      throw error
     } finally {
       setIsRateLoading(false)
     }   
@@ -165,8 +171,6 @@ const Calculator = () => {
       return;
     }
 
-    await fetchRate(formData.originCurrency, formData.destinationCurrency)
-
     const convertedAmount = convertAmount()
 
     if (convertedAmount === null) {
@@ -176,6 +180,7 @@ const Calculator = () => {
     }
 
     setResult(convertedAmount)
+    await fetchRate(formData.originCurrency, formData.destinationCurrency)
     setShowSummary(true)
   }
 
