@@ -16,8 +16,6 @@ import getExchangeRate from "../services/exchangeRateApi.js"
 const Calculator = () => {
   const [showSummary, setShowSummary] = useState(false)
 
-  const exchangeRate = 0.019
-
   const [formData, setFormData] = useState({
     originCurrency: "INR",
     destinationCurrency: "NZD",
@@ -33,7 +31,7 @@ const Calculator = () => {
 
   const [expenses, setExpenses] = useState([])
 
-  const [exchangeRateData, setExchangeRateData] = useState(null)
+  const [exchangeRate, setExchangeRate] = useState(null)
 
   const [isRateLoading, setIsRateLoading] = useState(false)
 
@@ -46,7 +44,7 @@ const Calculator = () => {
       const result = await getExchangeRate(from, to)
       const rate = result.rate 
 
-      setExchangeRateData(rate)
+      setExchangeRate(rate)
       setExchangeRateError(null)
 
       return rate
@@ -162,36 +160,28 @@ const Calculator = () => {
   }
 
   async function handleSubmit(event) {
-    
-    try {
-      event.preventDefault()
-      const isSavingsValid = checkSavingsError(formData.savings)
-      const isPairValid = checkCurrencyPairError(formData.originCurrency, formData.destinationCurrency)
+    event.preventDefault()
+    const isSavingsValid = checkSavingsError(formData.savings)
+    const isPairValid = checkCurrencyPairError(formData.originCurrency, formData.destinationCurrency)
 
-      if (!isSavingsValid || !isPairValid) {
-        return;
-      }
-
-      const rate = await fetchRate(formData.originCurrency, formData.destinationCurrency)
-
-      const convertedAmount = convertAmount(rate)
-
-      if (convertedAmount === null) {
-        setResult(null)
-        setShowSummary(false)
-        return;
-      }
-
-      setResult(convertedAmount)
-      await fetchRate(formData.originCurrency, formData.destinationCurrency)
-      setShowSummary(true)
-      
-    } catch (error) {
-      console.log(error.message)
+    if (!isSavingsValid || !isPairValid) {
+      return;
     }
-    
-  }
 
+    const rate = await fetchRate(formData.originCurrency, formData.destinationCurrency)
+
+    const convertedAmount = convertAmount(rate)
+
+    if (convertedAmount === null) {
+      setResult(null)
+      setShowSummary(false)
+      return;
+    }
+
+    setResult(convertedAmount)
+    setShowSummary(true)
+  }
+    
   const totalExpenses = calculateTotalExpenses(expenses)
   const oneTimeExpenses = calculateOneTimeExpenses(expenses)
   const monthlyExpenses = calculateMonthlyExpenses(expenses)
@@ -318,7 +308,7 @@ const Calculator = () => {
                   savings={formData.savings}
                   result={result}
                   totalExpenses={totalExpenses}
-                  rate = {exchangeRateData}
+                  rate = {exchangeRate}
                   remainingBudget={remainingBudget}
                   oneTimeExpenses={oneTimeExpenses}
                   monthlyExpenses={monthlyExpenses}
