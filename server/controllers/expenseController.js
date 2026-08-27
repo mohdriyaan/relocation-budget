@@ -24,8 +24,13 @@ const createExpenses = async(req,res) => {
     })
     
   } catch (error) {
+    if(error.name==="ValidationError"){
+      return res.status(400).json({
+        error : "Invalid inputs"
+      })
+    }
     return res.status(500).json({
-      error : "Unable to create expense"
+      error : "Cannot create expense"
     })
   }
 }
