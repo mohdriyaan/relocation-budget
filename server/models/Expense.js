@@ -1,4 +1,4 @@
-import mongoose from "mongooose"
+import mongoose from "mongoose"
 
 const expenseSchema = new mongoose.Schema({
   name : {
@@ -8,7 +8,8 @@ const expenseSchema = new mongoose.Schema({
   },
   category : {
     type : String,
-    required : [true, "Category is required"]
+    required : [true, "Category is required"],
+    trim : true
   },
   amount : {
     type : Number,
@@ -22,10 +23,10 @@ const expenseSchema = new mongoose.Schema({
     uppercase : true
   },
   frequency : {
-    type : [String],
+    type : String,
     required : [true, "Frequency is required"],
     enum : ["one-time","monthly"],
-    default : ["one-time"]
+    default : "one-time"
   },
   notes : {
     type : String,
