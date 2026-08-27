@@ -1,8 +1,10 @@
+import "dotenv/config"
 import express from "express"
 import healthRoute from "./routes/healthRoutes.js"
 import currencyRoute from "./routes/currencyRoutes.js"
 import exchangeRateRoute from "./routes/exchangeRateRoutes.js"
 import cors from "cors"
+import connectDB from "./config/db.js"
 
 const app = express()
 const PORT = 5000
@@ -20,6 +22,12 @@ app.use("/api/health",healthRoute)
 app.use("/api/currency",currencyRoute)
 app.use("/api/exchange-rate",exchangeRateRoute)
 
-app.listen(PORT,()=>{
-  console.log(`Server started running on ${PORT}`)
-})
+async function startServer(){
+  await connectDB()
+  
+  app.listen(PORT,()=>{
+    console.log(`Server started running on ${PORT}`)
+  })
+}
+
+startServer()
