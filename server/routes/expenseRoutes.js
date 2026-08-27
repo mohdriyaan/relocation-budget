@@ -1,7 +1,8 @@
 import express from "express"
-import getExpenses from "../controllers/expenseController.js"
+import { getExpenses, createExpenses } from "../controllers/expenseController.js"
 const router = express.Router()
 
 router.get("/",getExpenses)
+router.post("/",createExpenses)
 
 export default router

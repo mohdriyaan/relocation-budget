@@ -12,7 +12,22 @@ const getExpenses = async(req,res) => {
       error : "Unable to retrieve expenses."
     })
   }
-  
 }
 
-export default getExpenses
+const createExpenses = async(req,res) => {
+  try {
+    const newExpense = new Expense(req.body)
+    const saveExpense = await newExpense.save()
+
+    return res.status(201).json({
+      expense : saveExpense
+    })
+    
+  } catch (error) {
+    return res.status(500).json({
+      error : "Unable to create expense"
+    })
+  }
+}
+
+export {getExpenses, createExpenses}
