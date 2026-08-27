@@ -8,17 +8,21 @@ async function createExpense(expenseData){
       body : JSON.stringify(expenseData)
     })
     
-    
-    if(!res.ok){
-      throw new Error(`Failed to create expense`)
+    if(res.status===400){
+      throw new Error(`Invalid inputs`)
+    }
+
+    if(res.status===500){
+      throw new Error("Unable to create expense")
     }
 
     const result = await res.json()
     return result
 
   } catch (error) {
-    console.log("Error:", error )
+    throw error
   }
 }
 
-export default createExpense
+// export default createExpense
+createExpense()

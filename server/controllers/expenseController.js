@@ -30,7 +30,7 @@ const createExpenses = async(req,res) => {
       })
     }
     return res.status(500).json({
-      error : "Cannot create expense"
+      error : "Unable to create expense"
     })
   }
 }
