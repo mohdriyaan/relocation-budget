@@ -1,16 +1,18 @@
 import Expense from "../models/Expense.js"
 const getExpenses = async(req,res) => {
-  const expenses = await Expense.find()
+  try {
+    const expenses = await Expense.find()
 
-  if(expenses){
     return res.status(200).json({
       expenses
     })
-  }
 
-  return res.status(404).json({
-    expenses : []
-  })
+  } catch (error) {
+    return res.status(500).json({
+      error : error.message
+    })
+  }
+  
 }
 
 export default getExpenses
