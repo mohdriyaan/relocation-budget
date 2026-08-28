@@ -2,7 +2,7 @@
 import CalculatorSummary from "../components/CalculatorSummary.jsx"
 import CurrencySelector from "../components/CurrencySelector.jsx"
 import SavingsInput from "../components/SavingsInput.jsx"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import calculateSavings from "../utils/calculateSavings.js"
 import ExpenseForm from "../components/ExpenseForm.jsx"
 import ExpenseList from "../components/ExpenseList.jsx"
@@ -12,6 +12,8 @@ import calculateOneTimeExpenses from "../utils/calculateOneTimeExpenses.js"
 import calculateRemainingBudget from "../utils/calculateRemainingBudget.js"
 import calculateRunway from "../utils/calculateRunway.js"
 import getExchangeRate from "../services/exchangeRateApi.js"
+import { getExpenses } from "../services/expenseApi.js"
+
 
 const Calculator = () => {
   const [showSummary, setShowSummary] = useState(false)
@@ -36,6 +38,18 @@ const Calculator = () => {
   const [isRateLoading, setIsRateLoading] = useState(false)
 
   const [exchangeRateError, setExchangeRateError] = useState(null)
+
+  useEffect(()=>{
+    getExpensesData()
+  },[])
+
+  async function getExpensesData(){
+    const result = await getExpenses()
+    if(result.expenses){
+      setExpenses(result.expenses)
+    }
+    return;
+  }
 
   async function fetchRate(from, to) {
     try {
