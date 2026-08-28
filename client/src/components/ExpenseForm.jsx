@@ -98,7 +98,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency }) => {
     return true
   }
 
-  function submitHandler(event) {
+  async function submitHandler(event) {
     event.preventDefault()
 
     const isNameValid = checkNameError(formData.name)
@@ -113,14 +113,16 @@ const ExpenseForm = ({ addExpense, destinationCurrency }) => {
       ...formData,
       currency : destinationCurrency
     }
+
+    const result = await createExpense(expensePayload)
     
-    setFormData({
-      name: "",
-      category: "Other",
-      amount: "",
-      notes: "",
-      frequency: "one-time"
-    })
+    // setFormData({
+    //   name: "",
+    //   category: "Other",
+    //   amount: "",
+    //   notes: "",
+    //   frequency: "one-time"
+    // })
   }
 
   return (
