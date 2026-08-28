@@ -114,11 +114,6 @@ const ExpenseForm = ({ addExpense, destinationCurrency }) => {
       currency : destinationCurrency
     }
     
-    addExpense({
-      ...formData,
-      name : formData.name.trim()
-    })
-
     setFormData({
       name: "",
       category: "Other",
