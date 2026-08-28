@@ -115,14 +115,21 @@ const ExpenseForm = ({ addExpense, destinationCurrency }) => {
     }
 
     const result = await createExpense(expensePayload)
+
+    if(result.expense){
+      addExpense(result.expense)
     
-    // setFormData({
-    //   name: "",
-    //   category: "Other",
-    //   amount: "",
-    //   notes: "",
-    //   frequency: "one-time"
-    // })
+      setFormData({
+        name: "",
+        category: "Other",
+        amount: "",
+        notes: "",
+        frequency: "one-time"
+      })
+    }
+
+    return;
+    
   }
 
   return (
