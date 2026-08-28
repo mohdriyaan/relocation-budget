@@ -37,6 +37,8 @@ const Calculator = () => {
 
   const [isRateLoading, setIsRateLoading] = useState(false)
 
+  const [isExpensesLoading, setIsExpensesLoading] = useState(true)
+
   const [exchangeRateError, setExchangeRateError] = useState(null)
 
   useEffect(()=>{
@@ -45,13 +47,16 @@ const Calculator = () => {
 
   async function getExpensesData(){
     try {
+      setIsExpensesLoading(true)
       const result = await getExpenses()
       if(result.expenses){
         setExpenses(result.expenses)
       }  
     } catch (error) {
       console.log(error.message) 
-    }    
+    } finally {
+      setIsExpensesLoading(false)
+    }   
   }
 
   async function fetchRate(from, to) {
