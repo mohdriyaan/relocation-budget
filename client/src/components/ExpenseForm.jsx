@@ -1,8 +1,9 @@
 // components/ExpenseForm.jsx
 import { useState } from "react"
 import expenseCategories from "../data/expenseCategories.js"
+import createExpense from "../services/expenseApi.js"
 
-const ExpenseForm = ({ addExpense }) => {
+const ExpenseForm = ({ addExpense, destinationCurrency }) => {
   const [formData, setFormData] = useState({
     name: "",
     category: "Other",
@@ -106,6 +107,11 @@ const ExpenseForm = ({ addExpense }) => {
 
     if(!isNameValid || !isAmountValid || !isCategoryValid){
       return;
+    }
+
+    const expensePayload = {
+      ...formData,
+      currency : destinationCurrency
     }
     
     addExpense({

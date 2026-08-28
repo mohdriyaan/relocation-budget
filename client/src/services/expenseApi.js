@@ -7,8 +7,6 @@ async function createExpense(expenseData){
       },
       body : JSON.stringify(expenseData)
     })
-
-    console.log(res)
     
     if (!res.ok){
       throw new Error("Unable to create Expense")
