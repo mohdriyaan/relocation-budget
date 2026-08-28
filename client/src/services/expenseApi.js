@@ -24,9 +24,6 @@ async function getExpenses(){
   try {
     const res = await fetch("http://localhost:5000/api/expenses",{
       method : "GET",
-      headers : {
-        "Content-Type" : "application/json"
-      }
     })
     
     if (!res.ok){
@@ -43,4 +40,4 @@ async function getExpenses(){
 
 
 
-export default createExpense
+export {createExpense, getExpenses}

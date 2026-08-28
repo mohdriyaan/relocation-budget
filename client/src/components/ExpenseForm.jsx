@@ -1,7 +1,7 @@
 // components/ExpenseForm.jsx
 import { useState } from "react"
 import expenseCategories from "../data/expenseCategories.js"
-import createExpense from "../services/expenseApi.js"
+import { createExpense } from "../services/expenseApi.js"
 
 const ExpenseForm = ({ addExpense, destinationCurrency }) => {
   const [formData, setFormData] = useState({
