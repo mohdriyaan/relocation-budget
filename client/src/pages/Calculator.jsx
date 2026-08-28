@@ -44,11 +44,14 @@ const Calculator = () => {
   },[])
 
   async function getExpensesData(){
-    const result = await getExpenses()
-    if(result.expenses){
-      setExpenses(result.expenses)
-    }
-    return;
+    try {
+      const result = await getExpenses()
+      if(result.expenses){
+        setExpenses(result.expenses)
+      }  
+    } catch (error) {
+      console.log(error.message) 
+    }    
   }
 
   async function fetchRate(from, to) {
