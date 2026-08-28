@@ -361,7 +361,8 @@ const Calculator = () => {
                   Total Items: {expenses.length}
                 </span>
               </div>
-              <ExpenseList expenses={expenses} onDeleteExpense={deleteExpense} isLoading={isExpensesLoading} />
+              <ExpenseList expenses={expenses} onDeleteExpense={deleteExpense} isLoading={isExpensesLoading}
+              error={expensesLoadError} />
             </div>
 
           </div>
