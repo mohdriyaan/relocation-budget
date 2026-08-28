@@ -358,7 +358,7 @@ const Calculator = () => {
                   Total Items: {expenses.length}
                 </span>
               </div>
-              <ExpenseList expenses={expenses} onDeleteExpense={deleteExpense} />
+              <ExpenseList expenses={expenses} onDeleteExpense={deleteExpense} isLoading={isExpensesLoading} />
             </div>
 
           </div>
