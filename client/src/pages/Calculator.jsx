@@ -41,6 +41,8 @@ const Calculator = () => {
 
   const [exchangeRateError, setExchangeRateError] = useState(null)
 
+  const [expensesLoadError, setExpensesLoadError] = useState(null)
+
   useEffect(()=>{
     getExpensesData()
   },[])
@@ -51,9 +53,10 @@ const Calculator = () => {
       const result = await getExpenses()
       if(result.expenses){
         setExpenses(result.expenses)
+        setExpensesLoadError(null)
       }  
     } catch (error) {
-      console.log(error.message) 
+      setExpensesLoadError("Unable to get expenses") 
     } finally {
       setIsExpensesLoading(false)
     }   
