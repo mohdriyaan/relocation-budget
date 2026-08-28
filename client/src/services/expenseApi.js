@@ -20,4 +20,27 @@ async function createExpense(expenseData){
   }
 }
 
+async function getExpenses(){
+  try {
+    const res = await fetch("http://localhost:5000/api/expenses",{
+      method : "GET",
+      headers : {
+        "Content-Type" : "application/json"
+      }
+    })
+    
+    if (!res.ok){
+      throw new Error("Unable to get Expenses")
+    }
+
+    const result = await res.json()
+    return result
+
+  } catch (error) {
+    throw error
+  }
+}
+
+
+
 export default createExpense
