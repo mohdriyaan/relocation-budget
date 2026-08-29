@@ -1,7 +1,7 @@
 // components/ExpenseItem.jsx
 
 const ExpenseItem = ({ expense, onDeleteExpense }) => {
-  const { id, category, name, amount, notes, frequency } = expense;
+  const { _id, category, name, amount, notes, frequency } = expense;
 
   return (
     <div className="flex items-center justify-between p-4 bg-slate-900 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
@@ -33,7 +33,7 @@ const ExpenseItem = ({ expense, onDeleteExpense }) => {
           ${amount}
         </span>
         <button
-          onClick={() => onDeleteExpense(id)}
+          onClick={() => onDeleteExpense(_id)}
           type="button"
           aria-label="Delete expense"
           className="text-slate-400 hover:text-rose-400 p-2 rounded-lg hover:bg-rose-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-rose-500/40"

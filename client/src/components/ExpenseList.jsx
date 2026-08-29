@@ -70,7 +70,7 @@ const ExpenseList = ({ expenses = [], onDeleteExpense, isLoading, error }) => {
     <div className="space-y-3">
       {expenses.map((expense) => (
         <ExpenseItem
-          key={expense.id}
+          key={expense._id}
           expense={expense}
           onDeleteExpense={onDeleteExpense}
         />

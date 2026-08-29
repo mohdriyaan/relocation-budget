@@ -12,7 +12,7 @@ import calculateOneTimeExpenses from "../utils/calculateOneTimeExpenses.js"
 import calculateRemainingBudget from "../utils/calculateRemainingBudget.js"
 import calculateRunway from "../utils/calculateRunway.js"
 import getExchangeRate from "../services/exchangeRateApi.js"
-import { getExpenses } from "../services/expenseApi.js"
+import { getExpenses, deleteExpense } from "../services/expenseApi.js"
 
 
 const Calculator = () => {
@@ -173,12 +173,18 @@ const Calculator = () => {
     ])
   }
 
-  function deleteExpense(idToDelete) {
-    setExpenses((prevExpenses) => (
-      prevExpenses.filter(
-        (expense) => expense.id !== idToDelete
-      )
-    ))
+  async function handleDeleteExpense(idToDelete) {
+    try {
+      await deleteExpense(idToDelete)
+
+      setExpenses((prevExpenses) => (
+        prevExpenses.filter(
+          (expense) => expense._id !== idToDelete
+        )
+      ))  
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   async function handleSubmit(event) {
@@ -361,7 +367,7 @@ const Calculator = () => {
                   Total Items: {expenses.length}
                 </span>
               </div>
-              <ExpenseList expenses={expenses} onDeleteExpense={deleteExpense} isLoading={isExpensesLoading}
+              <ExpenseList expenses={expenses} onDeleteExpense={handleDeleteExpense} isLoading={isExpensesLoading}
               error={expensesLoadError} />
             </div>
 
