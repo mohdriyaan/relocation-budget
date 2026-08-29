@@ -38,6 +38,23 @@ async function getExpenses(){
   }
 }
 
+async function deleteExpense(id){
+  try {
+    const res = await fetch(`http://localhost:5000/api/expenses/${id}`,{
+      method : "DELETE",
+    })
+    
+    if (!res.ok){
+      throw new Error("Unable to delete Expenses")
+    }
+
+    const result = await res.json()
+    return result
+
+  } catch (error) {
+    throw error
+  }
+}
 
 
-export {createExpense, getExpenses}
+export {createExpense, getExpenses, deleteExpense}
