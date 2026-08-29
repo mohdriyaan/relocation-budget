@@ -52,6 +52,11 @@ const deleteExpense = async(req, res) => {
     })
     
   } catch (error) {
+    if(error.name==="CastError"){
+      return res.status(400).json({
+        error : "Invalid Id format"
+      })
+    }
     return res.status(500).json({
       error : "Unable to delete expense"
     })
