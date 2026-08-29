@@ -63,4 +63,41 @@ const deleteExpense = async(req, res) => {
   }
 }
 
-export {getExpenses, createExpenses, deleteExpense}
+const updateExpense = async(req,res)=> {
+  try {
+    const id = req.params.id
+    const newExpense = req.body
+
+    const updatedExpense = await Expense.findByIdAndUpdate(
+      id,
+      newExpense,
+      {new : true, runValidators: true}
+    )
+
+    if(!updatedExpense){
+      return res.status(404).json({
+        message : "Valid ID but no expense found"
+      })
+    }
+
+    return res.status(200).json({
+      expense : updatedExpense
+    })
+  } catch (error) {
+    if(error.name==="ValidationError"){
+      return res.status(400).json({
+        error : "Invalid inputs"
+      })
+    }
+    if(error.name==="CastError"){
+      return res.status(400).json({
+        error : "Invalid Id format"
+      })
+    }
+    return res.status(500).json({
+      error : "Unable to Update expense"
+    })
+  }
+}
+
+export {getExpenses, createExpenses, deleteExpense, updateExpense}
