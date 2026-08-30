@@ -1,12 +1,14 @@
 // components/ExpenseForm.jsx
 import { useEffect, useState } from "react"
 import expenseCategories from "../data/expenseCategories.js"
+import CurrencySelector from "./CurrencySelector.jsx"
 import { createExpense, updateExpense } from "../services/expenseApi.js"
 
 const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdateExpense, onEditComplete, onCancelEdit }) => {
   const [formData, setFormData] = useState({
     name: "",
     category: "Other",
+    currency: destinationCurrency || "NZD",
     amount: "",
     notes: "",
     frequency: "one-time"
@@ -22,18 +24,24 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
 
   useEffect(() => {
     if (editingExpense !== null) {
-      const { name, category, amount, frequency, notes } = editingExpense
+      const { name, category, currency, amount, frequency, notes } = editingExpense
 
       setFormData((prev) => ({
         ...prev,
         name,
         category,
+        currency: currency || destinationCurrency,
         amount,
         frequency,
         notes: notes ?? ""
       }))   
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        currency: destinationCurrency
+      }))
     }
-  }, [editingExpense])
+  }, [editingExpense, destinationCurrency])
 
   function changeHandler(event) {
     const { name, value } = event.target
@@ -122,6 +130,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
     setFormData({
       name: "",
       category: "Other",
+      currency: destinationCurrency || "NZD",
       amount: "",
       notes: "",
       frequency: "one-time"
@@ -146,7 +155,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
 
     const expensePayload = {
       ...formData,
-      currency: destinationCurrency
+      currency: formData.currency || destinationCurrency
     }
 
     try {
@@ -265,6 +274,14 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
           )}
         </div>
 
+        {/* Expense Currency Selector */}
+        <CurrencySelector
+          name="currency"
+          label="Currency"
+          value={formData.currency}
+          onChange={changeHandler}
+        />
+
         {/* Amount Input */}
         <div className="flex flex-col">
           <label htmlFor="amount" className="block text-sm font-medium text-slate-300 mb-2">
@@ -302,7 +319,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
         </div>
 
         {/* Frequency Selector */}
-        <div className="flex flex-col">
+        <div className="flex flex-col sm:col-span-2">
           <label htmlFor="frequency" className="block text-sm font-medium text-slate-300 mb-2">
             Frequency
           </label>
