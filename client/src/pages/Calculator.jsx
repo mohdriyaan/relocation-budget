@@ -189,6 +189,16 @@ const Calculator = () => {
     }
   }
 
+  function handleUpdateExpense(updatedExpense) {
+  setExpenses((prevExpenses) =>
+      prevExpenses.map((expense) =>
+        expense._id === updatedExpense._id
+          ? updatedExpense
+          : expense
+      )
+    )
+  }
+
   function handleEditExpense(expense){
     setEditingExpense(expense)
   }
@@ -361,7 +371,9 @@ const Calculator = () => {
                 2. Add Expense
               </h2>
               <ExpenseForm addExpense={addExpense} destinationCurrency={formData.destinationCurrency} 
-              editingExpense = {editingExpense}/>
+              editingExpense = {editingExpense}
+              onUpdateExpense={handleUpdateExpense}
+              />
             </div>
 
             {/* Expense List Card */}
