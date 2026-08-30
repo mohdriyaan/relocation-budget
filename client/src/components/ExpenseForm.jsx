@@ -1,9 +1,9 @@
 // components/ExpenseForm.jsx
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import expenseCategories from "../data/expenseCategories.js"
 import { createExpense } from "../services/expenseApi.js"
 
-const ExpenseForm = ({ addExpense, destinationCurrency }) => {
+const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense }) => {
   const [formData, setFormData] = useState({
     name: "",
     category: "Other",
@@ -17,6 +17,21 @@ const ExpenseForm = ({ addExpense, destinationCurrency }) => {
     category: "",
     amount: ""
   })
+
+  useEffect(()=>{
+    if(editingExpense!==null){
+      const {name, category, amount, frequency, notes} = editingExpense
+
+      setFormData((prev)=>({
+        ...prev,
+        name,
+        category,
+        amount,
+        frequency,
+        notes
+      }))  
+    }
+  },[editingExpense])
 
   function changeHandler(event) {
     const { name, value } = event.target

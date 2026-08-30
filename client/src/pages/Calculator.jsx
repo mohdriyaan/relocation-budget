@@ -360,7 +360,8 @@ const Calculator = () => {
               <h2 className="text-xl font-bold text-white tracking-wide border-b border-slate-800 pb-4">
                 2. Add Expense
               </h2>
-              <ExpenseForm addExpense={addExpense} destinationCurrency={formData.destinationCurrency} />
+              <ExpenseForm addExpense={addExpense} destinationCurrency={formData.destinationCurrency} 
+              editingExpense = {editingExpense}/>
             </div>
 
             {/* Expense List Card */}
