@@ -28,7 +28,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense }) => {
         category,
         amount,
         frequency,
-        notes
+        notes : notes ?? ""
       }))  
     }
   },[editingExpense])
@@ -296,7 +296,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense }) => {
         type="submit"
         className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900"
       >
-        Add Expense
+        {editingExpense === null ? "Add Expense" : "Update Expense"}
       </button>
     </form>
   )
