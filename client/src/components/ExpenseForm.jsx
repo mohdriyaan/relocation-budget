@@ -18,46 +18,49 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
     amount: ""
   })
 
+  const [submitError, setSubmitError] = useState("")
 
-  useEffect(()=>{
-    if(editingExpense!==null){
+  useEffect(() => {
+    if (editingExpense !== null) {
+      const { name, category, amount, frequency, notes } = editingExpense
 
-      const {name, category, amount, frequency, notes} = editingExpense
-
-      setFormData((prev)=>({
+      setFormData((prev) => ({
         ...prev,
         name,
         category,
         amount,
         frequency,
-        notes : notes ?? ""
-      }))  
+        notes: notes ?? ""
+      }))   
     }
-  },[editingExpense])
+  }, [editingExpense])
 
   function changeHandler(event) {
     const { name, value } = event.target
     
+    // Clear top-level submission error when user edits fields
+    if (submitError) setSubmitError("")
+
     setFormData((prev) => ({
       ...prev,
       [name]: value
     }))
 
-    if(name === "name"){
+    if (name === "name") {
       checkNameError(value)
     }
 
-    if(name === "amount"){
+    if (name === "amount") {
       checkAmountError(value)
     }
 
-    if(name === "category"){
+    if (name === "category") {
       checkCategoryError(value)
     }
   }
 
-  function checkNameError(name){
-    if(name.trim() === ""){
+  function checkNameError(name) {
+    if (name.trim() === "") {
       setErrors((prevErrors) => ({
         ...prevErrors,
         name: "Name is required"
@@ -73,8 +76,8 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
     return true
   }
 
-  function checkAmountError(amount){
-    if(amount == ""){
+  function checkAmountError(amount) {
+    if (amount == "") {
       setErrors((prevErrors) => ({
         ...prevErrors,
         amount: "Amount is required"
@@ -82,7 +85,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
       return false
     }
     
-    if(amount <= 0){
+    if (amount <= 0) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         amount: "Amount must be greater than zero"
@@ -98,8 +101,8 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
     return true
   }
 
-  function checkCategoryError(category){
-    if(!expenseCategories.includes(category)){
+  function checkCategoryError(category) {
+    if (!expenseCategories.includes(category)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         category: "Category should only be selected from the list"
@@ -122,43 +125,46 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
     const isAmountValid = checkAmountError(formData.amount)
     const isCategoryValid = checkCategoryError(formData.category)
 
-    if(!isNameValid || !isAmountValid || !isCategoryValid){
+    if (!isNameValid || !isAmountValid || !isCategoryValid) {
       return;
     }
 
     const expensePayload = {
       ...formData,
-      currency : destinationCurrency
+      currency: destinationCurrency
     }
 
-    const result = editingExpense===null ?   
-    await createExpense(expensePayload) : 
-    await updateExpense(editingExpense._id, expensePayload)
+    try {
+      setSubmitError("")
+      const result = editingExpense === null ?   
+      await createExpense(expensePayload) : 
+      await updateExpense(editingExpense._id, expensePayload)
 
-    if(result.expense){
-      if(editingExpense===null){
-        addExpense(result.expense)
-        setFormData({
-          name: "",
-          category: "Other",
-          amount: "",
-          notes: "",
-          frequency: "one-time"
-        })
-      }else{
-        onUpdateExpense(result.expense)
-        onEditComplete()
-        setFormData({
-          name: "",
-          category: "Other",
-          amount: "",
-          notes: "",
-          frequency: "one-time"
-        })
+      if (result.expense) {
+        if (editingExpense === null) {
+          addExpense(result.expense)
+          setFormData({
+            name: "",
+            category: "Other",
+            amount: "",
+            notes: "",
+            frequency: "one-time"
+          })
+        } else {
+          onUpdateExpense(result.expense)
+          onEditComplete()
+          setFormData({
+            name: "",
+            category: "Other",
+            amount: "",
+            notes: "",
+            frequency: "one-time"
+          })
+        } 
       }
-      
-    }
-    
+    } catch (error) {
+      setSubmitError("Unable to save expense. Please check your network connection and try again.")
+    }  
   }
 
   return (
@@ -302,9 +308,53 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
           value={formData.notes}
           onChange={changeHandler}
           placeholder="Add extra details..."
-          className="w-full bg-slate-950 border border-slate-700 text-white text-sm rounded-lg p-3 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none"
+          className="w-full bg-slate-950 border border-slate-700 text-white text-sm rounded-lg p-3 placeholder-slate-600 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
         ></textarea>
       </div>
+
+      {/* Form Submission Error Banner */}
+      {submitError && (
+        <div
+          role="alert"
+          className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm flex items-center justify-between gap-3 font-medium transition-all"
+        >
+          <div className="flex items-center gap-2.5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 shrink-0 text-rose-400"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 002 0V6a1 1 0 00-1-1z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <span>{submitError}</span>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setSubmitError("")}
+            className="text-rose-400/70 hover:text-rose-300 p-1 rounded-md hover:bg-rose-500/20 transition-colors"
+            aria-label="Dismiss error"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+      )}
 
       <button
         type="submit"
