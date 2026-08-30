@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import expenseCategories from "../data/expenseCategories.js"
 import { createExpense, updateExpense } from "../services/expenseApi.js"
 
-const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdateExpense, onEditComplete }) => {
+const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdateExpense, onEditComplete, onCancelEdit }) => {
   const [formData, setFormData] = useState({
     name: "",
     category: "Other",
@@ -118,6 +118,21 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
     return true
   }
 
+  function resetForm() {
+    setFormData({
+      name: "",
+      category: "Other",
+      amount: "",
+      notes: "",
+      frequency: "one-time"
+    })
+  }
+
+  function handleCancel() {
+    resetForm()
+    onCancelEdit()
+  }
+
   async function submitHandler(event) {
     event.preventDefault()
 
@@ -143,23 +158,11 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
       if (result.expense) {
         if (editingExpense === null) {
           addExpense(result.expense)
-          setFormData({
-            name: "",
-            category: "Other",
-            amount: "",
-            notes: "",
-            frequency: "one-time"
-          })
+          resetForm()
         } else {
           onUpdateExpense(result.expense)
           onEditComplete()
-          setFormData({
-            name: "",
-            category: "Other",
-            amount: "",
-            notes: "",
-            frequency: "one-time"
-          })
+          resetForm()
         } 
       }
     } catch (error) {
@@ -169,6 +172,26 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
 
   return (
     <form onSubmit={submitHandler} className="space-y-4">
+      
+      {/* Edit Mode Banner */}
+      {editingExpense !== null && (
+        <div className="flex items-center justify-between p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs sm:text-sm font-medium">
+          <div className="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-indigo-400 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+            </svg>
+            <span>Editing item: <strong className="text-white font-mono">{editingExpense.name}</strong></span>
+          </div>
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="text-xs text-indigo-400 hover:text-white underline font-semibold transition-colors"
+          >
+            Cancel
+          </button>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Expense Name */}
         <div className="flex flex-col">
@@ -308,7 +331,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
           value={formData.notes}
           onChange={changeHandler}
           placeholder="Add extra details..."
-          className="w-full bg-slate-950 border border-slate-700 text-white text-sm rounded-lg p-3 placeholder-slate-600 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
+          className="w-full bg-slate-950 border border-slate-700 text-white text-sm rounded-lg p-3 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none"
         ></textarea>
       </div>
 
@@ -356,12 +379,31 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
         </div>
       )}
 
-      <button
-        type="submit"
-        className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900"
-      >
-        {editingExpense === null ? "Add Expense" : "Update Expense"}
-      </button>
+      {/* Action Buttons */}
+      {editingExpense === null ? (
+        <button
+          type="submit"
+          className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+        >
+          Add Expense
+        </button>
+      ) : (
+        <div className="flex items-center gap-3">
+          <button
+            type="submit"
+            className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+          >
+            Update Expense
+          </button>
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="flex-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-600 focus:ring-offset-2 focus:ring-offset-slate-900"
+          >
+            Cancel
+          </button>
+        </div>
+      )}
     </form>
   )
 }
