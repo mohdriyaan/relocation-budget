@@ -43,6 +43,8 @@ const Calculator = () => {
 
   const [expensesLoadError, setExpensesLoadError] = useState(null)
 
+  const [editingExpense, setEditingExpense] = useState(null)
+
   useEffect(()=>{
     getExpensesData()
   },[])
@@ -182,6 +184,14 @@ const Calculator = () => {
           (expense) => expense._id !== idToDelete
         )
       ))  
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  async function handleEditExpense(expense){
+    try {
+      setEditingExpense(expense)
     } catch (error) {
       console.log(error.message)
     }
@@ -367,7 +377,9 @@ const Calculator = () => {
                   Total Items: {expenses.length}
                 </span>
               </div>
-              <ExpenseList expenses={expenses} onDeleteExpense={handleDeleteExpense} isLoading={isExpensesLoading}
+              <ExpenseList expenses={expenses} onDeleteExpense={handleDeleteExpense}
+              onEditExpense={handleEditExpense}
+              isLoading={isExpensesLoading}
               error={expensesLoadError} />
             </div>
 
