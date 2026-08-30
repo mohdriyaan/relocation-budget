@@ -189,12 +189,8 @@ const Calculator = () => {
     }
   }
 
-  async function handleEditExpense(expense){
-    try {
-      setEditingExpense(expense)
-    } catch (error) {
-      console.log(error.message)
-    }
+  function handleEditExpense(expense){
+    setEditingExpense(expense)
   }
 
   async function handleSubmit(event) {
