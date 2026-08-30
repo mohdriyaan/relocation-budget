@@ -203,6 +203,10 @@ const Calculator = () => {
     setEditingExpense(expense)
   }
 
+  function onEditComplete(){
+    setEditingExpense(null)
+  }
+
   async function handleSubmit(event) {
     event.preventDefault()
     
@@ -373,6 +377,7 @@ const Calculator = () => {
               <ExpenseForm addExpense={addExpense} destinationCurrency={formData.destinationCurrency} 
               editingExpense = {editingExpense}
               onUpdateExpense={handleUpdateExpense}
+              onEditComplete={onEditComplete}
               />
             </div>
 

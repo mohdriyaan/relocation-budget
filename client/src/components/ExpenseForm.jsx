@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import expenseCategories from "../data/expenseCategories.js"
 import { createExpense, updateExpense } from "../services/expenseApi.js"
 
-const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdateExpense }) => {
+const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdateExpense, onEditComplete }) => {
   const [formData, setFormData] = useState({
     name: "",
     category: "Other",
@@ -147,6 +147,14 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
         })
       }else{
         onUpdateExpense(result.expense)
+        onEditComplete()
+        setFormData({
+          name: "",
+          category: "Other",
+          amount: "",
+          notes: "",
+          frequency: "one-time"
+        })
       }
       
     }
