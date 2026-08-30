@@ -1,7 +1,7 @@
 // components/ExpenseForm.jsx
 import { useEffect, useState } from "react"
 import expenseCategories from "../data/expenseCategories.js"
-import { createExpense } from "../services/expenseApi.js"
+import { createExpense, updateExpense } from "../services/expenseApi.js"
 
 const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense }) => {
   const [formData, setFormData] = useState({
@@ -18,8 +18,10 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense }) => {
     amount: ""
   })
 
+
   useEffect(()=>{
     if(editingExpense!==null){
+      
       const {name, category, amount, frequency, notes} = editingExpense
 
       setFormData((prev)=>({
@@ -129,21 +131,21 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense }) => {
       currency : destinationCurrency
     }
 
-    const result = await createExpense(expensePayload)
+    const result = editingExpense===null ?  
+    await createExpense(expensePayload) : 
+    await updateExpense(editingExpense._id, expensePayload)
 
-    if(result.expense){
-      addExpense(result.expense)
+    // if(result.expense){
+    //   addExpense(result.expense)
     
-      setFormData({
-        name: "",
-        category: "Other",
-        amount: "",
-        notes: "",
-        frequency: "one-time"
-      })
-    }
-
-    return;
+    //   setFormData({
+    //     name: "",
+    //     category: "Other",
+    //     amount: "",
+    //     notes: "",
+    //     frequency: "one-time"
+    //   })
+    // }
     
   }
 
