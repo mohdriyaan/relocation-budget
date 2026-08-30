@@ -1,6 +1,6 @@
 // components/ExpenseItem.jsx
 
-const ExpenseItem = ({ expense, onDeleteExpense }) => {
+const ExpenseItem = ({ expense, onDeleteExpense, onEditExpense }) => {
   const { _id, category, name, amount, notes, frequency } = expense;
 
   return (
@@ -27,11 +27,30 @@ const ExpenseItem = ({ expense, onDeleteExpense }) => {
         )}
       </div>
 
-      {/* Amount & Delete Action */}
-      <div className="flex items-center gap-4">
-        <span className="text-lg font-mono font-bold text-emerald-400">
+      {/* Amount & Actions */}
+      <div className="flex items-center gap-1 sm:gap-2">
+        <span className="text-lg font-mono font-bold text-emerald-400 mr-2">
           ${amount}
         </span>
+
+        {/* Edit Button */}
+        <button
+          onClick={() => onEditExpense(expense)}
+          type="button"
+          aria-label="Edit expense"
+          className="text-slate-400 hover:text-indigo-400 p-2 rounded-lg hover:bg-indigo-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+          </svg>
+        </button>
+
+        {/* Delete Button */}
         <button
           onClick={() => onDeleteExpense(_id)}
           type="button"

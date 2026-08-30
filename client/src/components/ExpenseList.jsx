@@ -73,6 +73,7 @@ const ExpenseList = ({ expenses = [], onDeleteExpense, isLoading, error }) => {
           key={expense._id}
           expense={expense}
           onDeleteExpense={onDeleteExpense}
+          onEditExpense={onEditExpense}
         />
       ))}
     </div>
