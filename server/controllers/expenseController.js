@@ -66,11 +66,11 @@ const deleteExpense = async(req, res) => {
 const updateExpense = async(req,res)=> {
   try {
     const id = req.params.id
-    const newExpense = req.body
+    const expenseData = req.body
 
     const updatedExpense = await Expense.findByIdAndUpdate(
       id,
-      newExpense,
+      expenseData,
       {new : true, runValidators: true}
     )
 

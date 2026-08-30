@@ -41,7 +41,7 @@ async function getExpenses(){
 async function deleteExpense(id){
   try {
     const res = await fetch(`http://localhost:5000/api/expenses/${id}`,{
-      method : "DELETE",
+      method : "DELETE"
     })
     
     if (!res.ok){
@@ -56,5 +56,27 @@ async function deleteExpense(id){
   }
 }
 
+async function updateExpense(id, expenseData){
+  try {
+    const res = await fetch(`http://localhost:5000/api/expenses/${id}`,{
+      method : "PATCH",
+      headers : {
+        "Content-Type" : "application/json"
+      },
+      body : JSON.stringify(expenseData)
+    })
+    
+    if (!res.ok){
+      throw new Error("Unable to update Expenses")
+    }
 
-export {createExpense, getExpenses, deleteExpense}
+    const result = await res.json()
+    return result
+
+  } catch (error) {
+    throw error
+  }
+}
+
+
+export {createExpense, getExpenses, deleteExpense, updateExpense}
