@@ -11,3 +11,5 @@ function convertExpenses(expenses, destinationCurrency, rates){
     }
   })
 }
+
+export default convertExpenses
