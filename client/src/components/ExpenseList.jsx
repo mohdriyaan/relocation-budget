@@ -2,7 +2,7 @@
 
 import ExpenseItem from "./ExpenseItem.jsx";
 
-const ExpenseList = ({ expenses = [], onDeleteExpense, isLoading, error }) => {
+const ExpenseList = ({ expenses = [], onDeleteExpense, isLoading, error, onEditExpense }) => {
   // 1. Loading State
   if (isLoading) {
     return (
