@@ -1,16 +1,7 @@
 // pages/Calculator.jsx
 import useBudgetCalculator from "../hooks/useBudgetCalculator.js"
 import CalculatorSummary from "../components/CalculatorSummary.jsx"
-import calculateTotalExpenses from "../utils/calculateTotalExpenses.js"
-import calculateMonthlyExpenses from "../utils/calculateMonthlyExpenses.js"
-import calculateOneTimeExpenses from "../utils/calculateOneTimeExpenses.js"
-import calculateRemainingBudget from "../utils/calculateRemainingBudget.js"
-import calculateRunway from "../utils/calculateRunway.js"
-import getExchangeRate from "../services/exchangeRateApi.js"
 import { getExpenses, deleteExpense } from "../services/expenseApi.js"
-import getExpenseCurrencies from "../utils/getExpenseCurrencies.js"
-import getExpenseRates from "../utils/getExpenseRates.js"
-import convertExpenses from "../utils/convertExpenses.js"
 import CalculatorForm from "../components/CalculatorForm.jsx"
 import ExpenseSection from "../components/ExpenseSection.jsx"
 
@@ -19,35 +10,27 @@ const Calculator = () => {
     formData,
     errors,
     changeHandler,
-    convertAmount,
-    normalizeExpenses,
-    fetchRate,
-    handleSubmit
+    handleSubmit,
+    showSummary,
+    result,
+    exchangeRate,
+    isRateLoading,
+    exchangeRateError,
+    calculationError,
+    totalExpenses,
+    oneTimeExpenses,
+    monthlyExpenses,
+    remainingBudget,
+    runway
   } = useBudgetCalculator()
-
-  const [showSummary, setShowSummary] = useState(false)
-
-  const [result, setResult] = useState(null)
 
   const [expenses, setExpenses] = useState([])
 
-  const [exchangeRate, setExchangeRate] = useState(null)
-
-  const [isRateLoading, setIsRateLoading] = useState(false)
-
   const [isExpensesLoading, setIsExpensesLoading] = useState(true)
-
-  const [exchangeRateError, setExchangeRateError] = useState(null)
 
   const [expensesLoadError, setExpensesLoadError] = useState(null)
 
   const [editingExpense, setEditingExpense] = useState(null)
-
-  const [normalizedExpenses, setNormalizedExpenses] = useState([])
-
-  const [convertedSavings, setConvertedSavings] = useState(null)
-
-  const [calculationError, setCalculationError] = useState("")
 
   useEffect(() => {
     getExpensesData()
@@ -121,20 +104,6 @@ const Calculator = () => {
     setEditingExpense(null)
   }
 
-  function invalidateCalculation() {
-    setNormalizedExpenses([])
-    setConvertedSavings(null)
-    setResult(null)
-    setShowSummary(false)
-    setCalculationError("")
-  }
-
-  const totalExpenses = calculateTotalExpenses(normalizedExpenses)
-  const oneTimeExpenses = calculateOneTimeExpenses(normalizedExpenses)
-  const monthlyExpenses = calculateMonthlyExpenses(normalizedExpenses)
-  const remainingBudget = calculateRemainingBudget(convertedSavings, totalExpenses)
-  const runway = calculateRunway(remainingBudget, monthlyExpenses)
-
   return (
     <div className="min-h-screen bg-slate-950 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-8">
@@ -184,7 +153,7 @@ const Calculator = () => {
           {/* Right Column: Expense Management */}
           <div className="lg:col-span-7 space-y-6">
             {/* Add Expense Card */}
-            <ExpenseSection 
+            <ExpenseSection
               addExpense={addExpense}
               destinationCurrency={formData.destinationCurrency}
               editingExpense={editingExpense}

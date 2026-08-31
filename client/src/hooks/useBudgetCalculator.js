@@ -3,8 +3,17 @@ import calculateSavings from "../utils/calculateSavings.js";
 import getExpenseCurrencies from "../utils/getExpenseCurrencies.js";
 import getExpenseRates from "../utils/getExpenseRates.js";
 import convertExpenses from "../utils/convertExpenses.js";
+import calculateTotalExpenses from "../utils/calculateTotalExpenses.js"
+import calculateMonthlyExpenses from "../utils/calculateMonthlyExpenses.js"
+import calculateOneTimeExpenses from "../utils/calculateOneTimeExpenses.js"
+import calculateRemainingBudget from "../utils/calculateRemainingBudget.js"
+import calculateRunway from "../utils/calculateRunway.js"
+import getExchangeRate from "../services/exchangeRateApi.js"
+import getExpenseCurrencies from "../utils/getExpenseCurrencies.js"
+import getExpenseRates from "../utils/getExpenseRates.js"
+import convertExpenses from "../utils/convertExpenses.js"
 
-function useBudgetCalculator() {
+function useBudgetCalculator(expenses) {
   const [formData, setFormData] = useState({
     originCurrency: "INR",
     destinationCurrency: "NZD",
@@ -15,6 +24,15 @@ function useBudgetCalculator() {
     savings: "",
     currencyPair: ""
   })
+
+  const [showSummary, setShowSummary] = useState(false)
+  const [result, setResult] = useState(null)
+  const [exchangeRate, setExchangeRate] = useState(null)
+  const [isRateLoading, setIsRateLoading] = useState(false)
+  const [exchangeRateError, setExchangeRateError] = useState(null)
+  const [normalizedExpenses, setNormalizedExpenses] = useState([])
+  const [convertedSavings, setConvertedSavings] = useState(null)
+  const [calculationError, setCalculationError] = useState("")
 
   function checkSavingsError(value) {
     if (value === "") {
@@ -94,9 +112,7 @@ function useBudgetCalculator() {
 
     const rates = await getExpenseRates(currencies, destinationCurrency)
 
-    const normalizedExpenses = convertExpenses(expenses, destinationCurrency, rates)
-
-    return normalizedExpenses
+    return convertExpenses(expenses, destinationCurrency, rates)
   }
 
   async function handleSubmit(event) {
@@ -151,16 +167,36 @@ function useBudgetCalculator() {
     }
   }
 
+  function invalidateCalculation() {
+    setNormalizedExpenses([])
+    setConvertedSavings(null)
+    setResult(null)
+    setShowSummary(false)
+    setCalculationError("")
+  }
+
+  const totalExpenses = calculateTotalExpenses(normalizedExpenses)
+  const oneTimeExpenses = calculateOneTimeExpenses(normalizedExpenses)
+  const monthlyExpenses = calculateMonthlyExpenses(normalizedExpenses)
+  const remainingBudget = calculateRemainingBudget(convertedSavings, totalExpenses)
+  const runway = calculateRunway(remainingBudget, monthlyExpenses)
+
   return {
     formData,
     errors,
     changeHandler,
-    checkSavingsError,
-    checkCurrencyPairError,
-    convertAmount,
-    normalizeExpenses,
     handleSubmit,
-    fetchRate
+    showSummary,
+    result,
+    exchangeRate,
+    isRateLoading,
+    exchangeRateError,
+    calculationError,
+    totalExpenses,
+    oneTimeExpenses,
+    monthlyExpenses,
+    remainingBudget,
+    runway
   }
 
 }
