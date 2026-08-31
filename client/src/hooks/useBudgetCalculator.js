@@ -1,4 +1,5 @@
 import { useState } from "react";
+import calculateSavings from "../utils/calculateSavings.js";
 
 function useBudgetCalculator() {
   const [formData, setFormData] = useState({
@@ -18,10 +19,6 @@ function useBudgetCalculator() {
         ...prev,
         savings: "Savings should not be empty"
       }))
-
-      setShowSummary(false)
-      setResult(null)
-
       return false;
     }
 
@@ -31,8 +28,6 @@ function useBudgetCalculator() {
         savings: "Savings should be greater than 0"
       }))
 
-      setShowSummary(false)
-      setResult(null)
       return false;
     }
 
@@ -62,14 +57,6 @@ function useBudgetCalculator() {
   function changeHandler(event) {
     const { name, value } = event.target
 
-    if (
-      name === "savings" ||
-      name === "originCurrency" ||
-      name === "destinationCurrency"
-    ) {
-      invalidateCalculation()
-    }
-
     if (name === "savings") {
       checkSavingsError(value)
     }
@@ -96,7 +83,18 @@ function useBudgetCalculator() {
     }
 
     return calculateSavings(amount, rate)
+  
+  }
 
+  return {
+    formData,
+    errors,
+    changeHandler,
+    checkSavingsError,
+    checkCurrencyPairError,
+    convertAmount
   }
 
 }
+
+export default useBudgetCalculator

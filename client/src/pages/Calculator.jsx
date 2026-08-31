@@ -1,4 +1,5 @@
 // pages/Calculator.jsx
+import useBudgetCalculator from "../hooks/useBudgetCalculator.js"
 import CalculatorSummary from "../components/CalculatorSummary.jsx"
 import CurrencySelector from "../components/CurrencySelector.jsx"
 import SavingsInput from "../components/SavingsInput.jsx"
@@ -18,6 +19,13 @@ import getExpenseRates from "../utils/getExpenseRates.js"
 import convertExpenses from "../utils/convertExpenses.js"
 
 const Calculator = () => {
+  const {
+    formData,
+    errors,
+    changeHandler,
+    convertAmount
+  } = useBudgetCalculator()
+
   const [showSummary, setShowSummary] = useState(false)
 
   const [result, setResult] = useState(null)
