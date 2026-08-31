@@ -17,7 +17,6 @@ import getExpenseCurrencies from "../utils/getExpenseCurrencies.js"
 import getExpenseRates from "../utils/getExpenseRates.js"
 import convertExpenses from "../utils/convertExpenses.js"
 
-
 const Calculator = () => {
   const [showSummary, setShowSummary] = useState(false)
 
@@ -51,6 +50,8 @@ const Calculator = () => {
   const [normalizedExpenses, setNormalizedExpenses] = useState([])
 
   const [convertedSavings, setConvertedSavings] = useState(null)
+
+  const [calculationError, setCalculationError] = useState("")
 
   useEffect(() => {
     getExpensesData()
@@ -244,10 +245,10 @@ const Calculator = () => {
   async function handleSubmit(event) {
     event.preventDefault()
 
-    // invalidating previous results
+    // invalidating previous results & errors
     setResult(null)
     setShowSummary(false)
-
+    setCalculationError("")
 
     const isSavingsValid = checkSavingsError(formData.savings)
     const isPairValid = checkCurrencyPairError(formData.originCurrency, formData.destinationCurrency)
@@ -256,19 +257,23 @@ const Calculator = () => {
       return;
     }
 
-    const convertedExpenses = await normalizeExpenses(expenses, formData.destinationCurrency)
+    try {
+      const convertedExpenses = await normalizeExpenses(expenses, formData.destinationCurrency)
 
-    console.log(convertedExpenses)
+      setNormalizedExpenses(convertedExpenses)
 
-    setNormalizedExpenses(convertedExpenses)
+      const rate = await fetchRate(formData.originCurrency, formData.destinationCurrency)
 
-    const rate = await fetchRate(formData.originCurrency, formData.destinationCurrency)
+      const convertedAmount = convertAmount(rate)
 
-    const convertedAmount = convertAmount(rate)
+      setConvertedSavings(convertedAmount)
+      setResult(convertedAmount)
+      setShowSummary(true)
+    } catch (error) {
+      setCalculationError("Unable to calculate your budget. Please try again.")
+      setShowSummary(false)
+    }
 
-    setConvertedSavings(convertedAmount)
-    setResult(convertedAmount)
-    setShowSummary(true)
   }
 
   function invalidateCalculation() {
@@ -276,6 +281,7 @@ const Calculator = () => {
     setConvertedSavings(null)
     setResult(null)
     setShowSummary(false)
+    setCalculationError("")
   }
 
   const totalExpenses = calculateTotalExpenses(normalizedExpenses)
@@ -388,10 +394,23 @@ const Calculator = () => {
                 role="alert"
                 className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm flex items-center gap-2 font-medium"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 shrink-0 text-rose-400" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                 </svg>
                 <span>{exchangeRateError}</span>
+              </div>
+            )}
+
+            {/* Calculation Error Banner */}
+            {calculationError && (
+              <div
+                role="alert"
+                className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm flex items-center gap-2 font-medium"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 shrink-0 text-rose-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                <span>{calculationError}</span>
               </div>
             )}
 
