@@ -1,7 +1,7 @@
 // components/ExpenseItem.jsx
 
 const ExpenseItem = ({ expense, onDeleteExpense, onEditExpense }) => {
-  const { _id, category, name, amount, notes, frequency } = expense;
+  const { _id, category, name, amount, currency, notes, frequency } = expense;
 
   return (
     <div className="flex items-center justify-between p-4 bg-slate-900 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
@@ -30,7 +30,7 @@ const ExpenseItem = ({ expense, onDeleteExpense, onEditExpense }) => {
       {/* Amount & Actions */}
       <div className="flex items-center gap-1 sm:gap-2">
         <span className="text-lg font-mono font-bold text-emerald-400 mr-2">
-          ${amount}
+          {currency} {amount}
         </span>
 
         {/* Edit Button */}

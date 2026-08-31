@@ -104,7 +104,7 @@ const CalculatorSummary = ({
           <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex flex-col items-center justify-center">
             <span className="text-xs text-slate-400 mb-1">Total Expenses</span>
             <span className="font-mono text-slate-100 font-bold text-base">
-              {originCurrency} {totalExpenses}
+              {destinationCurrency} {totalExpenses}
             </span>
           </div>
 
