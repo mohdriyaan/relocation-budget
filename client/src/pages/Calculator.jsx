@@ -48,6 +48,8 @@ const Calculator = () => {
 
   const [editingExpense, setEditingExpense] = useState(null)
 
+  const [normalizedExpenses, setNormalizedExpenses] = useState([])
+
   useEffect(()=>{
     getExpensesData()
   },[])
@@ -239,9 +241,11 @@ const Calculator = () => {
       return;
     }
 
-    const normalizedExpenses = await normalizeExpenses(expenses, formData.destinationCurrency)
+    const convertedExpenses = await normalizeExpenses(expenses, formData.destinationCurrency)
 
-    console.log(normalizedExpenses)
+    console.log(convertedExpenses)
+
+    setNormalizedExpenses(convertedExpenses)
 
     const rate = await fetchRate(formData.originCurrency, formData.destinationCurrency)
 
