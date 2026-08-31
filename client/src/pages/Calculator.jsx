@@ -52,31 +52,31 @@ const Calculator = () => {
 
   const [convertedSavings, setConvertedSavings] = useState(null)
 
-  useEffect(()=>{
+  useEffect(() => {
     getExpensesData()
-  },[])
+  }, [])
 
-  async function getExpensesData(){
+  async function getExpensesData() {
     try {
       setIsExpensesLoading(true)
       const result = await getExpenses()
-      if(result.expenses){
+      if (result.expenses) {
         setExpenses(result.expenses)
         setExpensesLoadError(null)
-      }  
+      }
     } catch (error) {
-      setExpensesLoadError("Unable to get expenses") 
+      setExpensesLoadError("Unable to get expenses")
     } finally {
       setIsExpensesLoading(false)
-    }   
+    }
   }
 
   async function fetchRate(from, to) {
     try {
       setIsRateLoading(true)
-      
+
       const result = await getExchangeRate(from, to)
-      const rate = result.rate 
+      const rate = result.rate
 
       setExchangeRate(rate)
       setExchangeRateError(null)
@@ -88,7 +88,7 @@ const Calculator = () => {
       throw error
     } finally {
       setIsRateLoading(false)
-    }   
+    }
   }
 
   function checkSavingsError(value) {
@@ -141,6 +141,14 @@ const Calculator = () => {
   function changeHandler(event) {
     const { name, value } = event.target
 
+    if (
+      name === "savings" ||
+      name === "originCurrency" ||
+      name === "destinationCurrency"
+    ) {
+      invalidateCalculation()
+    }
+
     if (name === "savings") {
       checkSavingsError(value)
     }
@@ -180,6 +188,8 @@ const Calculator = () => {
       ...prevExpenses,
       newExpense
     ])
+
+    invalidateCalculation()
   }
 
   async function handleDeleteExpense(idToDelete) {
@@ -190,27 +200,30 @@ const Calculator = () => {
         prevExpenses.filter(
           (expense) => expense._id !== idToDelete
         )
-      ))  
+      ))
+
+      invalidateCalculation()
     } catch (error) {
       console.log(error.message)
     }
   }
 
   function handleUpdateExpense(updatedExpense) {
-  setExpenses((prevExpenses) =>
+    setExpenses((prevExpenses) =>
       prevExpenses.map((expense) =>
         expense._id === updatedExpense._id
           ? updatedExpense
           : expense
       )
     )
+    invalidateCalculation()
   }
 
-  function handleEditExpense(expense){
+  function handleEditExpense(expense) {
     setEditingExpense(expense)
   }
 
-  function onEditComplete(){
+  function onEditComplete() {
     setEditingExpense(null)
   }
 
@@ -218,7 +231,7 @@ const Calculator = () => {
     setEditingExpense(null)
   }
 
-  async function normalizeExpenses(expenses, destinationCurrency){
+  async function normalizeExpenses(expenses, destinationCurrency) {
     const currencies = getExpenseCurrencies(expenses, destinationCurrency)
 
     const rates = await getExpenseRates(currencies, destinationCurrency)
@@ -230,12 +243,12 @@ const Calculator = () => {
 
   async function handleSubmit(event) {
     event.preventDefault()
-    
+
     // invalidating previous results
     setResult(null)
     setShowSummary(false)
 
-    
+
     const isSavingsValid = checkSavingsError(formData.savings)
     const isPairValid = checkCurrencyPairError(formData.originCurrency, formData.destinationCurrency)
 
@@ -264,7 +277,7 @@ const Calculator = () => {
     setResult(null)
     setShowSummary(false)
   }
-    
+
   const totalExpenses = calculateTotalExpenses(normalizedExpenses)
   const oneTimeExpenses = calculateOneTimeExpenses(normalizedExpenses)
   const monthlyExpenses = calculateMonthlyExpenses(normalizedExpenses)
@@ -274,7 +287,7 @@ const Calculator = () => {
   return (
     <div className="min-h-screen bg-slate-950 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-8">
-        
+
         {/* Header Section */}
         <div className="text-center space-y-2">
           <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -287,7 +300,7 @@ const Calculator = () => {
 
         {/* 2-Column Responsive Dashboard Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
+
           {/* Left Column: Currency Conversion Form */}
           <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
             <h2 className="text-xl font-bold text-white tracking-wide border-b border-slate-800 pb-4">
@@ -391,7 +404,7 @@ const Calculator = () => {
                   savings={formData.savings}
                   result={result}
                   totalExpenses={totalExpenses}
-                  rate = {exchangeRate}
+                  rate={exchangeRate}
                   remainingBudget={remainingBudget}
                   oneTimeExpenses={oneTimeExpenses}
                   monthlyExpenses={monthlyExpenses}
@@ -403,18 +416,17 @@ const Calculator = () => {
 
           {/* Right Column: Expense Management */}
           <div className="lg:col-span-7 space-y-6">
-            
+
             {/* Add Expense Card */}
             <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
               <h2 className="text-xl font-bold text-white tracking-wide border-b border-slate-800 pb-4">
                 2. Add Expense
               </h2>
-              <ExpenseForm addExpense={addExpense} destinationCurrency={formData.destinationCurrency} 
-              editingExpense = {editingExpense}
-              onUpdateExpense={handleUpdateExpense}
-              onEditComplete={onEditComplete}
-              onCancelEdit={handleCancelEdit}
-              invalidateCalculation={invalidateCalculation}
+              <ExpenseForm addExpense={addExpense} destinationCurrency={formData.destinationCurrency}
+                editingExpense={editingExpense}
+                onUpdateExpense={handleUpdateExpense}
+                onEditComplete={onEditComplete}
+                onCancelEdit={handleCancelEdit}
               />
             </div>
 
@@ -429,9 +441,9 @@ const Calculator = () => {
                 </span>
               </div>
               <ExpenseList expenses={expenses} onDeleteExpense={handleDeleteExpense}
-              onEditExpense={handleEditExpense}
-              isLoading={isExpensesLoading}
-              error={expensesLoadError} />
+                onEditExpense={handleEditExpense}
+                isLoading={isExpensesLoading}
+                error={expensesLoadError} />
             </div>
 
           </div>
