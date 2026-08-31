@@ -50,6 +50,8 @@ const Calculator = () => {
 
   const [normalizedExpenses, setNormalizedExpenses] = useState([])
 
+  const [convertedSavings, setConvertedSavings] = useState(null)
+
   useEffect(()=>{
     getExpensesData()
   },[])
@@ -251,6 +253,7 @@ const Calculator = () => {
 
     const convertedAmount = convertAmount(rate)
 
+    setConvertedSavings(convertedAmount)
     setResult(convertedAmount)
     setShowSummary(true)
   }
