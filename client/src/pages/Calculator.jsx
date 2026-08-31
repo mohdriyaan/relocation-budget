@@ -239,6 +239,10 @@ const Calculator = () => {
       return;
     }
 
+    const normalizedExpenses = await normalizeExpenses(expenses, formData.destinationCurrency)
+
+    console.log(normalizedExpenses)
+
     const rate = await fetchRate(formData.originCurrency, formData.destinationCurrency)
 
     const convertedAmount = convertAmount(rate)
