@@ -215,11 +215,11 @@ const Calculator = () => {
   }
 
   async function normalizeExpenses(expenses, destinationCurrency){
-    const currencies = getExpenseCurrencies(expenses, formData.destinationCurrency)
+    const currencies = getExpenseCurrencies(expenses, destinationCurrency)
 
-    const rates = await getExpenseRates(currencies, formData.destinationCurrency)
+    const rates = await getExpenseRates(currencies, destinationCurrency)
 
-    const normalizedExpenses = convertExpenses(expenses, formData.destinationCurrency, rates)
+    const normalizedExpenses = convertExpenses(expenses, destinationCurrency, rates)
 
     return normalizedExpenses
   }
