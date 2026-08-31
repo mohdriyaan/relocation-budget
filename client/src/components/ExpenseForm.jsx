@@ -22,6 +22,8 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
 
   const [submitError, setSubmitError] = useState("")
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   useEffect(() => {
     if (editingExpense !== null) {
       const { name, category, currency, amount, frequency, notes } = editingExpense
@@ -158,6 +160,8 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
       currency: formData.currency || destinationCurrency
     }
 
+    setIsSubmitting(true)
+
     try {
       setSubmitError("")
       const result = editingExpense === null ?   
@@ -176,6 +180,8 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
       }
     } catch (error) {
       setSubmitError("Unable to save expense. Please check your network connection and try again.")
+    } finally {
+      setIsSubmitting(false)
     }  
   }
 
