@@ -1,4 +1,5 @@
 // pages/Calculator.jsx
+import { useState, useEffect } from "react"
 import useBudgetCalculator from "../hooks/useBudgetCalculator.js"
 import CalculatorSummary from "../components/CalculatorSummary.jsx"
 import { getExpenses, deleteExpense } from "../services/expenseApi.js"
@@ -6,7 +7,6 @@ import CalculatorForm from "../components/CalculatorForm.jsx"
 import ExpenseSection from "../components/ExpenseSection.jsx"
 
 const Calculator = () => {
-  
   const [expenses, setExpenses] = useState([])
 
   const {
@@ -24,7 +24,8 @@ const Calculator = () => {
     oneTimeExpenses,
     monthlyExpenses,
     remainingBudget,
-    runway
+    runway,
+    invalidateCalculation
   } = useBudgetCalculator(expenses)
 
   const [isExpensesLoading, setIsExpensesLoading] = useState(true)

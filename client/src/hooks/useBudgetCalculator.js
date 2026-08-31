@@ -193,7 +193,8 @@ function useBudgetCalculator(expenses) {
     oneTimeExpenses,
     monthlyExpenses,
     remainingBudget,
-    runway
+    runway,
+    invalidateCalculation
   }
 
 }
