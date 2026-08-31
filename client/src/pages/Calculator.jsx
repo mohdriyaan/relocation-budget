@@ -261,7 +261,7 @@ const Calculator = () => {
   const totalExpenses = calculateTotalExpenses(normalizedExpenses)
   const oneTimeExpenses = calculateOneTimeExpenses(normalizedExpenses)
   const monthlyExpenses = calculateMonthlyExpenses(normalizedExpenses)
-  const remainingBudget = calculateRemainingBudget(formData.savings, totalExpenses)
+  const remainingBudget = calculateRemainingBudget(convertedSavings, totalExpenses)
   const runway = calculateRunway(remainingBudget, monthlyExpenses)
 
   return (
