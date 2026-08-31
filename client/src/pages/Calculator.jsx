@@ -257,6 +257,13 @@ const Calculator = () => {
     setResult(convertedAmount)
     setShowSummary(true)
   }
+
+  function invalidateCalculation() {
+    setNormalizedExpenses([])
+    setConvertedSavings(null)
+    setResult(null)
+    setShowSummary(false)
+  }
     
   const totalExpenses = calculateTotalExpenses(normalizedExpenses)
   const oneTimeExpenses = calculateOneTimeExpenses(normalizedExpenses)
@@ -407,6 +414,7 @@ const Calculator = () => {
               onUpdateExpense={handleUpdateExpense}
               onEditComplete={onEditComplete}
               onCancelEdit={handleCancelEdit}
+              invalidateCalculation={invalidateCalculation}
               />
             </div>
 

@@ -4,7 +4,7 @@ import expenseCategories from "../data/expenseCategories.js"
 import CurrencySelector from "./CurrencySelector.jsx"
 import { createExpense, updateExpense } from "../services/expenseApi.js"
 
-const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdateExpense, onEditComplete, onCancelEdit }) => {
+const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdateExpense, onEditComplete, onCancelEdit, invalidateCalculation }) => {
   const [formData, setFormData] = useState({
     name: "",
     category: "Other",
@@ -167,10 +167,12 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
       if (result.expense) {
         if (editingExpense === null) {
           addExpense(result.expense)
+          invalidateCalculation()
           resetForm()
         } else {
           onUpdateExpense(result.expense)
           onEditComplete()
+          invalidateCalculation()
           resetForm()
         } 
       }
