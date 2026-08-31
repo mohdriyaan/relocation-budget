@@ -1,7 +1,7 @@
 import CurrencySelector from "./CurrencySelector"
 import SavingsInput from "./SavingsInput"
 
-function CalculatorForm({formData, errors, changeHandler, handleSubmit, isRateLoading, exchangeRateError, calculationError, isCalculating}) {
+function CalculatorForm({formData, errors, changeHandler, handleSubmit, exchangeRateError, calculationError, isCalculating}) {
   return (
     <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
       <h2 className="text-xl font-bold text-white tracking-wide border-b border-slate-800 pb-4">
@@ -53,7 +53,7 @@ function CalculatorForm({formData, errors, changeHandler, handleSubmit, isRateLo
           disabled={isCalculating}
           className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-600/50 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900 flex items-center justify-center gap-2"
         >
-          {isRateLoading ? (
+          {isCalculating ? (
             <>
               <svg
                 className="animate-spin h-5 w-5 text-white"

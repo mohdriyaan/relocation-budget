@@ -129,7 +129,6 @@ const Calculator = () => {
               formData={formData}
               errors={errors}
               changeHandler={changeHandler} handleSubmit={handleSubmit}
-              isRateLoading={isRateLoading}
               exchangeRateError={exchangeRateError}
               calculationError={calculationError}
               isCalculating={isCalculating}
