@@ -25,7 +25,8 @@ const Calculator = () => {
     monthlyExpenses,
     remainingBudget,
     runway,
-    invalidateCalculation
+    invalidateCalculation,
+    isCalculating
   } = useBudgetCalculator(expenses)
 
   const [isExpensesLoading, setIsExpensesLoading] = useState(true)
@@ -131,6 +132,7 @@ const Calculator = () => {
               isRateLoading={isRateLoading}
               exchangeRateError={exchangeRateError}
               calculationError={calculationError}
+              isCalculating={isCalculating}
             />
 
             {/* Direct Summary Render */}

@@ -30,6 +30,7 @@ function useBudgetCalculator(expenses) {
   const [normalizedExpenses, setNormalizedExpenses] = useState([])
   const [convertedSavings, setConvertedSavings] = useState(null)
   const [calculationError, setCalculationError] = useState("")
+  const [isCalculating, setIsCalculating] = useState(false)
 
   function checkSavingsError(value) {
     if (value === "") {
@@ -126,6 +127,8 @@ function useBudgetCalculator(expenses) {
       return;
     }
 
+    setIsCalculating(true)
+
     try {
       const convertedExpenses = await normalizeExpenses(expenses, formData.destinationCurrency)
 
@@ -141,6 +144,8 @@ function useBudgetCalculator(expenses) {
     } catch (error) {
       setCalculationError("Unable to calculate your budget. Please try again.")
       setShowSummary(false)
+    } finally {
+      setIsCalculating(false)
     }
   }
 
@@ -194,7 +199,8 @@ function useBudgetCalculator(expenses) {
     monthlyExpenses,
     remainingBudget,
     runway,
-    invalidateCalculation
+    invalidateCalculation,
+    isCalculating
   }
 
 }
