@@ -1,4 +1,19 @@
-function ExpenseSection() {
+import ExpenseForm from "./ExpenseForm"
+import ExpenseList from "./ExpenseList"
+
+function ExpenseSection({
+  addExpense,
+  destinationCurrency,
+  editingExpense,
+  onUpdateExpense,
+  onEditComplete,
+  onCancelEdit,
+  expenses,
+  onDeleteExpense,
+  onEditExpense,
+  isLoading,
+  error
+}) {
   return (
     <>
       <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
@@ -6,11 +21,11 @@ function ExpenseSection() {
           2. Add Expense
         </h2>
         <ExpenseForm 
-          addExpense={addExpense}        destinationCurrency={formData.destinationCurrency}
+          addExpense={addExpense}        destinationCurrency={destinationCurrency}
           editingExpense={editingExpense}
-          onUpdateExpense={handleUpdateExpense}
+          onUpdateExpense={onUpdateExpense}
           onEditComplete={onEditComplete}
-          onCancelEdit={handleCancelEdit}
+          onCancelEdit={onCancelEdit}
         />
       </div>
 
@@ -26,10 +41,10 @@ function ExpenseSection() {
         </div>
         <ExpenseList 
           expenses={expenses} 
-          onDeleteExpense={handleDeleteExpense}
-          onEditExpense={handleEditExpense}
-          isLoading={isExpensesLoading}
-          error={expensesLoadError} 
+          onDeleteExpense={onDeleteExpense}
+          onEditExpense={onEditExpense}
+          isLoading={isLoading}
+          error={error} 
         />
       </div>
     </>

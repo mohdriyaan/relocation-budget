@@ -1,8 +1,6 @@
 // pages/Calculator.jsx
 import useBudgetCalculator from "../hooks/useBudgetCalculator.js"
 import CalculatorSummary from "../components/CalculatorSummary.jsx"
-import ExpenseForm from "../components/ExpenseForm.jsx"
-import ExpenseList from "../components/ExpenseList.jsx"
 import calculateTotalExpenses from "../utils/calculateTotalExpenses.js"
 import calculateMonthlyExpenses from "../utils/calculateMonthlyExpenses.js"
 import calculateOneTimeExpenses from "../utils/calculateOneTimeExpenses.js"
@@ -249,7 +247,19 @@ const Calculator = () => {
           {/* Right Column: Expense Management */}
           <div className="lg:col-span-7 space-y-6">
             {/* Add Expense Card */}
-            <ExpenseSection />
+            <ExpenseSection 
+              addExpense={addExpense}
+              destinationCurrency={formData.destinationCurrency}
+              editingExpense={editingExpense}
+              onUpdateExpense={handleUpdateExpense}
+              onEditComplete={onEditComplete}
+              onCancelEdit={handleCancelEdit}
+              expenses={expenses}
+              onDeleteExpense={handleDeleteExpense}
+              onEditExpense={handleEditExpense}
+              isLoading={isExpensesLoading}
+              error={expensesLoadError}
+            />
           </div>
         </div>
       </div>
