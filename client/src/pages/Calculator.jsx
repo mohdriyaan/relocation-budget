@@ -13,6 +13,9 @@ import calculateRemainingBudget from "../utils/calculateRemainingBudget.js"
 import calculateRunway from "../utils/calculateRunway.js"
 import getExchangeRate from "../services/exchangeRateApi.js"
 import { getExpenses, deleteExpense } from "../services/expenseApi.js"
+import getExpenseCurrencies from "../utils/getExpenseCurrencies.js"
+import getExpenseRates from "../utils/getExpenseRates.js"
+import convertExpenses from "../utils/convertExpenses.js"
 
 
 const Calculator = () => {
@@ -209,6 +212,16 @@ const Calculator = () => {
 
   function handleCancelEdit() {
     setEditingExpense(null)
+  }
+
+  async function normalizeExpenses(expenses, destinationCurrency){
+    const currencies = getExpenseCurrencies(expenses, formData.destinationCurrency)
+
+    const rates = await getExpenseRates(currencies, formData.destinationCurrency)
+
+    const normalizedExpenses = convertExpenses(expenses, formData.destinationCurrency, rates)
+
+    return normalizedExpenses
   }
 
   async function handleSubmit(event) {
