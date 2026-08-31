@@ -6,6 +6,9 @@ import CalculatorForm from "../components/CalculatorForm.jsx"
 import ExpenseSection from "../components/ExpenseSection.jsx"
 
 const Calculator = () => {
+  
+  const [expenses, setExpenses] = useState([])
+
   const {
     formData,
     errors,
@@ -22,9 +25,7 @@ const Calculator = () => {
     monthlyExpenses,
     remainingBudget,
     runway
-  } = useBudgetCalculator()
-
-  const [expenses, setExpenses] = useState([])
+  } = useBudgetCalculator(expenses)
 
   const [isExpensesLoading, setIsExpensesLoading] = useState(true)
 

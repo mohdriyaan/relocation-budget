@@ -1,8 +1,5 @@
 import { useState } from "react";
 import calculateSavings from "../utils/calculateSavings.js";
-import getExpenseCurrencies from "../utils/getExpenseCurrencies.js";
-import getExpenseRates from "../utils/getExpenseRates.js";
-import convertExpenses from "../utils/convertExpenses.js";
 import calculateTotalExpenses from "../utils/calculateTotalExpenses.js"
 import calculateMonthlyExpenses from "../utils/calculateMonthlyExpenses.js"
 import calculateOneTimeExpenses from "../utils/calculateOneTimeExpenses.js"
