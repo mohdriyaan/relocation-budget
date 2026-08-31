@@ -112,7 +112,7 @@ const CalculatorSummary = ({
           <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex flex-col items-center justify-center">
             <span className="text-xs text-slate-400 mb-1">One-Time Costs</span>
             <span className="font-mono text-slate-100 font-bold text-base">
-              {originCurrency} {oneTimeExpenses}
+              {destinationCurrency} {oneTimeExpenses}
             </span>
           </div>
 
@@ -120,7 +120,7 @@ const CalculatorSummary = ({
           <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex flex-col items-center justify-center">
             <span className="text-xs text-slate-400 mb-1">Monthly Living Costs</span>
             <span className="font-mono text-slate-100 font-bold text-base">
-              {originCurrency} {monthlyExpenses}
+              {destinationCurrency} {monthlyExpenses}
             </span>
           </div>
 
@@ -136,7 +136,7 @@ const CalculatorSummary = ({
               className={`font-mono font-bold text-base ${isOverBudget ? "text-rose-400" : "text-emerald-400"
                 }`}
             >
-              {originCurrency} {remainingBudget}
+              {destinationCurrency} {remainingBudget}
             </span>
           </div>
         </div>
