@@ -255,7 +255,7 @@ const Calculator = () => {
     setShowSummary(true)
   }
     
-  const totalExpenses = calculateTotalExpenses(expenses)
+  const totalExpenses = calculateTotalExpenses(normalizedExpenses)
   const oneTimeExpenses = calculateOneTimeExpenses(expenses)
   const monthlyExpenses = calculateMonthlyExpenses(expenses)
   const remainingBudget = calculateRemainingBudget(formData.savings, totalExpenses)
