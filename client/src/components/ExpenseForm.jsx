@@ -249,11 +249,11 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
             Amount
           </label>
           <input
+            {...register("amount", {
+              valueAsNumber : true
+            })}
             type="number"
-            name="amount"
             id="amount"
-            value={formData.amount}
-            onChange={changeHandler}
             placeholder="0.00"
             min="0"
             step="0.01"
