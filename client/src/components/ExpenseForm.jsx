@@ -5,9 +5,16 @@ import CurrencySelector from "./CurrencySelector.jsx"
 import { createExpense, updateExpense } from "../services/expenseApi.js"
 import ExpenseSchema from "../schemas/expenseSchema.js"
 import { z } from "zod"
-
+import { useForm } from "react-hook-form"
 
 const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdateExpense, onEditComplete, onCancelEdit}) => {
+  const {
+    register,
+    handleSubmit : rhfHandleSubmit,
+    reset : rfhReset,
+    formState : {errors : rhfErrors, isSubmitting : rhfIsSubmitting}
+  } = useForm()
+
   const [formData, setFormData] = useState({
     name: "",
     category: "Other",
