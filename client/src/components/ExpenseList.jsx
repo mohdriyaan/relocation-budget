@@ -2,7 +2,14 @@
 
 import ExpenseItem from "./ExpenseItem.jsx";
 
-const ExpenseList = ({ expenses = [], onDeleteExpense, isLoading, error, onEditExpense }) => {
+const ExpenseList = ({
+  expenses = [],
+  onDeleteExpense,
+  isLoading,
+  error,
+  deleteError,
+  onEditExpense
+}) => {
   // 1. Loading State
   if (isLoading) {
     return (
@@ -54,6 +61,32 @@ const ExpenseList = ({ expenses = [], onDeleteExpense, isLoading, error, onEditE
         <span>{error}</span>
       </div>
     );
+  }
+
+  {
+    deleteError && (
+      <div
+        role="alert"
+        className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm font-medium"
+      >
+        <div className="flex items-center gap-2.5">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 shrink-0"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0V6a1 1 0 00-2 0v5zm1 3a1 1 0 11-2 0 1 1 0 012 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+
+          <span>{deleteError}</span>
+        </div>
+      </div>
+    )
   }
 
   // 3. Empty State

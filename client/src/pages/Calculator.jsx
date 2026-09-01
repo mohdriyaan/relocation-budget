@@ -17,7 +17,6 @@ const Calculator = () => {
     showSummary,
     result,
     exchangeRate,
-    isRateLoading,
     exchangeRateError,
     calculationError,
     totalExpenses,
@@ -32,6 +31,8 @@ const Calculator = () => {
   const [isExpensesLoading, setIsExpensesLoading] = useState(true)
 
   const [expensesLoadError, setExpensesLoadError] = useState(null)
+
+  const [deleteError, setDeleteError] = useState(null)
 
   const [editingExpense, setEditingExpense] = useState(null)
 
@@ -48,7 +49,7 @@ const Calculator = () => {
         setExpensesLoadError(null)
       }
     } catch (error) {
-      setExpensesLoadError("Unable to get expenses")
+      setExpensesLoadError(error.message || "Unable to get expenses")
     } finally {
       setIsExpensesLoading(false)
     }
@@ -70,6 +71,8 @@ const Calculator = () => {
 
   async function handleDeleteExpense(idToDelete) {
     try {
+      setDeleteError(null)
+
       await deleteExpense(idToDelete)
 
       setExpenses((prevExpenses) => (
@@ -79,8 +82,9 @@ const Calculator = () => {
       ))
 
       invalidateCalculation()
+      setDeleteError(null)
     } catch (error) {
-      console.log(error.message)
+      setDeleteError(error.message || "Unable to delete expense")
     }
   }
 
@@ -168,6 +172,7 @@ const Calculator = () => {
               onEditExpense={handleEditExpense}
               isLoading={isExpensesLoading}
               error={expensesLoadError}
+              deleteError={deleteError}
             />
           </div>
         </div>

@@ -12,7 +12,8 @@ function ExpenseSection({
   onDeleteExpense,
   onEditExpense,
   isLoading,
-  error
+  error,
+  deleteError
 }) {
   return (
     <>
@@ -44,6 +45,7 @@ function ExpenseSection({
           onDeleteExpense={onDeleteExpense}
           onEditExpense={onEditExpense}
           isLoading={isLoading}
+          deleteError={deleteError}
           error={error} 
         />
       </div>
