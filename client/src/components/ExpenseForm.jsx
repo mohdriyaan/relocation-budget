@@ -10,10 +10,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdateExpense, onEditComplete, onCancelEdit}) => {
   const {
     register,
-    handleSubmit : rhfHandleSubmit,
+    handleSubmit,
     control,
-    reset : rfhReset,
-    formState : {errors : rhfErrors, isSubmitting : rhfIsSubmitting}
+    reset,
+    formState : {errors, isSubmitting}
   } = useForm({
     resolver : zodResolver(ExpenseSchema),
     defaultValues : {
@@ -25,7 +25,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
 
   useEffect(() => {
     if (editingExpense !== null) {
-      rfhReset({
+      reset({
         name : editingExpense.name,
         category : editingExpense.category,
         amount : editingExpense.amount,
@@ -34,7 +34,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
         notes : editingExpense.notes ?? ""
       })
     } else {
-      rfhReset({
+      reset({
         name : "",
         category : "Other",
         amount : "",
@@ -43,10 +43,10 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
         notes : ""
       })
     }
-  }, [editingExpense, destinationCurrency, rfhReset])
+  }, [editingExpense, destinationCurrency, reset])
 
   function resetForm() {
-    rfhReset({
+    reset({
       name : "",
       category: "Other",
       amount: "",
@@ -88,7 +88,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
   }
 
   return (
-    <form onSubmit={rhfHandleSubmit(submitHandler)} className="space-y-4">
+    <form onSubmit={handleSubmit(submitHandler)} className="space-y-4">
       
       {/* Edit Mode Banner */}
       {editingExpense !== null && (
@@ -120,15 +120,15 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
             id="name"
             type="text"
             placeholder="e.g. Flight Ticket"
-            aria-invalid={Boolean(rhfErrors.name)}
-            aria-describedby={rhfErrors.name ? "name-error" : undefined}
+            aria-invalid={Boolean(errors.name)}
+            aria-describedby={errors.name ? "name-error" : undefined}
             className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 placeholder-slate-600 transition-colors focus:outline-none focus:ring-2 ${
-              rhfErrors.name
+              errors.name
                 ? "border border-rose-500 focus:border-rose-500 focus:ring-rose-500/40"
                 : "border border-slate-700 focus:border-indigo-500 focus:ring-indigo-500"
             }`}
           />
-          {rhfErrors.name && (
+          {errors.name && (
             <span
               id="name-error"
               role="alert"
@@ -137,7 +137,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
-              <span>{rhfErrors.name?.message}</span>
+              <span>{errors.name?.message}</span>
             </span>
           )}
         </div>
@@ -150,10 +150,10 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
           <select
             {...register("category")}
             id="category"
-            aria-invalid={Boolean(rhfErrors.category)}
-            aria-describedby={rhfErrors.category ? "category-error" : undefined}
+            aria-invalid={Boolean(errors.category)}
+            aria-describedby={errors.category ? "category-error" : undefined}
             className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 transition-colors focus:outline-none focus:ring-2 ${
-              rhfErrors.category
+              errors.category
                 ? "border border-rose-500 focus:border-rose-500 focus:ring-rose-500/40"
                 : "border border-slate-700 focus:border-indigo-500 focus:ring-indigo-500"
             }`}
@@ -164,7 +164,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
               </option>
             ))}
           </select>
-          {rhfErrors.category && (
+          {errors.category && (
             <span
               id="category-error"
               role="alert"
@@ -173,7 +173,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
-              <span>{rhfErrors.category?.message}</span>
+              <span>{errors.category?.message}</span>
             </span>
           )}
         </div>
@@ -207,15 +207,15 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
             placeholder="0.00"
             min="0"
             step="0.01"
-            aria-invalid={Boolean(rhfErrors.amount)}
-            aria-describedby={rhfErrors.amount ? "amount-error" : undefined}
+            aria-invalid={Boolean(errors.amount)}
+            aria-describedby={errors.amount ? "amount-error" : undefined}
             className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 placeholder-slate-600 transition-colors focus:outline-none focus:ring-2 ${
-              rhfErrors.amount
+              errors.amount
                 ? "border border-rose-500 focus:border-rose-500 focus:ring-rose-500/40"
                 : "border border-slate-700 focus:border-indigo-500 focus:ring-indigo-500"
             }`}
           />
-          {rhfErrors.amount && (
+          {errors.amount && (
             <span
               id="amount-error"
               role="alert"
@@ -224,7 +224,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
-              <span>{rhfErrors.amount?.message}</span>
+              <span>{errors.amount?.message}</span>
             </span>
           )}
         </div>
@@ -309,9 +309,9 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
           type="submit"
           className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900
           disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled={rhfIsSubmitting}
+          disabled={isSubmitting}
         >
-         {rhfIsSubmitting ? "Saving..." : "Add Expense"} 
+         {isSubmitting ? "Saving..." : "Add Expense"} 
         </button>
       ) : (
         <div className="flex items-center gap-3">
@@ -319,16 +319,16 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
             type="submit"
             className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900
             disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={rhfIsSubmitting}
+            disabled={isSubmitting}
           >
-            {rhfIsSubmitting ? "Saving..." : "Update Expense"}
+            {isSubmitting ? "Saving..." : "Update Expense"}
           </button>
           <button
             type="button"
             onClick={handleCancel}
             className="flex-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-600 focus:ring-offset-2 focus:ring-offset-slate-900
             disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={rhfIsSubmitting}
+            disabled={isSubmitting}
           >
             Cancel
           </button>
