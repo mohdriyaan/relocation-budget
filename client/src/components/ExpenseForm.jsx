@@ -16,23 +16,10 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
   } = useForm()
 
   const [formData, setFormData] = useState({
-    name: "",
-    category: "Other",
     currency: destinationCurrency || "NZD",
-    amount: "",
-    notes: "",
-    frequency: "one-time"
-  })
-
-  const [errors, setErrors] = useState({
-    name: "",
-    category: "",
-    amount: ""
   })
 
   const [submitError, setSubmitError] = useState("")
-
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
     if (editingExpense !== null) {
@@ -66,12 +53,6 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
       [name]: value
     }))
 
-    if(name === "name" || name === "category" || name === "amount"){
-      setErrors((prev)=> ({
-        ...prev,
-        [name] : ""
-      }))
-    }
   }
 
   function resetForm() {
@@ -90,34 +71,19 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
     onCancelEdit()
   }
 
-  async function submitHandler(event) {
-    event.preventDefault()
-
-    const validationData = {
-      ...formData,
-      amount : Number(formData.amount)
-    }
-
-    const validationResult = ExpenseSchema.safeParse(validationData)
+  async function submitHandler(data) {
+    const validationResult = ExpenseSchema.safeParse(data)
 
     if(!validationResult.success){
       const fieldErrors = z.flattenError(validationResult.error).fieldErrors
       
-      setErrors({
-        name : fieldErrors.name?.[0] || "",
-        category: fieldErrors.category?.[0] || "",
-        amount: fieldErrors.amount?.[0] || ""
-      })
-
       return;
     }
 
     const expensePayload = {
-      ...formData,
+      ...data,
       currency: formData.currency || destinationCurrency
     }
-
-    setIsSubmitting(true)
 
     try {
       setSubmitError("")
@@ -138,12 +104,11 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
     } catch (error) {
       setSubmitError("Unable to save expense. Please check your network connection and try again.")
     } finally {
-      setIsSubmitting(false)
     }  
   }
 
   return (
-    <form onSubmit={submitHandler} className="space-y-4">
+    <form onSubmit={rhfHandleSubmit(submitHandler)} className="space-y-4">
       
       {/* Edit Mode Banner */}
       {editingExpense !== null && (
@@ -175,15 +140,15 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
             id="name"
             type="text"
             placeholder="e.g. Flight Ticket"
-            aria-invalid={Boolean(errors.name)}
-            aria-describedby={errors.name ? "name-error" : undefined}
+            aria-invalid={Boolean(rhfErrors.name)}
+            aria-describedby={rhfErrors.name ? "name-error" : undefined}
             className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 placeholder-slate-600 transition-colors focus:outline-none focus:ring-2 ${
               errors.name
                 ? "border border-rose-500 focus:border-rose-500 focus:ring-rose-500/40"
                 : "border border-slate-700 focus:border-indigo-500 focus:ring-indigo-500"
             }`}
           />
-          {errors.name && (
+          {rhfErrors.name && (
             <span
               id="name-error"
               role="alert"
@@ -192,7 +157,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
-              <span>{errors.name}</span>
+              <span>{rhfErrors.name?.message}</span>
             </span>
           )}
         </div>
@@ -205,10 +170,10 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
           <select
             {...register("category")}
             id="category"
-            aria-invalid={Boolean(errors.category)}
-            aria-describedby={errors.category ? "category-error" : undefined}
+            aria-invalid={Boolean(rhfErrors.category)}
+            aria-describedby={rhfErrors.category ? "category-error" : undefined}
             className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 transition-colors focus:outline-none focus:ring-2 ${
-              errors.category
+              rhfErrors.category
                 ? "border border-rose-500 focus:border-rose-500 focus:ring-rose-500/40"
                 : "border border-slate-700 focus:border-indigo-500 focus:ring-indigo-500"
             }`}
@@ -219,7 +184,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
               </option>
             ))}
           </select>
-          {errors.category && (
+          {rhfErrors.category && (
             <span
               id="category-error"
               role="alert"
@@ -228,7 +193,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
-              <span>{errors.category}</span>
+              <span>{rhfErrors.category?.message}</span>
             </span>
           )}
         </div>
@@ -255,15 +220,15 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
             placeholder="0.00"
             min="0"
             step="0.01"
-            aria-invalid={Boolean(errors.amount)}
-            aria-describedby={errors.amount ? "amount-error" : undefined}
+            aria-invalid={Boolean(rhfErrors.amount)}
+            aria-describedby={rhfErrors.amount ? "amount-error" : undefined}
             className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 placeholder-slate-600 transition-colors focus:outline-none focus:ring-2 ${
-              errors.amount
+              rhfErrors.amount
                 ? "border border-rose-500 focus:border-rose-500 focus:ring-rose-500/40"
                 : "border border-slate-700 focus:border-indigo-500 focus:ring-indigo-500"
             }`}
           />
-          {errors.amount && (
+          {rhfErrors.amount && (
             <span
               id="amount-error"
               role="alert"
@@ -272,7 +237,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
-              <span>{errors.amount}</span>
+              <span>{rhfErrors.amount?.message}</span>
             </span>
           )}
         </div>
@@ -357,9 +322,9 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
           type="submit"
           className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900
           disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled={isSubmitting}
+          disabled={rhfIsSubmitting}
         >
-         {isSubmitting ? "Saving..." : "Add Expense"} 
+         {rhfIsSubmitting ? "Saving..." : "Add Expense"} 
         </button>
       ) : (
         <div className="flex items-center gap-3">
@@ -367,16 +332,16 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
             type="submit"
             className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900
             disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={isSubmitting}
+            disabled={rhfIsSubmitting}
           >
-            {isSubmitting ? "Saving..." : "Update Expense"}
+            {rhfIsSubmitting ? "Saving..." : "Update Expense"}
           </button>
           <button
             type="button"
             onClick={handleCancel}
             className="flex-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-600 focus:ring-offset-2 focus:ring-offset-slate-900
             disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={isSubmitting}
+            disabled={rhfIsSubmitting}
           >
             Cancel
           </button>
