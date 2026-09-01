@@ -4,33 +4,33 @@ import currencyList from "../data/currencies.js"
 
 const ExpenseSchema = z.object({
   name : z
-  .string()
-  .trim()
-  .min(1, "Name is required"),
+    .string()
+    .trim()
+    .min(1, "Name is required"),
   
   category : z
-  .string()
-  .refine(
-    (value) => expenseCategories.includes(value),
-    "Must be a valid expense category"
-  ),
+    .string()
+    .refine(
+      (value) => expenseCategories.includes(value),
+      "Must be a valid expense category"
+    ),
 
   amount : z
-  .number()
-  .positive("Amount must be greater than 0"),
+    .number()
+    .positive("Amount must be greater than 0"),
 
   currency : z
-  .refine(
-    (value) => currencyList.includes(value),
-    "Must be a valid currency"
-  ),
+    .refine(
+      (value) => currencyList.includes(value),
+      "Must be a valid currency"
+    ),
 
   frequency: z
-  .enum(["one-time", "monthly"]),
+    .enum(["one-time", "monthly"]),
 
   notes : z
-  .string()
-  .optional()
+    .string()
+    .optional()
 })
 
 export default ExpenseSchema

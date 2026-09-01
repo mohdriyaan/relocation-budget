@@ -3,6 +3,9 @@ import { useEffect, useState } from "react"
 import expenseCategories from "../data/expenseCategories.js"
 import CurrencySelector from "./CurrencySelector.jsx"
 import { createExpense, updateExpense } from "../services/expenseApi.js"
+import ExpenseSchema from "../schemas/expenseSchema.js"
+import { z } from "zod"
+
 
 const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdateExpense, onEditComplete, onCancelEdit}) => {
   const [formData, setFormData] = useState({
@@ -147,11 +150,22 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
   async function submitHandler(event) {
     event.preventDefault()
 
-    const isNameValid = checkNameError(formData.name)
-    const isAmountValid = checkAmountError(formData.amount)
-    const isCategoryValid = checkCategoryError(formData.category)
+    const validationData = {
+      ...formData,
+      amount : Number(formData.amount)
+    }
 
-    if (!isNameValid || !isAmountValid || !isCategoryValid) {
+    const validationResult = ExpenseSchema.safeParse(validationData)
+
+    if(!validationResult.success){
+      const fieldErrors = z.flattenError(validationResult.error).fieldErrors
+      
+      setErrors({
+        name : fieldErrors.name?.[0] || "",
+        category: fieldErrors.category?.[0] || "",
+        amount: fieldErrors.amount?.[0] || ""
+      })
+
       return;
     }
 
