@@ -4,21 +4,21 @@ import expenseCategories from "../data/expenseCategories.js"
 import CurrencySelector from "./CurrencySelector.jsx"
 import { createExpense, updateExpense } from "../services/expenseApi.js"
 import ExpenseSchema from "../schemas/expenseSchema.js"
-import { useForm } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdateExpense, onEditComplete, onCancelEdit}) => {
   const {
     register,
     handleSubmit : rhfHandleSubmit,
+    control,
     reset : rfhReset,
     formState : {errors : rhfErrors, isSubmitting : rhfIsSubmitting}
   } = useForm({
-    resolver : zodResolver(ExpenseSchema)
-  })
-
-  const [formData, setFormData] = useState({
-    currency: destinationCurrency || "NZD",
+    resolver : zodResolver(ExpenseSchema),
+    defaultValues : {
+      currency : destinationCurrency || "NZD"
+    }
   })
 
   const [submitError, setSubmitError] = useState("")
@@ -29,54 +29,32 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
         name : editingExpense.name,
         category : editingExpense.category,
         amount : editingExpense.amount,
+        currency : editingExpense.currency || destinationCurrency,
         frequency : editingExpense.frequency,
         notes : editingExpense.notes ?? ""
       })
-
-      setFormData({
-        currency: editingExpense.currency || destinationCurrency
-      })   
-
     } else {
       rfhReset({
         name : "",
         category : "Other",
         amount : "",
+        currency : destinationCurrency,
         frequency : "one-time",
         notes : ""
       })
-
-      setFormData({
-        currency: destinationCurrency
-      })
     }
   }, [editingExpense, destinationCurrency, rfhReset])
-
-  function changeHandler(event) {
-    const { name, value } = event.target
-    
-    // Clear top-level submission error when user edits fields
-    if (submitError) setSubmitError("")
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value
-    }))
-  }
 
   function resetForm() {
     rfhReset({
       name : "",
       category: "Other",
       amount: "",
+      currency: destinationCurrency || "NZD",
       frequency: "one-time",
       notes: ""
     })
     
-    setFormData({
-      currency: destinationCurrency || "NZD",
-    })
-
     setSubmitError("")
   }
 
@@ -86,10 +64,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
   }
 
   async function submitHandler(data) {
-    const expensePayload = {
-      ...data,
-      currency: formData.currency || destinationCurrency
-    }
+    const expensePayload = data
 
     try {
       setSubmitError("")
@@ -204,11 +179,18 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
         </div>
 
         {/* Expense Currency Selector */}
-        <CurrencySelector
+        <Controller 
           name="currency"
-          label="Currency"
-          value={formData.currency}
-          onChange={changeHandler}
+          control={control}
+          render={({field, fieldState})=> (
+            <CurrencySelector
+              name={field.name}
+              label="Currency"
+              value={field.value}
+              onChange={field.onChange}
+              error={fieldState.error?.message}
+            />
+          )}
         />
 
         {/* Amount Input */}
