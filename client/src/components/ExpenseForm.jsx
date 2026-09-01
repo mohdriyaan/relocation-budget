@@ -6,6 +6,7 @@ import { createExpense, updateExpense } from "../services/expenseApi.js"
 import ExpenseSchema from "../schemas/expenseSchema.js"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdateExpense, onEditComplete, onCancelEdit}) => {
   const {
@@ -13,7 +14,9 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
     handleSubmit : rhfHandleSubmit,
     reset : rfhReset,
     formState : {errors : rhfErrors, isSubmitting : rhfIsSubmitting}
-  } = useForm()
+  } = useForm({
+    resolver : zodResolver(ExpenseSchema)
+  })
 
   const [formData, setFormData] = useState({
     currency: destinationCurrency || "NZD",
@@ -72,14 +75,6 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
   }
 
   async function submitHandler(data) {
-    const validationResult = ExpenseSchema.safeParse(data)
-
-    if(!validationResult.success){
-      const fieldErrors = z.flattenError(validationResult.error).fieldErrors
-      
-      return;
-    }
-
     const expensePayload = {
       ...data,
       currency: formData.currency || destinationCurrency
@@ -143,7 +138,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
             aria-invalid={Boolean(rhfErrors.name)}
             aria-describedby={rhfErrors.name ? "name-error" : undefined}
             className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 placeholder-slate-600 transition-colors focus:outline-none focus:ring-2 ${
-              errors.name
+              rhfErrors.name
                 ? "border border-rose-500 focus:border-rose-500 focus:ring-rose-500/40"
                 : "border border-slate-700 focus:border-indigo-500 focus:ring-indigo-500"
             }`}
