@@ -33,9 +33,9 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
         notes : editingExpense.notes ?? ""
       })
 
-      setFormData((prev) => ({
-        currency: currency || destinationCurrency
-      }))   
+      setFormData({
+        currency: editingExpense.currency || destinationCurrency
+      })   
 
     } else {
       rfhReset({
@@ -46,9 +46,9 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
         notes : ""
       })
 
-      setFormData((prev) => ({
+      setFormData({
         currency: destinationCurrency
-      }))
+      })
     }
   }, [editingExpense, destinationCurrency, rfhReset])
 
