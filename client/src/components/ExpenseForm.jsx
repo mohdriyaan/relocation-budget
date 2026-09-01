@@ -83,7 +83,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
         } 
       }
     } catch (error) {
-      setSubmitError("Unable to save expense. Please check your network connection and try again.")
+      setSubmitError(error.message || "Unable to save expense. Please try again.")
     }  
   }
 

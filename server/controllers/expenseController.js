@@ -43,7 +43,7 @@ const deleteExpense = async(req, res) => {
 
     if(!expense){
       return res.status(404).json({
-        message : "Valid ID but no expense found"
+        error : "Valid ID but expense not found"
       })
     }
 
