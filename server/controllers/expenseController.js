@@ -76,7 +76,7 @@ const updateExpense = async(req,res)=> {
 
     if(!updatedExpense){
       return res.status(404).json({
-        message : "Valid ID but no expense found"
+        error : "Valid ID but expense not found"
       })
     }
 

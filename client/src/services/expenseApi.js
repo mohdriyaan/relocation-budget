@@ -7,10 +7,10 @@ async function createExpense(expenseData) {
     body: JSON.stringify(expenseData)
   })
 
-  const result = res.json()
+  const result = await res.json()
 
   if (!res.ok) {
-    throw new Error(result.error || result.message || "Unable to create expense")
+    throw new Error(result.error || "Unable to create expense")
   }
 
   return result
@@ -24,7 +24,7 @@ async function getExpenses() {
   const result = await res.json()
 
   if (!res.ok) {
-    throw new Error(result.error || result.message || "Unable to get expense")
+    throw new Error(result.error || "Unable to get expense")
   }
 
   return result
@@ -35,7 +35,7 @@ async function deleteExpense(id) {
     method: "DELETE"
   })
 
-  const result = res.json()
+  const result = await res.json()
 
   if (!res.ok) {
     throw new Error(result.error || "Unable to delete expense")
@@ -53,10 +53,10 @@ async function updateExpense(id, expenseData) {
     body: JSON.stringify(expenseData)
   })
 
-  const result = res.json()
+  const result = await res.json()
 
   if (!res.ok) {
-    throw new Error(result.error || result.message || "Unable to update expense")
+    throw new Error(result.error || "Unable to update expense")
   }
 
   return result
