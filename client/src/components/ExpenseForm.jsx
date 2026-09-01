@@ -203,10 +203,8 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
             Category
           </label>
           <select
-            name="category"
+            {...register("category")}
             id="category"
-            value={formData.category}
-            onChange={changeHandler}
             aria-invalid={Boolean(errors.category)}
             aria-describedby={errors.category ? "category-error" : undefined}
             className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 transition-colors focus:outline-none focus:ring-2 ${
