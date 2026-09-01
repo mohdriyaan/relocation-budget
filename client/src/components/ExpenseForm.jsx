@@ -171,11 +171,9 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
             Expense Name
           </label>
           <input
-            name="name"
+            {...register("name")}
             id="name"
             type="text"
-            value={formData.name}
-            onChange={changeHandler}
             placeholder="e.g. Flight Ticket"
             aria-invalid={Boolean(errors.name)}
             aria-describedby={errors.name ? "name-error" : undefined}
