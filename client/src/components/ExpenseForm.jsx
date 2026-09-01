@@ -59,76 +59,12 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
       [name]: value
     }))
 
-    if (name === "name") {
-      checkNameError(value)
-    }
-
-    if (name === "amount") {
-      checkAmountError(value)
-    }
-
-    if (name === "category") {
-      checkCategoryError(value)
-    }
-  }
-
-  function checkNameError(name) {
-    if (name.trim() === "") {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        name: "Name is required"
+    if(name === "name" || name === "category" || name === "amount"){
+      setErrors((prev)=> ({
+        ...prev,
+        [name] : ""
       }))
-      return false
     }
-    
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      name: ""
-    }))
-
-    return true
-  }
-
-  function checkAmountError(amount) {
-    if (amount == "") {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        amount: "Amount is required"
-      }))
-      return false
-    }
-    
-    if (amount <= 0) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        amount: "Amount must be greater than zero"
-      }))
-      return false
-    }
-
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      amount: ""
-    }))
-
-    return true
-  }
-
-  function checkCategoryError(category) {
-    if (!expenseCategories.includes(category)) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        category: "Category should only be selected from the list"
-      }))
-      return false
-    }
-
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      category: ""
-    }))
-
-    return true
   }
 
   function resetForm() {
