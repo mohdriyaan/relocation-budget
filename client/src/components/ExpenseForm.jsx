@@ -4,7 +4,6 @@ import expenseCategories from "../data/expenseCategories.js"
 import CurrencySelector from "./CurrencySelector.jsx"
 import { createExpense, updateExpense } from "../services/expenseApi.js"
 import ExpenseSchema from "../schemas/expenseSchema.js"
-import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
@@ -26,24 +25,32 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
 
   useEffect(() => {
     if (editingExpense !== null) {
-      const { name, category, currency, amount, frequency, notes } = editingExpense
+      rfhReset({
+        name : editingExpense.name,
+        category : editingExpense.category,
+        amount : editingExpense.amount,
+        frequency : editingExpense.frequency,
+        notes : editingExpense.notes ?? ""
+      })
 
       setFormData((prev) => ({
-        ...prev,
-        name,
-        category,
-        currency: currency || destinationCurrency,
-        amount,
-        frequency,
-        notes: notes ?? ""
+        currency: currency || destinationCurrency
       }))   
+
     } else {
+      rfhReset({
+        name : "",
+        category : "Other",
+        amount : "",
+        frequency : "one-time",
+        notes : ""
+      })
+
       setFormData((prev) => ({
-        ...prev,
         currency: destinationCurrency
       }))
     }
-  }, [editingExpense, destinationCurrency])
+  }, [editingExpense, destinationCurrency, rfhReset])
 
   function changeHandler(event) {
     const { name, value } = event.target
@@ -55,18 +62,22 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
       ...prev,
       [name]: value
     }))
-
   }
 
   function resetForm() {
-    setFormData({
-      name: "",
+    rfhReset({
+      name : "",
       category: "Other",
-      currency: destinationCurrency || "NZD",
       amount: "",
-      notes: "",
-      frequency: "one-time"
+      frequency: "one-time",
+      notes: ""
     })
+    
+    setFormData({
+      currency: destinationCurrency || "NZD",
+    })
+
+    setSubmitError("")
   }
 
   function handleCancel() {
@@ -98,7 +109,6 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
       }
     } catch (error) {
       setSubmitError("Unable to save expense. Please check your network connection and try again.")
-    } finally {
     }  
   }
 

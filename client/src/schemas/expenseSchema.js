@@ -20,6 +20,7 @@ const ExpenseSchema = z.object({
     .positive("Amount must be greater than 0"),
 
   currency : z
+    .string()
     .refine(
       (value) => currencyList.includes(value),
       "Must be a valid currency"
