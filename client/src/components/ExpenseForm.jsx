@@ -283,10 +283,8 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
             Frequency
           </label>
           <select
-            name="frequency"
+            {...register("frequency")}
             id="frequency"
-            value={formData.frequency}
-            onChange={changeHandler}
             className="w-full bg-slate-950 border border-slate-700 text-white text-sm rounded-lg p-3 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           >
             <option value="one-time">One-time</option>
@@ -301,11 +299,9 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
           Notes (Optional)
         </label>
         <textarea
-          name="notes"
+          {...register("notes")}
           id="notes"
           rows="2"
-          value={formData.notes}
-          onChange={changeHandler}
           placeholder="Add extra details..."
           className="w-full bg-slate-950 border border-slate-700 text-white text-sm rounded-lg p-3 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none"
         ></textarea>
