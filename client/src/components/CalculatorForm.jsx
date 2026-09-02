@@ -8,6 +8,7 @@ import CalculatorSchema from "../schemas/calculatorSchema"
 
 function CalculatorForm({
   onCalculate,
+  onDestinationCurrencyChange,
   exchangeRateError,
   calculationError,
   isCalculating
@@ -54,7 +55,10 @@ function CalculatorForm({
                 name={field.name}
                 label="Destination Currency"
                 value={field.value}
-                onChange={field.onChange}
+                onChange={(value)=> {
+                  field.onChange(value)
+                  onDestinationCurrencyChange(value)
+                }}
                 error={fieldState.error?.message}
               />
             )}

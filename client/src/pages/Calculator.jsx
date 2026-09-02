@@ -8,11 +8,10 @@ import ExpenseSection from "../components/ExpenseSection.jsx"
 
 const Calculator = () => {
   const [expenses, setExpenses] = useState([])
+  const [destinationCurrency, setDestinationCurrency] = useState("NZD")
 
   const {
-    formData,
-    errors,
-    changeHandler,
+    calculationData,
     handleSubmit,
     showSummary,
     result,
@@ -129,9 +128,8 @@ const Calculator = () => {
           {/* Left Column: Currency Conversion Form */}
           <div className="lg:col-span-5 space-y-6">
             <CalculatorForm
-              formData={formData}
-              errors={errors}
-              changeHandler={changeHandler} handleSubmit={handleSubmit}
+              onCalculate={handleSubmit}
+              onDestinationCurrencyChange={setDestinationCurrency}
               exchangeRateError={exchangeRateError}
               calculationError={calculationError}
               isCalculating={isCalculating}
@@ -141,9 +139,9 @@ const Calculator = () => {
             {showSummary && result !== null && (
               <div className="pt-6 border-t border-slate-800">
                 <CalculatorSummary
-                  originCurrency={formData.originCurrency}
-                  destinationCurrency={formData.destinationCurrency}
-                  savings={formData.savings}
+                  originCurrency={calculationData.originCurrency}
+                  destinationCurrency={calculationData.destinationCurrency}
+                  savings={calculationData.savings}
                   result={result}
                   totalExpenses={totalExpenses}
                   rate={exchangeRate}
@@ -161,7 +159,7 @@ const Calculator = () => {
             {/* Add Expense Card */}
             <ExpenseSection
               addExpense={addExpense}
-              destinationCurrency={formData.destinationCurrency}
+              destinationCurrency={destinationCurrency}
               editingExpense={editingExpense}
               onUpdateExpense={handleUpdateExpense}
               onEditComplete={onEditComplete}
