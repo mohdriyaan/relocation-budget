@@ -4,7 +4,7 @@ const authMiddleware = (req, res, next) => {
   try {
     const jwtToken = req.cookies.accessToken;
 
-    if (!token) {
+    if (!jwtToken) {
       return res.status(401).json({
         error: "Authentication required"
       })
@@ -15,6 +15,10 @@ const authMiddleware = (req, res, next) => {
     req.user = id
 
     next()
+
+    return res.status(200).json({
+      userId : id
+    })
 
   } catch (error) {
     return res.status(401).json({

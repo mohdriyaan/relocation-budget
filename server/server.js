@@ -8,7 +8,6 @@ import cors from "cors"
 import connectDB from "./config/db.js"
 import authRoute from "./routes/authRoutes.js"
 import cookieParser from "cookie-parser"
-import authMiddleware from "./middleware/authMiddleware.js"
 
 const app = express()
 const PORT = 5000
