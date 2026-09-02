@@ -7,54 +7,46 @@ import ExpenseSchema from "../schemas/expenseSchema.js"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdateExpense, onEditComplete, onCancelEdit}) => {
+const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdateExpense, onEditComplete, onCancelEdit }) => {
+  const getDefaultExpenseValues = (currency) => ({
+    name: "",
+    category: "Other",
+    amount: "",
+    currency: currency || "NZD",
+    frequency: "one-time",
+    notes: ""
+  })
+
   const {
     register,
     handleSubmit,
     control,
     reset,
-    formState : {errors, isSubmitting}
+    formState: { errors, isSubmitting }
   } = useForm({
-    resolver : zodResolver(ExpenseSchema),
-    defaultValues : {
-      currency : destinationCurrency || "NZD"
-    }
+    resolver: zodResolver(ExpenseSchema),
+    defaultValues: getDefaultExpenseValues(destinationCurrency)
   })
 
   const [submitError, setSubmitError] = useState("")
 
   useEffect(() => {
-    if (editingExpense !== null) {
-      reset({
-        name : editingExpense.name,
-        category : editingExpense.category,
-        amount : editingExpense.amount,
-        currency : editingExpense.currency || destinationCurrency,
-        frequency : editingExpense.frequency,
-        notes : editingExpense.notes ?? ""
-      })
-    } else {
-      reset({
-        name : "",
-        category : "Other",
-        amount : "",
-        currency : destinationCurrency,
-        frequency : "one-time",
-        notes : ""
-      })
+    if (!editingExpense) {
+      return
     }
-  }, [editingExpense, destinationCurrency, reset])
+
+    reset({
+      name: editingExpense.name,
+      category: editingExpense.category,
+      amount: editingExpense.amount,
+      currency: editingExpense.currency || destinationCurrency,
+      frequency: editingExpense.frequency,
+      notes: editingExpense.notes ?? ""
+    })
+  }, [editingExpense, reset])
 
   function resetForm() {
-    reset({
-      name : "",
-      category: "Other",
-      amount: "",
-      currency: destinationCurrency || "NZD",
-      frequency: "one-time",
-      notes: ""
-    })
-    
+    reset(getDefaultExpenseValues(destinationCurrency))
     setSubmitError("")
   }
 
@@ -64,32 +56,33 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
   }
 
   async function submitHandler(data) {
-    const expensePayload = data
-
     try {
       setSubmitError("")
-      const result = editingExpense === null ?   
-      await createExpense(expensePayload) : 
-      await updateExpense(editingExpense._id, expensePayload)
+
+      const result = editingExpense
+        ? await updateExpense(editingExpense._id, data)
+        : await createExpense(data)
 
       if (result.expense) {
-        if (editingExpense === null) {
-          addExpense(result.expense)
-          resetForm()
-        } else {
+        if (editingExpense) {
           onUpdateExpense(result.expense)
           onEditComplete()
-          resetForm()
-        } 
+        } else {
+          addExpense(result.expense)
+        }
+
+        resetForm()
       }
     } catch (error) {
-      setSubmitError(error.message || "Unable to save expense. Please try again.")
-    }  
+      setSubmitError(
+        error.message || "Unable to save expense. Please try again."
+      )
+    }
   }
 
   return (
     <form onSubmit={handleSubmit(submitHandler)} className="space-y-4">
-      
+
       {/* Edit Mode Banner */}
       {editingExpense !== null && (
         <div className="flex items-center justify-between p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs sm:text-sm font-medium">
@@ -122,11 +115,10 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
             placeholder="e.g. Flight Ticket"
             aria-invalid={Boolean(errors.name)}
             aria-describedby={errors.name ? "name-error" : undefined}
-            className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 placeholder-slate-600 transition-colors focus:outline-none focus:ring-2 ${
-              errors.name
-                ? "border border-rose-500 focus:border-rose-500 focus:ring-rose-500/40"
-                : "border border-slate-700 focus:border-indigo-500 focus:ring-indigo-500"
-            }`}
+            className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 placeholder-slate-600 transition-colors focus:outline-none focus:ring-2 ${errors.name
+              ? "border border-rose-500 focus:border-rose-500 focus:ring-rose-500/40"
+              : "border border-slate-700 focus:border-indigo-500 focus:ring-indigo-500"
+              }`}
           />
           {errors.name && (
             <span
@@ -152,11 +144,10 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
             id="category"
             aria-invalid={Boolean(errors.category)}
             aria-describedby={errors.category ? "category-error" : undefined}
-            className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 transition-colors focus:outline-none focus:ring-2 ${
-              errors.category
-                ? "border border-rose-500 focus:border-rose-500 focus:ring-rose-500/40"
-                : "border border-slate-700 focus:border-indigo-500 focus:ring-indigo-500"
-            }`}
+            className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 transition-colors focus:outline-none focus:ring-2 ${errors.category
+              ? "border border-rose-500 focus:border-rose-500 focus:ring-rose-500/40"
+              : "border border-slate-700 focus:border-indigo-500 focus:ring-indigo-500"
+              }`}
           >
             {expenseCategories.map((expenseCategory) => (
               <option key={expenseCategory} value={expenseCategory}>
@@ -179,10 +170,10 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
         </div>
 
         {/* Expense Currency Selector */}
-        <Controller 
+        <Controller
           name="currency"
           control={control}
-          render={({field, fieldState})=> (
+          render={({ field, fieldState }) => (
             <CurrencySelector
               name={field.name}
               label="Currency"
@@ -200,7 +191,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
           </label>
           <input
             {...register("amount", {
-              valueAsNumber : true
+              valueAsNumber: true
             })}
             type="number"
             id="amount"
@@ -209,11 +200,10 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
             step="0.01"
             aria-invalid={Boolean(errors.amount)}
             aria-describedby={errors.amount ? "amount-error" : undefined}
-            className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 placeholder-slate-600 transition-colors focus:outline-none focus:ring-2 ${
-              errors.amount
-                ? "border border-rose-500 focus:border-rose-500 focus:ring-rose-500/40"
-                : "border border-slate-700 focus:border-indigo-500 focus:ring-indigo-500"
-            }`}
+            className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 placeholder-slate-600 transition-colors focus:outline-none focus:ring-2 ${errors.amount
+              ? "border border-rose-500 focus:border-rose-500 focus:ring-rose-500/40"
+              : "border border-slate-700 focus:border-indigo-500 focus:ring-indigo-500"
+              }`}
           />
           {errors.amount && (
             <span
@@ -311,7 +301,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
           disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={isSubmitting}
         >
-         {isSubmitting ? "Saving..." : "Add Expense"} 
+          {isSubmitting ? "Saving..." : "Add Expense"}
         </button>
       ) : (
         <div className="flex items-center gap-3">

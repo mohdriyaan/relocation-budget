@@ -55,14 +55,9 @@ const Calculator = () => {
   }
 
   function addExpense(expenseData) {
-    const newExpense = {
-      id: crypto.randomUUID(),
-      ...expenseData
-    }
-
     setExpenses((prevExpenses) => [
       ...prevExpenses,
-      newExpense
+      expenseData
     ])
 
     invalidateCalculation()
