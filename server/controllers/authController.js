@@ -47,7 +47,7 @@ const registerUser = async (req, res) => {
 
   } catch (error) {
     return res.status(500).json({
-      error: "Unable to register user",
+      error: "Unable to register user"
     })
   }
 }
@@ -121,9 +121,6 @@ const loginUser = async (req, res) => {
       error : "Unable to login user"
     })
   }
-
-
-
 }
 export { registerUser, loginUser }
 

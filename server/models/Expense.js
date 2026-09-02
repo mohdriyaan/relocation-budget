@@ -32,7 +32,12 @@ const expenseSchema = new mongoose.Schema({
     type : String,
     required : false,
     trim : true
-  }
+  },
+  user : {
+    type : mongoose.Schema.Types.ObjectId,
+    ref : "User",
+    required : true
+  } 
 }, {
   timestamps : true
 })

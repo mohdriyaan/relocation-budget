@@ -1,7 +1,9 @@
 import Expense from "../models/Expense.js"
 const getExpenses = async(req,res) => {
   try {
-    const expenses = await Expense.find()
+    const expenses = await Expense.findOne({
+      user : req.user
+    })
 
     return res.status(200).json({
       expenses
@@ -16,7 +18,10 @@ const getExpenses = async(req,res) => {
 
 const createExpenses = async(req,res) => {
   try {
-    const newExpense = new Expense(req.body)
+    const newExpense = new Expense({
+      ...req.body,
+      user : req.user
+    })
     const saveExpense = await newExpense.save()
 
     return res.status(201).json({
@@ -26,7 +31,7 @@ const createExpenses = async(req,res) => {
   } catch (error) {
     if(error.name==="ValidationError"){
       return res.status(400).json({
-        error : "Invalid inputs"
+        error : "Invalid inputs",
       })
     }
     return res.status(500).json({
@@ -37,9 +42,13 @@ const createExpenses = async(req,res) => {
 
 const deleteExpense = async(req, res) => {
   try {
-    const id = req.params.id
+    const expenseId = req.params.id
+    const userId = req.user
 
-    const expense = await Expense.findByIdAndDelete(id)
+    const expense = await Expense.findOneAndDelete({
+      _id : expenseId,
+      user : userId
+    })
 
     if(!expense){
       return res.status(404).json({
@@ -65,11 +74,15 @@ const deleteExpense = async(req, res) => {
 
 const updateExpense = async(req,res)=> {
   try {
-    const id = req.params.id
+    const expenseId = req.params.id
+    const userId = req.user
     const expenseData = req.body
 
-    const updatedExpense = await Expense.findByIdAndUpdate(
-      id,
+    const updatedExpense = await Expense.findOneAndUpdate(
+      {
+        _id : expenseId,
+        user : userId
+      },
       expenseData,
       {new : true, runValidators: true}
     )
