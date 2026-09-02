@@ -1,8 +1,5 @@
 import User from "../models/User.js"
 import jwt from "jsonwebtoken"
-import dotenv from "dotenv"
-
-dotenv.config()
 
 const registerUser = async (req, res) => {
   try {
@@ -63,7 +60,7 @@ const loginUser = async (req, res) => {
 
     if (!normalizedEmail || !password) {
       return res.status(400).json({
-        error: "Email and password is required"
+        error: "Email and password are required"
       })
     }
 
@@ -85,18 +82,26 @@ const loginUser = async (req, res) => {
       })
     }
 
+    const secretJWT = process.env.JWT_SECRET
+
+    if(!secretJWT){
+      return res.status(500).json({
+        error : "JWT secret is not configured"
+      })
+    }
+
     const token = jwt.sign(
       {
         id : user._id
       }, 
-      process.env.JWT_SECRET, 
+      secretJWT, 
       {
       expiresIn : "1d"
       }
     )
 
     return res.status(200).json({
-      message : "Login Successfull",
+      message : "Login successful",
       token,
       user : {
         id : user._id,
@@ -107,8 +112,7 @@ const loginUser = async (req, res) => {
     
   } catch (error) {
     return res.status(500).json({
-      error : "Unable to login user",
-      message : error.message
+      error : "Unable to login user"
     })
   }
 
