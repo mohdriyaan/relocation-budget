@@ -59,12 +59,7 @@ function useBudgetCalculator(expenses) {
   async function fetchRate(from, to) {
     try {
       const result = await getExchangeRate(from, to)
-      const rate = result.rate
-
-      setExchangeRate(rate)
-      setExchangeRateError(null)
-
-      return rate
+      return result.rate
     } catch (error) {
       setExchangeRate(null)
       setExchangeRateError("Unable to retrieve exchange rate.")
@@ -77,12 +72,6 @@ function useBudgetCalculator(expenses) {
     setShowSummary(false)
     setCalculationError("")
     setExchangeRateError(null)
-
-    setNormalizedExpenses([])
-    setConvertedSavings(null)
-    setCalculationData(null)
-
-
     setIsCalculating(true)
 
     try {
@@ -97,8 +86,6 @@ function useBudgetCalculator(expenses) {
         destinationCurrency
       )
 
-      setNormalizedExpenses(convertedExpenses)
-
       const rate = await fetchRate(
         originCurrency,
         destinationCurrency
@@ -111,7 +98,9 @@ function useBudgetCalculator(expenses) {
         rate
       )
 
+      setNormalizedExpenses(convertedExpenses)
       setConvertedSavings(convertedAmount)
+      setExchangeRate(rate)
       setResult(convertedAmount)
       setCalculationData(data)
       setShowSummary(true)
