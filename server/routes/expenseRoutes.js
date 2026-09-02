@@ -3,11 +3,17 @@ import { getExpenses, createExpenses, deleteExpense, updateExpense } from "../co
 import authMiddleware from "../middleware/authMiddleware.js"
 const router = express.Router()
 
+// Protect all routes defined below in this router
 router.use(authMiddleware)
 
-router.get("/", getExpenses)
-router.post("/", createExpenses)
-router.delete("/:id", deleteExpense)
-router.patch("/:id", updateExpense)
+// Collection routes
+router.route("/")
+  .get(getExpenses)
+  .post(createExpenses)
+
+// Individual resource routes
+router.route("/:id")
+  .patch(updateExpense)
+  .delete(deleteExpense)
 
 export default router

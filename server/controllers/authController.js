@@ -76,51 +76,77 @@ const loginUser = async (req, res) => {
 
     const isMatch = await user.comparePassword(password)
 
-    if (!isMatch){
+    if (!isMatch) {
       return res.status(401).json({
-        error : "Invalid email or password"
+        error: "Invalid email or password"
       })
     }
 
     const secretJWT = process.env.JWT_SECRET
 
-    if(!secretJWT){
+    if (!secretJWT) {
       return res.status(500).json({
-        error : "JWT secret is not configured"
+        error: "JWT secret is not configured"
       })
     }
 
     const token = jwt.sign(
       {
-        id : user._id
-      }, 
-      secretJWT, 
+        id: user._id
+      },
+      secretJWT,
       {
-      expiresIn : "1d"
+        expiresIn: "1d"
       }
     )
 
     res.cookie("accessToken", token, {
-      httpOnly : true,
-      secure : false,
-      sameSite : "lax",
-      maxAge : 24 * 60 * 60 * 1000
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000
     })
 
     return res.status(200).json({
-      message : "Login successful",
-      user : {
-        id : user._id,
-        name : user.name,
-        email : user.email
+      message: "Login successful",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email
       }
     })
-    
+
   } catch (error) {
     return res.status(500).json({
-      error : "Unable to login user"
+      error: "Unable to login user"
     })
   }
 }
-export { registerUser, loginUser }
+
+const logoutUser = async (req, res) => {
+  res.clearCookie("accessToken",{
+    httpOnly : true,
+    secure : false,
+    sameSite : "lax"
+  })
+
+  return res.status(200).json({
+    message : "Logged out successfully"
+  })
+}
+
+const getCurrentUser = async (req,res) => {
+  const userId = req.user
+
+  const user = await User.findById(userId).select("-password")
+
+  if(!user){
+    return res.status(404).json({
+      error : "User not found"
+    })
+  }
+
+  return res.status(200).json(user)
+}
+export { registerUser, loginUser, logoutUser, getCurrentUser }
 
