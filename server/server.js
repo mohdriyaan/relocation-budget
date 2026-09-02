@@ -6,6 +6,7 @@ import exchangeRateRoute from "./routes/exchangeRateRoutes.js"
 import expenseRoute from "./routes/expenseRoutes.js"
 import cors from "cors"
 import connectDB from "./config/db.js"
+import authRoute from "./routes/authRoutes.js"
 
 const app = express()
 const PORT = 5000
@@ -23,6 +24,7 @@ app.use("/api/health",healthRoute)
 app.use("/api/currency",currencyRoute)
 app.use("/api/exchange-rate",exchangeRateRoute)
 app.use("/api/expenses",expenseRoute)
+app.use("/api/auth", authRoute)
 
 async function startServer(){
   await connectDB()
