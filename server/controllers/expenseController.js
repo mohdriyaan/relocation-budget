@@ -1,7 +1,7 @@
 import Expense from "../models/Expense.js"
 const getExpenses = async(req,res) => {
   try {
-    const expenses = await Expense.findOne({
+    const expenses = await Expense.find({
       user : req.user
     })
 
