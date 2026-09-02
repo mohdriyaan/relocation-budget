@@ -1,26 +1,63 @@
+import { useForm, Controller } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+
 import CurrencySelector from "./CurrencySelector"
 import SavingsInput from "./SavingsInput"
 
-function CalculatorForm({formData, errors, changeHandler, handleSubmit, exchangeRateError, calculationError, isCalculating}) {
+import CalculatorSchema from "../schemas/calculatorSchema"
+
+function CalculatorForm({
+  onCalculate,
+  exchangeRateError,
+  calculationError,
+  isCalculating
+}) {
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    resolver: zodResolver(CalculatorSchema),
+    defaultValues: {
+      originCurrency: "INR",
+      destinationCurrency: "NZD",
+      savings: ""
+    }
+  })
   return (
     <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
       <h2 className="text-xl font-bold text-white tracking-wide border-b border-slate-800 pb-4">
         1. Currency Conversion
       </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit(onCalculate)} className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <CurrencySelector
+          <Controller
             name="originCurrency"
-            label="Origin Currency"
-            value={formData.originCurrency}
-            onChange={changeHandler}
+            control={control}
+            render={({ field }) => (
+              <CurrencySelector
+                name={field.name}
+                label="Origin Currency"
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
           />
-          <CurrencySelector
+
+          <Controller
             name="destinationCurrency"
-            label="Destination Currency"
-            value={formData.destinationCurrency}
-            onChange={changeHandler}
+            control={control}
+            render={({ field, fieldState }) => (
+              <CurrencySelector
+                name={field.name}
+                label="Destination Currency"
+                value={field.value}
+                onChange={field.onChange}
+                error={fieldState.error?.message}
+              />
+            )}
           />
         </div>
 
