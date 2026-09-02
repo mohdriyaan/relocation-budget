@@ -3,9 +3,11 @@ import { getExpenses, createExpenses, deleteExpense, updateExpense } from "../co
 import authMiddleware from "../middleware/authMiddleware.js"
 const router = express.Router()
 
-router.get("/", authMiddleware, getExpenses)
-router.post("/", authMiddleware, createExpenses)
-router.delete("/:id", authMiddleware, deleteExpense)
-router.patch("/:id", authMiddleware, updateExpense)
+router.use(authMiddleware)
+
+router.get("/", getExpenses)
+router.post("/", createExpenses)
+router.delete("/:id", deleteExpense)
+router.patch("/:id", updateExpense)
 
 export default router
