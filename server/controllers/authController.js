@@ -124,29 +124,44 @@ const loginUser = async (req, res) => {
 }
 
 const logoutUser = async (req, res) => {
-  res.clearCookie("accessToken",{
-    httpOnly : true,
-    secure : false,
-    sameSite : "lax"
-  })
+  try {
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax"
+    })
 
-  return res.status(200).json({
-    message : "Logged out successfully"
-  })
-}
-
-const getCurrentUser = async (req,res) => {
-  const userId = req.user
-
-  const user = await User.findById(userId).select("-password")
-
-  if(!user){
-    return res.status(404).json({
-      error : "User not found"
+    return res.status(200).json({
+      message: "Logged out successfully"
+    })
+  } catch (error) {
+    return res.status(500).json({
+      error: "Unable to logout"
     })
   }
 
-  return res.status(200).json(user)
+}
+
+const getCurrentUser = async (req, res) => {
+  try {
+    const userId = req.user
+
+    const user = await User.findById(userId).select("-password")
+
+    if (!user) {
+      return res.status(404).json({
+        error: "User not found"
+      })
+    }
+
+    return res.status(200).json(user)
+
+  } catch (error) {
+    return res.status(500).json({
+      error: "Unable to get current user"
+    })
+  }
+
 }
 export { registerUser, loginUser, logoutUser, getCurrentUser }
 
