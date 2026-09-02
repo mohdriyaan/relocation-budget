@@ -76,12 +76,10 @@ function CalculatorForm({
 
         {/* Savings Input */}
         <SavingsInput
+          {...register("savings")}
           label="Total Savings"
-          name="savings"
-          onChange={changeHandler}
           placeholder="1500000.00"
-          value={formData.savings}
-          error={errors.savings}
+          error={errors.savings?.message}
         />
 
         {/* Submit Button with Loading Indicator */}

@@ -14,7 +14,8 @@ const CalculatorSchema = z
     destinationCurrency : z
       .string()
       .refine(
-        (value) => currencyList.includes(value)
+        (value) => currencyList.includes(value),
+        "Must be a valid currency"
       ),
     
     savings : z
