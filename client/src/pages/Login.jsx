@@ -27,8 +27,7 @@ const Login = () => {
       navigate("/calculator")
     } catch (error) {
       setApiError(
-        error.response?.data?.message || 
-        error.message || 
+        error.data?.message ||  
         "Invalid email or password"
       )
     }

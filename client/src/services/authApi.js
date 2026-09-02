@@ -50,4 +50,24 @@ async function getCurrentUser() {
   return result
 }
 
-export { login, logout, getCurrentUser }
+async function registerUser(userDetails) {
+  const res = await fetch(`${API_BASE_URL}/auth/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(userDetails),
+    credentials: "include"
+  })
+
+  const result = await res.json()
+
+  if (!res.ok) {
+    throw new Error(result.error || "Unable to register user")
+  }
+
+  return result
+
+}
+
+export { login, logout, getCurrentUser, registerUser }
