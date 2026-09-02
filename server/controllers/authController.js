@@ -1,5 +1,4 @@
 import User from "../models/User.js"
-import bcrypt from "bcryptjs"
 
 const registerUser = async (req, res) => {
   try {
@@ -9,8 +8,8 @@ const registerUser = async (req, res) => {
       password
     } = req.body
 
-    const normalizedName = name.trim()
-    const normalizedEmail = email.trim().toLowerCase()
+    const normalizedName = name?.trim()
+    const normalizedEmail = email?.trim().toLowerCase()
 
     if (!normalizedName || !normalizedEmail || !password) {
       return res.status(400).json({
@@ -28,12 +27,10 @@ const registerUser = async (req, res) => {
       })
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10)
-
     const newUser = new User({
       name : normalizedName,
       email : normalizedEmail,
-      password : hashedPassword
+      password 
     })
 
     const savedUser = await newUser.save()
