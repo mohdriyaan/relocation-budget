@@ -21,7 +21,7 @@ const CalculatorSchema = z
     savings : z
       .string()
       .trim()
-      .min(1, "savings should not be empty")
+      .min(1, "Savings should not be empty")
       .refine(
         (value) => Number(value) > 0,
         "Savings should be greater than 0"
