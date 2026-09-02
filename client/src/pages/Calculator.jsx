@@ -136,7 +136,7 @@ const Calculator = () => {
             />
 
             {/* Direct Summary Render */}
-            {showSummary && result !== null && (
+            {showSummary && result !== null && calculationData && (
               <div className="pt-6 border-t border-slate-800">
                 <CalculatorSummary
                   originCurrency={calculationData.originCurrency}
