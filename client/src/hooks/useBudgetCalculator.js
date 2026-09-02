@@ -66,6 +66,7 @@ function useBudgetCalculator(expenses) {
 
       return rate
     } catch (error) {
+      setExchangeRate(null)
       setExchangeRateError("Unable to retrieve exchange rate.")
       throw error
     }
