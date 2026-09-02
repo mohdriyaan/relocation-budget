@@ -4,6 +4,7 @@ import Home from "./pages/Home"
 import Calculator from "./pages/Calculator"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
+import ProtectedRoute from "./components/ProtectedRoute"
 
 function App() {
   return (
@@ -11,8 +12,18 @@ function App() {
       <Navbar />
       <main className="flex-1">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/calculator" element={<Calculator />} />
+          <Route path="/" 
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          } />
+          <Route path="/calculator" 
+          element={
+            <ProtectedRoute>
+              <Calculator />
+            </ProtectedRoute>
+          } />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
