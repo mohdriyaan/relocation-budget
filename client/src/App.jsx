@@ -12,18 +12,22 @@ function App() {
       <Navbar />
       <main className="flex-1">
         <Routes>
-          <Route path="/" 
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          } />
-          <Route path="/calculator" 
-          element={
-            <ProtectedRoute>
-              <Calculator />
-            </ProtectedRoute>
-          } />
+          <Route 
+            path="/" 
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/calculator" 
+            element={
+              <ProtectedRoute>
+                <Calculator />
+              </ProtectedRoute>
+            } 
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>

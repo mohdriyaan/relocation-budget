@@ -1,8 +1,8 @@
 import Expense from "../models/Expense.js"
-const getExpenses = async(req,res) => {
+const getExpenses = async (req, res) => {
   try {
     const expenses = await Expense.find({
-      user : req.user
+      user: req.user
     })
 
     return res.status(200).json({
@@ -11,68 +11,82 @@ const getExpenses = async(req,res) => {
 
   } catch (error) {
     return res.status(500).json({
-      error : "Unable to retrieve expenses."
+      error: "Unable to retrieve expenses"
     })
   }
 }
 
-const createExpenses = async(req,res) => {
+const createExpenses = async (req, res) => {
   try {
+    const {
+      name,
+      category,
+      amount,
+      currency,
+      frequency,
+      notes
+    } = req.body
+
     const newExpense = new Expense({
-      ...req.body,
-      user : req.user
+      name,
+      category,
+      amount,
+      currency,
+      frequency,
+      notes,
+      user: req.user
     })
     const saveExpense = await newExpense.save()
 
     return res.status(201).json({
-      expense : saveExpense
+      expense: saveExpense
     })
-    
+
   } catch (error) {
-    if(error.name==="ValidationError"){
+    if (error.name === "ValidationError") {
       return res.status(400).json({
-        error : "Invalid inputs",
+        error: "Invalid inputs",
       })
     }
     return res.status(500).json({
-      error : "Unable to create expense"
+      error: "Unable to create expense"
     })
   }
 }
 
-const deleteExpense = async(req, res) => {
+const deleteExpense = async (req, res) => {
   try {
     const expenseId = req.params.id
     const userId = req.user
 
     const expense = await Expense.findOneAndDelete({
-      _id : expenseId,
-      user : userId
+      _id: expenseId,
+      user: userId
     })
 
-    if(!expense){
+    if (!expense) {
       return res.status(404).json({
-        error : "Valid ID but expense not found"
+        error: "Valid ID but expense not found"
       })
     }
 
     return res.status(200).json({
-      message : "Expense has been deleted successfully"
+      message: "Expense has been deleted successfully"
     })
-    
+
   } catch (error) {
-    if(error.name==="CastError"){
+    if (error.name === "CastError") {
       return res.status(400).json({
-        error : "Invalid Id format"
+        error: "Invalid Id format"
       })
     }
     return res.status(500).json({
-      error : "Unable to delete expense"
+      error: "Unable to delete expense"
     })
   }
 }
 
-const updateExpense = async(req,res)=> {
+const updateExpense = async (req, res) => {
   try {
     const expenseId = req.params.id
     const userId = req.user
@@ -80,37 +94,37 @@ const updateExpense = async(req,res)=> {
 
     const updatedExpense = await Expense.findOneAndUpdate(
       {
-        _id : expenseId,
-        user : userId
+        _id: expenseId,
+        user: userId
       },
       expenseData,
-      {new : true, runValidators: true}
+      { new: true, runValidators: true }
     )
 
-    if(!updatedExpense){
+    if (!updatedExpense) {
       return res.status(404).json({
-        error : "Valid ID but expense not found"
+        error: "Valid ID but expense not found"
       })
     }
 
     return res.status(200).json({
-      expense : updatedExpense
+      expense: updatedExpense
     })
   } catch (error) {
-    if(error.name==="ValidationError"){
+    if (error.name === "ValidationError") {
       return res.status(400).json({
-        error : "Invalid inputs"
+        error: "Invalid inputs"
       })
     }
-    if(error.name==="CastError"){
+    if (error.name === "CastError") {
       return res.status(400).json({
-        error : "Invalid Id format"
+        error: "Invalid Id format"
       })
     }
     return res.status(500).json({
-      error : "Unable to Update expense"
+      error: "Unable to update expense"
     })
   }
 }
 
-export {getExpenses, createExpenses, deleteExpense, updateExpense}
+export { getExpenses, createExpenses, deleteExpense, updateExpense }

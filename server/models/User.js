@@ -10,12 +10,13 @@ const userSchema = new mongoose.Schema({
   email : {
     type : String,
     required : [true, "Email is required"],
-    trim : true
+    trim : true,
+    lowercase : true,
+    unique : true
   },
   password : {
     type : String,
     required : [true, "Password is required"],
-    trim : true
   }
 },{
   timestamps : true
@@ -30,11 +31,7 @@ userSchema.pre("save", async function() {
 })
 
 userSchema.methods.comparePassword = async function(userPassword) {
-  try {
-    return await bcrypt.compare(userPassword, this.password)
-  } catch (error) {
-    throw new Error(error)
-  }
+  return await bcrypt.compare(userPassword, this.password)
 }
 
 const User = mongoose.model("User",userSchema)
