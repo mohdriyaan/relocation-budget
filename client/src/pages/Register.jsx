@@ -27,7 +27,6 @@ const Register = () => {
       setIsRegistered(true)
     } catch (error) {
       setApiError(
-        error.response?.data?.message ||
         error.message ||
         "Registration failed. Please try again."
       )
