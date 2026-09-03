@@ -1,11 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import {
   login as loginApi,
   logout as logoutApi,
   getCurrentUser
 } from "../services/authApi.js"
-
-const AuthContext = createContext(null)
+import AuthContext from "./authContext.js"
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
@@ -16,7 +15,7 @@ const AuthProvider = ({ children }) => {
       try {
         const currentUser = await getCurrentUser()
         setUser(currentUser)
-      } catch (error) {
+      } catch {
         setUser(null)
       } finally {
         setLoading(false)
@@ -52,14 +51,4 @@ const AuthProvider = ({ children }) => {
   )
 }
 
-const useAuth = () => {
-  const context = useContext(AuthContext)
-
-  if (!context) {
-    throw new Error("useAuth must be used within AuthProvider")
-  }
-
-  return context
-}
-
-export { AuthProvider, useAuth }
+export { AuthProvider }

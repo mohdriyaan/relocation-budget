@@ -43,7 +43,7 @@ const ExpenseForm = ({ addExpense, destinationCurrency, editingExpense, onUpdate
       frequency: editingExpense.frequency,
       notes: editingExpense.notes ?? ""
     })
-  }, [editingExpense, reset])
+  }, [editingExpense, destinationCurrency, reset])
 
   function resetForm() {
     reset(getDefaultExpenseValues(destinationCurrency))

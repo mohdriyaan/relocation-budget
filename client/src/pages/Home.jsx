@@ -1,90 +1,19 @@
 import { Link } from "react-router-dom"
-import { useAuth } from "../context/AuthContext.jsx"
-import { getExpenses } from "../services/expenseApi.js"
-import getExchangeRate from "../services/exchangeRateApi.js"
-import { getBudget } from "../services/budgetApi.js"
-import { useEffect, useState } from "react"
-
+import useAuth from "../hooks/useAuth.js"
+import useDashboardData from "../hooks/useDashboardData.js"
 
 const Home = () => {
   const { user } = useAuth()
 
-  const [expenses, setExpenses] = useState([])
-  const [budget, setBudget] = useState(null)
-  const [convertedSavings, setConvertedSavings] = useState(null)
-  const [convertedExpenses, setConvertedExpenses] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  async function fetchDashboardData() {
-    try {
-      setLoading(true)
-      setError(null)
-
-      const expenseResult = await getExpenses()
-      setExpenses(expenseResult.expenses)
-
-      try {
-        const budgetResult = await getBudget()
-        setBudget(budgetResult.budget)
-
-        const rate = await getExchangeRate(
-          budgetResult.budget.originCurrency,
-          budgetResult.budget.destinationCurrency
-        )
-
-        setConvertedSavings(
-          Number(budgetResult.budget.savings) * Number(rate.rate)
-        )
-
-        const rateCache = new Map()
-
-        let totalConvertedExpenses = 0
-
-        for (const expense of expenseResult.expenses) {
-          if (expense.currency === budgetResult.budget.destinationCurrency) {
-            totalConvertedExpenses += Number(expense.amount)
-            continue
-          }
-
-          let rate = rateCache.get(expense.currency)
-
-          if (rate === undefined) {
-            rate = await getExchangeRate(
-              expense.currency,
-              budgetResult.budget.destinationCurrency
-            )
-
-            rateCache.set(expense.currency, rate)
-          }
-
-          totalConvertedExpenses +=
-            Number(expense.amount) * Number(rate.rate)
-        }
-
-        setConvertedExpenses(totalConvertedExpenses)
-      } catch (error) {
-        if (error.message !== "Budget not found") {
-          throw error
-        }
-      }
-    } catch (error) {
-      setError(error.message || "Unable to load dashboard data")
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchDashboardData()
-  }, [])
-
-  const expenseCount = expenses.length
-
-  const remainingBudget =
-    convertedSavings !== null && convertedExpenses !== null
-      ? convertedSavings - convertedExpenses
-      : null
+  const {
+    budget,
+    convertedSavings,
+    convertedExpenses,
+    remainingBudget,
+    loading,
+    error,
+    fetchDashboardData
+  } = useDashboardData()
 
   return (
     <div className="min-h-screen bg-slate-950 px-4 py-10 sm:px-6 lg:px-8">

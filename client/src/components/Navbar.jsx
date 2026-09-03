@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { NavLink, useNavigate, Link } from "react-router-dom"
-import { useAuth } from "../context/AuthContext.jsx"
+import useAuth from "../hooks/useAuth.js"
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)

@@ -8,13 +8,10 @@ import CalculatorForm from "../components/CalculatorForm.jsx"
 import ExpenseSection from "../components/ExpenseSection.jsx"
 import { Link } from "react-router-dom"
 
-
-
 const Calculator = () => {
   const [expenses, setExpenses] = useState([])
 
   const [initialBudget, setInitialBudget] = useState(null)
-  const [isBudgetLoading, setIsBudgetLoading] = useState(true)
 
   const [destinationCurrency, setDestinationCurrency] = useState("NZD")
 
@@ -43,11 +40,6 @@ const Calculator = () => {
 
   const [editingExpense, setEditingExpense] = useState(null)
 
-  useEffect(() => {
-    getExpensesData()
-    getBudgetData()
-  }, [])
-
   async function getExpensesData() {
     try {
       setIsExpensesLoading(true)
@@ -65,8 +57,6 @@ const Calculator = () => {
 
   async function getBudgetData() {
     try {
-      setIsBudgetLoading(true)
-
       const result = await getBudget()
 
       setInitialBudget(result.budget)
@@ -74,10 +64,19 @@ const Calculator = () => {
       if (error.message !== "Budget not found") {
         console.error(error)
       }
-    } finally {
-      setIsBudgetLoading(false)
     }
   }
+
+  useEffect(() => {
+    const loadCalculatorData = async () => {
+      await Promise.all([
+        getExpensesData(),
+        getBudgetData()
+      ])
+    }
+
+    loadCalculatorData()
+  }, [])
 
   function addExpense(expenseData) {
     setExpenses((prevExpenses) => [
