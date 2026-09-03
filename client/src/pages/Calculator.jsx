@@ -6,6 +6,8 @@ import { getExpenses, deleteExpense } from "../services/expenseApi.js"
 import { getBudget, saveBudget } from "../services/budgetApi.js"
 import CalculatorForm from "../components/CalculatorForm.jsx"
 import ExpenseSection from "../components/ExpenseSection.jsx"
+import { Link } from "react-router-dom"
+
 
 
 const Calculator = () => {
@@ -179,6 +181,15 @@ const Calculator = () => {
                   monthlyExpenses={monthlyExpenses}
                   runway={runway}
                 />
+
+                <div className="mt-6 flex justify-end">
+                  <Link
+                    to="/"
+                    className="text-sm font-semibold text-indigo-400 transition-colors hover:text-indigo-300"
+                  >
+                    Back to Dashboard →
+                  </Link>
+                </div>
               </div>
             )}
           </div>

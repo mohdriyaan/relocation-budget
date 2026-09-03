@@ -34,8 +34,10 @@ const Home = () => {
         )
 
         setConvertedSavings(
-          Number(budgetResult.budget.savings) * Number(rate)
+          Number(budgetResult.budget.savings) * Number(rate.rate)
         )
+
+        const rateCache = new Map()
 
         let totalConvertedExpenses = 0
 
@@ -45,13 +47,19 @@ const Home = () => {
             continue
           }
 
-          const rate = await getExchangeRate(
-            expense.currency,
-            budgetResult.budget.destinationCurrency
-          )
+          let rate = rateCache.get(expense.currency)
+
+          if (rate === undefined) {
+            rate = await getExchangeRate(
+              expense.currency,
+              budgetResult.budget.destinationCurrency
+            )
+
+            rateCache.set(expense.currency, rate)
+          }
 
           totalConvertedExpenses +=
-            Number(expense.amount) * Number(rate)
+            Number(expense.amount) * Number(rate.rate)
         }
 
         setConvertedExpenses(totalConvertedExpenses)

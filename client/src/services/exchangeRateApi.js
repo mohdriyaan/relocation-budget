@@ -7,7 +7,7 @@ const getExchangeRate = async(from,to) => {
     throw new Error(data.error || "Unable to retrieve exchange rate")
   }
   
-  return data.rate
+  return data
 }
 
 export default getExchangeRate
