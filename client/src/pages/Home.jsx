@@ -1,8 +1,39 @@
 import { Link } from "react-router-dom"
 import { useAuth } from "../context/AuthContext.jsx"
-
+import { getExpenses } from "../services/expenseApi.js"
+import { useEffect, useState } from "react"
 const Home = () => {
   const { user } = useAuth()
+
+  const [expenses, setExpenses] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    async function fetchDashboardData() {
+      try {
+        setLoading(true)
+        setError(null)
+
+        const result = await getExpenses()
+
+        setExpenses(result.expenses)
+      } catch (error) {
+        setError(error.message || "Unable to load dashboard data")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchDashboardData()
+  }, [])
+
+  const totalExpenses = expenses.reduce(
+    (total, expense) => total + Number(expense.amount),
+    0
+  )
+
+  const expenseCount = expenses.length
 
   return (
     <div className="min-h-screen bg-slate-950 px-4 py-10 sm:px-6 lg:px-8">
@@ -45,54 +76,75 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {loading && (
+            <p className="text-sm text-slate-400">
+              Loading dashboard data...
+            </p>
+          )}
 
-            {/* Savings */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
-              <p className="text-sm font-medium text-slate-400">
-                Total Savings
-              </p>
+          {error && (
+            <p className="text-sm text-red-400">
+              {error}
+            </p>
+          )}
 
-              <p className="mt-3 text-2xl font-bold text-white">
-                —
-              </p>
+          {!loading && !error && expenses.length === 0 && (
+            <p className="text-sm text-slate-400">
+              You haven't added any expenses yet.
+            </p>
+          )}
 
-              <p className="mt-1 text-xs text-slate-500">
-                No calculation yet
-              </p>
+          {!loading && !error && expenses.length > 0 && (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+              {/* Expense Count */}
+              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+                <p className="text-sm font-medium text-slate-400">
+                  Expense Count
+                </p>
+
+                <p className="mt-3 text-2xl font-bold text-white">
+                  {expenseCount}
+                </p>
+
+                <p className="mt-1 text-xs text-slate-500">
+                  Total expenses added
+                </p>
+              </div>
+
+              {/* Planned Expenses */}
+              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+                <p className="text-sm font-medium text-slate-400">
+                  Planned Expenses
+                </p>
+
+                <p className="mt-3 text-2xl font-bold text-white">
+                  {totalExpenses.toFixed(2)}
+                </p>
+
+                <p className="mt-1 text-xs text-slate-500">
+                  Total planned expenses
+                </p>
+              </div>
+
+              {/* Budget Status */}
+              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+                <p className="text-sm font-medium text-slate-400">
+                  Budget Status
+                </p>
+
+                <p className="mt-3 text-2xl font-bold text-white">
+                  {expenseCount > 0 ? "Active" : "Empty"}
+                </p>
+
+                <p className="mt-1 text-xs text-slate-500">
+                  {expenseCount > 0
+                    ? "Expenses have been added"
+                    : "No expenses added yet"}
+                </p>
+              </div>
             </div>
-
-            {/* Planned Expenses */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
-              <p className="text-sm font-medium text-slate-400">
-                Planned Expenses
-              </p>
-
-              <p className="mt-3 text-2xl font-bold text-white">
-                —
-              </p>
-
-              <p className="mt-1 text-xs text-slate-500">
-                No expenses summarized yet
-              </p>
-            </div>
-
-            {/* Remaining Budget */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
-              <p className="text-sm font-medium text-slate-400">
-                Remaining Budget
-              </p>
-
-              <p className="mt-3 text-2xl font-bold text-white">
-                —
-              </p>
-
-              <p className="mt-1 text-xs text-slate-500">
-                Calculate your budget to see this
-              </p>
-            </div>
-
-          </div>
+          )}
         </section>
 
         {/* Getting Started */}

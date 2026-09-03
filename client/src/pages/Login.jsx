@@ -24,7 +24,7 @@ const Login = () => {
     try {
       setApiError("")
       await login(data)
-      navigate("/home")
+      navigate("/")
     } catch (error) {
       setApiError(
         error?.message ||  
