@@ -1,7 +1,6 @@
 import {z} from "zod"
 import currencyList from "../data/currencies.js"
 
-
 const CalculatorSchema = z
   .object({
     originCurrency : z
@@ -27,12 +26,5 @@ const CalculatorSchema = z
         "Savings should be greater than 0"
       )
   })
-  .refine(
-    (data) => data.originCurrency !== data.destinationCurrency,
-    {
-      message : "Same currency selected - no conversion required",
-      path : ["destinationCurrency"]
-    }
-  )
 
 export default CalculatorSchema

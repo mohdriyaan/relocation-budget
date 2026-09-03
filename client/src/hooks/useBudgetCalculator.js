@@ -110,6 +110,8 @@ function useBudgetCalculator(expenses) {
       )
 
       setShowSummary(false)
+
+      throw error
     } finally {
       setIsCalculating(false)
     }

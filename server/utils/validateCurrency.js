@@ -1,9 +1,23 @@
+const supportedCurrencies = [
+  "INR",
+  "USD",
+  "EUR",
+  "GBP",
+  "NZD",
+  "AUD",
+  "CAD"
+]
+
 function validateCurrency(currencyCode){
-  currencyCode = currencyCode.toUpperCase()
-  if(/^[A-Z]{3}$/.test(currencyCode)){
-    return currencyCode
+  if(!currencyCode){
+    return false
   }
-  return false
+
+  const normalizedCurrency = currencyCode.toUpperCase()
+
+  return supportedCurrencies.includes(normalizedCurrency)
+    ? normalizedCurrency
+    : false
 }
 
 export default validateCurrency

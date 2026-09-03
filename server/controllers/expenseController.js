@@ -90,7 +90,23 @@ const updateExpense = async (req, res) => {
   try {
     const expenseId = req.params.id
     const userId = req.user
-    const expenseData = req.body
+    const {
+      name,
+      category,
+      amount,
+      currency,
+      frequency,
+      notes
+    } = req.body
+    
+    const expenseData = {
+      name,
+      category,
+      amount,
+      currency,
+      frequency,
+      notes
+    }
 
     const updatedExpense = await Expense.findOneAndUpdate(
       {
