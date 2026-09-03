@@ -112,7 +112,7 @@ const Register = () => {
             <input
               type="text"
               id="name"
-              placeholder="Mohammed Riyaan"
+              placeholder="John Doe"
               {...register("name", {
                 required: "Full name is required",
                 onChange: () => setApiError("")
