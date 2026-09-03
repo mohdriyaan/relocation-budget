@@ -72,7 +72,7 @@ const Home = () => {
             </h2>
 
             <p className="mt-1 text-sm text-slate-400">
-              Your key relocation numbers will appear here.
+              Track your planned relocation expenses at a glance.
             </p>
           </div>
 
@@ -89,9 +89,42 @@ const Home = () => {
           )}
 
           {!loading && !error && expenses.length === 0 && (
-            <p className="text-sm text-slate-400">
-              You haven't added any expenses yet.
-            </p>
+            <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/70 p-8 sm:p-10">
+              <div className="mx-auto flex max-w-xl flex-col items-center text-center">
+                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-500/10 ring-1 ring-indigo-500/20">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    className="h-7 w-7 text-indigo-400"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 6v12m6-6H6"
+                    />
+                  </svg>
+                </div>
+
+                <h3 className="text-xl font-semibold text-white sm:text-2xl">
+                  No expenses yet
+                </h3>
+
+                <p className="mt-2 max-w-md text-sm leading-6 text-slate-400 sm:text-base">
+                  Start adding your relocation expenses to build your budget and see
+                  useful insights here.
+                </p>
+
+                <Link
+                  to="/calculator"
+                  className="mt-6 inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all hover:bg-indigo-500 hover:shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-950"
+                >
+                  Add First Expense
+                </Link>
+              </div>
+            </div>
           )}
 
           {!loading && !error && expenses.length > 0 && (
