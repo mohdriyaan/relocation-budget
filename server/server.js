@@ -4,6 +4,7 @@ import healthRoute from "./routes/healthRoutes.js"
 import currencyRoute from "./routes/currencyRoutes.js"
 import exchangeRateRoute from "./routes/exchangeRateRoutes.js"
 import expenseRoute from "./routes/expenseRoutes.js"
+import budgetRoute from "./routes/budgetRoute.js"
 import cors from "cors"
 import connectDB from "./config/db.js"
 import authRoute from "./routes/authRoutes.js"
@@ -28,6 +29,7 @@ app.use("/api/currency",currencyRoute)
 app.use("/api/exchange-rate",exchangeRateRoute)
 app.use("/api/expenses",expenseRoute)
 app.use("/api/auth", authRoute)
+app.use("/api/budget",budgetRoute)
 
 async function startServer(){
   await connectDB()
