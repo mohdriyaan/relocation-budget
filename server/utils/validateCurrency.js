@@ -1,12 +1,4 @@
-const supportedCurrencies = [
-  "INR",
-  "USD",
-  "EUR",
-  "GBP",
-  "NZD",
-  "AUD",
-  "CAD"
-]
+import supportedCurrencies from "../constants/currencies.js"
 
 function validateCurrency(currencyCode){
   if(!currencyCode){

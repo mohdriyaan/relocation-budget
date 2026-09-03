@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import supportedCurrencies from "../constants/currencies.js"
 
 const expenseSchema = new mongoose.Schema({
   name : {
@@ -20,6 +21,9 @@ const expenseSchema = new mongoose.Schema({
     type : String,
     required : [true, "Currency is required"],
     minlength : 3,
+    enum : {
+      values : supportedCurrencies
+    },
     uppercase : true
   },
   frequency : {

@@ -1,5 +1,7 @@
+import API_BASE_URL from "../config/env.js"
+
 const getExchangeRate = async(from,to) => {
-  const res = await fetch(`http://localhost:5000/api/exchange-rate/${from}/${to}`)
+  const res = await fetch(`${API_BASE_URL}/exchange-rate/${from}/${to}`)
   
   const data = await res.json()
   

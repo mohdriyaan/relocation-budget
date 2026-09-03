@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import supportedCurrencies from "../constants/currencies.js"
 
 const budgetSchema = new mongoose.Schema({
   user: {
@@ -18,14 +19,22 @@ const budgetSchema = new mongoose.Schema({
     type: String,
     required: [true, "Origin currency is required"],
     uppercase: true,
-    trim: true
+    trim: true,
+    enum: {
+      values: supportedCurrencies,
+      message: "Origin currency is not supported"
+    }
   },
 
   destinationCurrency: {
     type: String,
     required: [true, "Destination currency is required"],
     uppercase: true,
-    trim: true
+    trim: true,
+    enum: {
+      values: supportedCurrencies,
+      message: "Destination currency is not supported"
+    }
   }
 },
   {
