@@ -3,11 +3,17 @@ import { useState, useEffect } from "react"
 import useBudgetCalculator from "../hooks/useBudgetCalculator.js"
 import CalculatorSummary from "../components/CalculatorSummary.jsx"
 import { getExpenses, deleteExpense } from "../services/expenseApi.js"
+import { getBudget, saveBudget } from "../services/budgetApi.js"
 import CalculatorForm from "../components/CalculatorForm.jsx"
 import ExpenseSection from "../components/ExpenseSection.jsx"
 
+
 const Calculator = () => {
   const [expenses, setExpenses] = useState([])
+
+  const [initialBudget, setInitialBudget] = useState(null)
+  const [isBudgetLoading, setIsBudgetLoading] = useState(true)
+
   const [destinationCurrency, setDestinationCurrency] = useState("NZD")
 
   const {
@@ -37,6 +43,7 @@ const Calculator = () => {
 
   useEffect(() => {
     getExpensesData()
+    getBudgetData()
   }, [])
 
   async function getExpensesData() {
@@ -51,6 +58,22 @@ const Calculator = () => {
       setExpensesLoadError(error.message || "Unable to get expenses")
     } finally {
       setIsExpensesLoading(false)
+    }
+  }
+
+  async function getBudgetData() {
+    try {
+      setIsBudgetLoading(true)
+
+      const result = await getBudget()
+
+      setInitialBudget(result.budget)
+    } catch (error) {
+      if (error.message !== "Budget not found") {
+        console.error(error)
+      }
+    } finally {
+      setIsBudgetLoading(false)
     }
   }
 
@@ -104,6 +127,16 @@ const Calculator = () => {
     setEditingExpense(null)
   }
 
+  async function handleCalculate(data) {
+    await handleSubmit(data)
+
+    await saveBudget({
+      savings: Number(data.savings),
+      originCurrency: data.originCurrency,
+      destinationCurrency: data.destinationCurrency
+    })
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-8">
@@ -123,11 +156,12 @@ const Calculator = () => {
           {/* Left Column: Currency Conversion Form */}
           <div className="lg:col-span-5 space-y-6">
             <CalculatorForm
-              onCalculate={handleSubmit}
+              onCalculate={handleCalculate}
               onDestinationCurrencyChange={setDestinationCurrency}
               exchangeRateError={exchangeRateError}
               calculationError={calculationError}
               isCalculating={isCalculating}
+              initialBudget={initialBudget}
             />
 
             {/* Direct Summary Render */}

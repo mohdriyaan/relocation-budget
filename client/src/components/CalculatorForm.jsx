@@ -5,18 +5,21 @@ import CurrencySelector from "./CurrencySelector"
 import SavingsInput from "./SavingsInput"
 
 import CalculatorSchema from "../schemas/calculatorSchema"
+import { useEffect } from "react"
 
 function CalculatorForm({
   onCalculate,
   onDestinationCurrencyChange,
   exchangeRateError,
   calculationError,
-  isCalculating
+  isCalculating,
+  initialBudget
 }) {
   const {
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm({
     resolver: zodResolver(CalculatorSchema),
@@ -26,6 +29,21 @@ function CalculatorForm({
       savings: ""
     }
   })
+
+  useEffect(() => {
+    if (!initialBudget) {
+      return
+    }
+
+    reset({
+      originCurrency: initialBudget.originCurrency,
+      destinationCurrency: initialBudget.destinationCurrency,
+      savings: String(initialBudget.savings)
+    })
+
+    onDestinationCurrencyChange(initialBudget.destinationCurrency)
+  }, [initialBudget, reset, onDestinationCurrencyChange])
+
   return (
     <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
       <h2 className="text-xl font-bold text-white tracking-wide border-b border-slate-800 pb-4">
@@ -55,7 +73,7 @@ function CalculatorForm({
                 name={field.name}
                 label="Destination Currency"
                 value={field.value}
-                onChange={(value)=> {
+                onChange={(value) => {
                   field.onChange(value)
                   onDestinationCurrencyChange(value)
                 }}

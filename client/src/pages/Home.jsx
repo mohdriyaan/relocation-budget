@@ -1,12 +1,18 @@
 import { Link } from "react-router-dom"
 import { useAuth } from "../context/AuthContext.jsx"
 import { getExpenses } from "../services/expenseApi.js"
+import getExchangeRate from "../services/exchangeRateApi.js"
+import { getBudget } from "../services/budgetApi.js"
 import { useEffect, useState } from "react"
+
 
 const Home = () => {
   const { user } = useAuth()
 
   const [expenses, setExpenses] = useState([])
+  const [budget, setBudget] = useState(null)
+  const [convertedSavings, setConvertedSavings] = useState(null)
+  const [convertedExpenses, setConvertedExpenses] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -15,9 +21,45 @@ const Home = () => {
       setLoading(true)
       setError(null)
 
-      const result = await getExpenses()
+      const expenseResult = await getExpenses()
+      setExpenses(expenseResult.expenses)
 
-      setExpenses(result.expenses)
+      try {
+        const budgetResult = await getBudget()
+        setBudget(budgetResult.budget)
+
+        const rate = await getExchangeRate(
+          budgetResult.budget.originCurrency,
+          budgetResult.budget.destinationCurrency
+        )
+
+        setConvertedSavings(
+          Number(budgetResult.budget.savings) * Number(rate)
+        )
+
+        let totalConvertedExpenses = 0
+
+        for (const expense of expenseResult.expenses) {
+          if (expense.currency === budgetResult.budget.destinationCurrency) {
+            totalConvertedExpenses += Number(expense.amount)
+            continue
+          }
+
+          const rate = await getExchangeRate(
+            expense.currency,
+            budgetResult.budget.destinationCurrency
+          )
+
+          totalConvertedExpenses +=
+            Number(expense.amount) * Number(rate)
+        }
+
+        setConvertedExpenses(totalConvertedExpenses)
+      } catch (error) {
+        if (error.message !== "Budget not found") {
+          throw error
+        }
+      }
     } catch (error) {
       setError(error.message || "Unable to load dashboard data")
     } finally {
@@ -29,12 +71,12 @@ const Home = () => {
     fetchDashboardData()
   }, [])
 
-  const totalExpenses = expenses.reduce(
-    (total, expense) => total + Number(expense.amount),
-    0
-  )
-
   const expenseCount = expenses.length
+
+  const remainingBudget =
+    convertedSavings !== null && convertedExpenses !== null
+      ? convertedSavings - convertedExpenses
+      : null
 
   return (
     <div className="min-h-screen bg-slate-950 px-4 py-10 sm:px-6 lg:px-8">
@@ -78,7 +120,7 @@ const Home = () => {
               </p>
             </div>
 
-            {!loading && !error && expenses.length > 0 && (
+            {!loading && !error && budget && (
               <Link
                 to="/calculator"
                 className="text-sm font-semibold text-indigo-400 transition-colors hover:text-indigo-300"
@@ -132,7 +174,7 @@ const Home = () => {
           )}
 
           {/* Empty State */}
-          {!loading && !error && expenses.length === 0 && (
+          {!loading && !error && !budget && (
             <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/70 p-8 sm:p-10">
               <div className="mx-auto flex max-w-xl flex-col items-center text-center">
                 <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-500/10 ring-1 ring-indigo-500/20">
@@ -153,78 +195,42 @@ const Home = () => {
                 </div>
 
                 <h3 className="text-xl font-semibold text-white sm:text-2xl">
-                  No expenses yet
+                  No budget yet
                 </h3>
 
                 <p className="mt-2 max-w-md text-sm leading-6 text-slate-400 sm:text-base">
-                  Start adding your relocation expenses to build your budget and
-                  see useful insights here.
+                  Set up your savings and destination currency to start building your
+                  relocation budget.
                 </p>
 
                 <Link
                   to="/calculator"
                   className="mt-6 inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all hover:bg-indigo-500 hover:shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-950"
                 >
-                  Add First Expense
+                  Set Up Budget
                 </Link>
               </div>
             </div>
           )}
 
-          {/* Metrics */}
-          {!loading && !error && expenses.length > 0 && (
+          {/* Budget Metrics */}
+          {!loading && !error && budget && convertedSavings !== null && convertedExpenses !== null && (
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 
-              {/* Expense Count */}
+              {/* Total Savings */}
               <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="text-sm font-medium text-slate-400">
-                      Expense Count
+                      Total Savings
                     </p>
 
                     <p className="mt-3 text-3xl font-bold tracking-tight text-white">
-                      {expenseCount}
+                      {convertedSavings.toFixed(2)}
                     </p>
 
                     <p className="mt-1 text-xs text-slate-500">
-                      Total expenses added
-                    </p>
-                  </div>
-
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/10 ring-1 ring-indigo-500/20">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      className="h-5 w-5 text-indigo-400"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 5h6m-7 4h8m-8 4h5m-8 7h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              {/* Planned Expenses */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-slate-400">
-                      Planned Expenses
-                    </p>
-
-                    <p className="mt-3 text-3xl font-bold tracking-tight text-white">
-                      {totalExpenses.toFixed(2)}
-                    </p>
-
-                    <p className="mt-1 text-xs text-slate-500">
-                      Total planned expenses
+                      {budget.destinationCurrency} after conversion
                     </p>
                   </div>
 
@@ -253,43 +259,142 @@ const Home = () => {
                 </div>
               </div>
 
-              {/* Budget Status */}
+              {/* Planned Expenses */}
               <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="text-sm font-medium text-slate-400">
-                      Budget Status
+                      Planned Expenses
                     </p>
 
-                    <p className="mt-3 text-3xl font-bold tracking-tight text-emerald-400">
-                      Active
+                    <p className="mt-3 text-3xl font-bold tracking-tight text-white">
+                      {convertedExpenses.toFixed(2)}
                     </p>
 
                     <p className="mt-1 text-xs text-slate-500">
-                      Expenses have been added
+                      {budget.destinationCurrency} converted total
                     </p>
                   </div>
 
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 ring-1 ring-emerald-500/20">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 ring-1 ring-amber-500/20">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="1.8"
-                      className="h-5 w-5 text-emerald-400"
+                      className="h-5 w-5 text-amber-400"
                     >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        d="m5 12 4 4L19 6"
+                        d="M9 14.25 11.25 17l3.75-5.25"
+                      />
+
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4.5 19.5h15M6 4.5h12M6 4.5v15"
                       />
                     </svg>
                   </div>
                 </div>
               </div>
+
+              {/* Remaining Budget */}
+              <div
+                className={`rounded-2xl border p-6 shadow-xl ${remainingBudget < 0
+                  ? "border-rose-500/20 bg-rose-500/5"
+                  : "border-emerald-500/20 bg-emerald-500/5"
+                  }`}
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-slate-400">
+                      Remaining Budget
+                    </p>
+
+                    <p
+                      className={`mt-3 text-3xl font-bold tracking-tight ${remainingBudget < 0
+                        ? "text-rose-400"
+                        : "text-emerald-400"
+                        }`}
+                    >
+                      {remainingBudget.toFixed(2)}
+                    </p>
+
+                    <p className="mt-1 text-xs text-slate-500">
+                      {budget.destinationCurrency} available
+                    </p>
+                  </div>
+
+                  <div
+                    className={`flex h-10 w-10 items-center justify-center rounded-xl ring-1 ${remainingBudget < 0
+                      ? "bg-rose-500/10 ring-rose-500/20"
+                      : "bg-emerald-500/10 ring-emerald-500/20"
+                      }`}
+                  >
+                    {remainingBudget < 0 ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        className="h-5 w-5 text-rose-400"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 9v4"
+                        />
+
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 17h.01"
+                        />
+
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m5.25 18.75 5.29-14.03a1.55 1.55 0 0 1 2.92 0l5.29 14.03A1.55 1.55 0 0 1 17.3 21H6.7a1.55 1.55 0 0 1-1.45-2.25Z"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        className="h-5 w-5 text-emerald-400"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m5 12 4 4L19 6"
+                        />
+                      </svg>
+                    )}
+                  </div>
+                </div>
+
+                <p
+                  className={`mt-4 text-xs font-medium ${remainingBudget < 0
+                    ? "text-rose-300"
+                    : "text-emerald-300"
+                    }`}
+                >
+                  {remainingBudget < 0
+                    ? "You're over your available savings"
+                    : "You're within your available savings"}
+                </p>
+              </div>
+
             </div>
           )}
+
         </section>
 
         {/* Getting Started */}
