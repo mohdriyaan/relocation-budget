@@ -23,11 +23,15 @@ function ExpenseSection({
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       {/* Add expense */}
-      <section className="rounded-xl border border-divider bg-surface p-6 sm:p-8">
-        <div className="space-y-1">
-          <h2 className="text-xl font-semibold text-text-primary">
+      <section className="border-y border-white/5 py-8">
+        <div className="max-w-2xl space-y-2">
+          <p className="text-sm font-medium text-text-muted">
+            Expense planning
+          </p>
+
+          <h2 className="text-xl font-semibold leading-tighter tracking-tightest text-text-primary">
             Add an expense
           </h2>
 
@@ -36,7 +40,7 @@ function ExpenseSection({
           </p>
         </div>
 
-        <div className="mt-6">
+        <div className="mt-8">
           <ExpenseForm
             addExpense={addExpense}
             destinationCurrency={destinationCurrency}
@@ -49,7 +53,7 @@ function ExpenseSection({
       </section>
 
       {/* Planned expenses */}
-      <section className="rounded-xl border border-divider bg-surface p-6 sm:p-8">
+      <section>
         <ExpenseList
           expenses={expenses}
           onDeleteExpense={onDeleteExpense}

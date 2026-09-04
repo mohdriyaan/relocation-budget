@@ -145,7 +145,7 @@ const Calculator = () => {
 
         {/* Header Section */}
         <header className="max-w-2xl space-y-3">
-          <h1 className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl">
+          <h1 className="text-3xl font-semibold leading-tighter tracking-tightest text-text-primary sm:text-4xl">
             Relocation budget calculator
           </h1>
 
@@ -166,7 +166,7 @@ const Calculator = () => {
               calculationError={calculationError}
               isCalculating={isCalculating}
               initialBudget={initialBudget}
-              hasCalculated={showSummary && result!== null}
+              hasCalculated={showSummary && result !== null}
             />
 
             {/* Direct Summary Render */}
@@ -190,14 +190,14 @@ const Calculator = () => {
                     to="/"
                     className="text-sm font-semibold text-indigo-400 transition-colors hover:text-indigo-300"
                   >
-                    Back to Dashboard 
+                    Back to Dashboard
                   </Link>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Right Column: Expense Management */}
+          {/* Right Column: Expense Ledger */}
           <div className="lg:col-span-7 space-y-6">
             {/* Add Expense Card */}
             <ExpenseSection

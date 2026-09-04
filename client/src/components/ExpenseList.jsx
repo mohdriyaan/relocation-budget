@@ -15,19 +15,28 @@ const ExpenseList = ({
       <div
         role="status"
         aria-label="Loading expenses"
-        className="space-y-4"
+        className="border-y border-white/5"
       >
-        <div className="flex items-center justify-between gap-4">
-          <div className="h-6 w-36 animate-pulse rounded bg-divider" />
-          <div className="h-5 w-16 animate-pulse rounded bg-divider" />
+        <div className="flex items-center justify-between border-b border-white/5 py-5">
+          <div className="h-5 w-32 animate-pulse bg-white/5" />
+          <div className="h-4 w-16 animate-pulse bg-white/5" />
         </div>
 
-        <div className="space-y-3">
+        <div className="divide-y divide-white/5">
           {[1, 2, 3].map((item) => (
             <div
               key={item}
-              className="h-20 animate-pulse rounded-lg bg-divider"
-            />
+              className="grid grid-cols-[minmax(0,1fr)_3rem_7rem_auto] items-center gap-4 py-5"
+            >
+              <div className="space-y-2">
+                <div className="h-4 w-32 animate-pulse bg-white/5" />
+                <div className="h-3 w-24 animate-pulse bg-white/5" />
+              </div>
+
+              <div className="h-3 w-8 justify-self-end animate-pulse bg-white/5" />
+              <div className="h-4 w-20 justify-self-end animate-pulse bg-white/5" />
+              <div className="h-8 w-16 justify-self-end animate-pulse bg-white/5" />
+            </div>
           ))}
         </div>
       </div>
@@ -38,7 +47,7 @@ const ExpenseList = ({
     return (
       <div
         role="alert"
-        className="rounded-lg border border-error/40 bg-error/10 px-4 py-4 text-sm text-error"
+        className="border-y border-error/30 py-5 text-sm text-error"
       >
         {error}
       </div>
@@ -46,52 +55,52 @@ const ExpenseList = ({
   }
 
   return (
-    <div className="space-y-5">
-      {/* Heading */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      {/* Ledger header */}
+      <div className="flex flex-col gap-2 border-b border-white/5 py-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2
             ref={headingRef}
             tabIndex="-1"
-            className="text-xl font-semibold text-text-primary focus:outline-none"
+            className="text-xl font-semibold leading-tighter tracking-tightest text-text-primary focus:outline-none"
           >
             Planned expenses
           </h2>
 
-          <p className="mt-1 text-sm text-text-muted">
+          <p className="mt-2 text-sm text-text-muted">
             Review and manage your relocation costs.
           </p>
         </div>
 
-        <span className="text-sm text-text-muted">
+        <span className="text-sm tabular-nums text-text-muted">
           {expenses.length}{" "}
           {expenses.length === 1 ? "expense" : "expenses"}
         </span>
       </div>
 
-      {/* Delete error — conditionally mounted */}
+      {/* Delete error */}
       {deleteError && (
         <div
           role="alert"
-          className="rounded-lg border border-error/40 bg-error/10 px-4 py-3 text-sm text-error"
+          className="border-b border-error/30 py-4 text-sm text-error"
         >
           {deleteError}
         </div>
       )}
 
-      {/* Empty */}
+      {/* Empty state */}
       {expenses.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-divider px-6 py-8 text-center">
+        <div className="border-b border-white/5 py-16 text-center">
           <p className="text-sm font-medium text-text-primary">
             No expenses yet
           </p>
 
-          <p className="mt-1 text-sm text-text-muted">
+          <p className="mt-2 text-sm text-text-muted">
             Add your first relocation expense to start building your budget.
           </p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="divide-y divide-white/5">
           {expenses.map((expense) => (
             <ExpenseItem
               key={expense._id}
