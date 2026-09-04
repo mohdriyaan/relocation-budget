@@ -99,17 +99,17 @@ const CalculatorSummary = ({
           </div>
 
           {hasKnownStatus && (
-            <span
-              className={`w-fit text-sm font-medium ${isOverBudget
-                  ? "text-error"
-                  : "text-success"
-                }`}
-            >
-              <span aria-hidden="true">
+            <span className="inline-flex items-center gap-1.5 text-sm font-medium">
+              <span
+                aria-hidden="true"
+                className={isOverBudget ? "text-error" : "text-success"}
+              >
                 {isOverBudget ? "!" : "✓"}
               </span>
 
-              <span>{budgetStatus?.label}</span>
+              <span className="text-text-primary">
+                {budgetStatus?.label}
+              </span>
             </span>
           )}
         </div>
@@ -180,8 +180,8 @@ const CalculatorSummary = ({
 
               <span
                 className={`text-xl font-medium tabular-nums ${isOverBudget
-                    ? "text-error"
-                    : "text-success"
+                  ? "text-error"
+                  : "text-success"
                   }`}
               >
                 {remaining.value}
@@ -226,8 +226,8 @@ const CalculatorSummary = ({
           >
             <div
               className={`h-full rounded-full transition-[width] duration-300 ${isOverBudget
-                  ? "bg-error"
-                  : "bg-primary"
+                ? "bg-error"
+                : "bg-primary"
                 }`}
               style={{
                 width: `${progressPercentage}%`,
@@ -318,8 +318,8 @@ const CalculatorSummary = ({
 
             <dd
               className={`justify-self-end text-sm font-medium tabular-nums ${isOverBudget
-                  ? "text-error"
-                  : "text-success"
+                ? "text-error"
+                : "text-success"
                 }`}
             >
               {remaining.value}

@@ -287,16 +287,17 @@ const Home = () => {
                             {remaining.value}
                           </span>
 
-                          <span
-                            className={`inline-flex items-center gap-1.5 text-xs font-medium 
-                              ${isOverBudget ? "text-error" : "text-success"
-                              }`}>
-                            
-                            <span aria-hidden="true">
+                          <span className="inline-flex items-center gap-1.5 text-xs font-medium">
+                            <span
+                              aria-hidden="true"
+                              className={isOverBudget ? "text-error" : "text-success"}
+                            >
                               {isOverBudget ? "!" : "✓"}
                             </span>
 
-                            <span>{budgetStatus?.label}</span>
+                            <span className="text-text-primary">
+                              {budgetStatus?.label}
+                            </span>
                           </span>
                         </div>
 
