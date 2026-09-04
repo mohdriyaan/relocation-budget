@@ -33,11 +33,31 @@ const Login = () => {
   }
 
   const fieldClassName = (hasError) =>
-    `w-full rounded-lg border bg-surface px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 ${
+    [
+      "w-full",
+      "rounded-lg",
+      "border",
+      "bg-white/[0.02]",
+      "px-3",
+      "py-2.5",
+      "text-sm",
+      "text-text-primary",
+      "placeholder:text-text-muted",
+      "shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]",
+      "transition-colors",
+      "focus:outline-none",
+      "focus-visible:outline-none",
+      "focus-visible:ring-1",
+      "focus-visible:ring-white/20",
+      "focus-visible:ring-offset-2",
+      "focus-visible:ring-offset-background",
       hasError
-        ? "border-error focus:border-error focus:ring-error/30"
-        : "border-input-border focus:border-primary focus:ring-primary/30"
-    }`
+        ? "border-error focus-visible:border-error"
+        : "border-white/10 focus-visible:border-white/20",
+    ].join(" ")
+
+  const labelClassName =
+    "block text-sm font-medium text-text-muted"
 
   return (
     <AuthPage
@@ -47,24 +67,27 @@ const Login = () => {
       footerLink="/register"
       footerLabel="Register"
     >
-      <form 
+      <form
         onSubmit={handleSubmit(onSubmit)}
-        noValidate 
-        className="space-y-5"
+        noValidate
+        className="space-y-6"
       >
         {apiError && (
           <div
             role="alert"
-            className="rounded-lg border border-error/40 bg-error/10 px-3.5 py-3 text-sm text-error"
+            className="border-y border-error/25 bg-error/4 py-4"
           >
-            {apiError}
+            <p className="text-sm leading-5 text-error">
+              {apiError}
+            </p>
           </div>
         )}
 
+        {/* Email */}
         <div className="space-y-2">
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-text-primary"
+            className={labelClassName}
           >
             Email address
           </label>
@@ -75,7 +98,9 @@ const Login = () => {
             autoComplete="email"
             placeholder="you@example.com"
             aria-invalid={Boolean(errors.email)}
-            aria-describedby={errors.email ? "email-error" : undefined}
+            aria-describedby={
+              errors.email ? "email-error" : undefined
+            }
             className={fieldClassName(Boolean(errors.email))}
             {...register("email", {
               required: "Email is required",
@@ -84,7 +109,9 @@ const Login = () => {
                 message: "Please enter a valid email address",
               },
               onChange: () => {
-                if (apiError) setApiError("")
+                if (apiError) {
+                  setApiError("")
+                }
               },
             })}
           />
@@ -93,17 +120,18 @@ const Login = () => {
             <p
               id="email-error"
               role="alert"
-              className="text-sm text-error"
+              className="text-sm leading-5 text-error"
             >
               {errors.email.message}
             </p>
           )}
         </div>
 
+        {/* Password */}
         <div className="space-y-2">
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-text-primary"
+            className={labelClassName}
           >
             Password
           </label>
@@ -114,12 +142,16 @@ const Login = () => {
             autoComplete="current-password"
             placeholder="Enter your password"
             aria-invalid={Boolean(errors.password)}
-            aria-describedby={errors.password ? "password-error" : undefined}
+            aria-describedby={
+              errors.password ? "password-error" : undefined
+            }
             className={fieldClassName(Boolean(errors.password))}
             {...register("password", {
               required: "Password is required",
               onChange: () => {
-                if (apiError) setApiError("")
+                if (apiError) {
+                  setApiError("")
+                }
               },
             })}
           />
@@ -128,17 +160,18 @@ const Login = () => {
             <p
               id="password-error"
               role="alert"
-              className="text-sm text-error"
+              className="text-sm leading-5 text-error"
             >
               {errors.password.message}
             </p>
           )}
         </div>
 
+        {/* Submit */}
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting ? (
             <>

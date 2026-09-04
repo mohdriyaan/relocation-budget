@@ -155,7 +155,7 @@ const Calculator = () => {
           </p>
         </header>
 
-        {/* 2-Column Responsive Dashboard Layout */}
+        {/* Calculator workspace */}
         <div className="space-y-12">
           {/* Working area */}
           <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12">

@@ -33,11 +33,31 @@ const Register = () => {
   }
 
   const fieldClassName = (hasError) =>
-    `w-full rounded-lg border bg-surface px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 ${
+    [
+      "w-full",
+      "rounded-lg",
+      "border",
+      "bg-white/[0.02]",
+      "px-3",
+      "py-2.5",
+      "text-sm",
+      "text-text-primary",
+      "placeholder:text-text-muted",
+      "shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]",
+      "transition-colors",
+      "focus:outline-none",
+      "focus-visible:outline-none",
+      "focus-visible:ring-1",
+      "focus-visible:ring-white/20",
+      "focus-visible:ring-offset-2",
+      "focus-visible:ring-offset-background",
       hasError
-        ? "border-error focus:border-error focus:ring-error/30"
-        : "border-input-border focus:border-primary focus:ring-primary/30"
-    }`
+        ? "border-error focus-visible:border-error"
+        : "border-white/10 focus-visible:border-white/20",
+    ].join(" ")
+
+  const labelClassName =
+    "block text-sm font-medium text-text-muted"
 
   if (isRegistered) {
     return (
@@ -45,20 +65,26 @@ const Register = () => {
         title="Account created"
         description="Your registration was successful. You can now sign in with your credentials."
       >
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div
             role="status"
-            className="rounded-lg border border-success/40 bg-success/10 px-4 py-3 text-sm text-success"
+            className="border-y border-success/20 bg-success/3 px-4 py-4 sm:px-5"
           >
-            Your account has been created successfully.
+            <p className="text-sm leading-5 text-success">
+              Your account has been created successfully.
+            </p>
           </div>
 
-          <Link
-            to="/login"
-            className="flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface"
-          >
-            Proceed to login
-          </Link>
+          <div className="mt-7">
+            <Link
+              to="/login"
+              className="flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              Proceed to login
+            </Link>
+          </div>
+
+
         </div>
       </AuthPage>
     )
@@ -72,23 +98,27 @@ const Register = () => {
       footerLink="/login"
       footerLabel="Log in"
     >
-      <form 
+      <form
         onSubmit={handleSubmit(onSubmit)}
-        noValidate 
-        className="space-y-5">
+        noValidate
+        className="space-y-6"
+      >
         {apiError && (
           <div
             role="alert"
-            className="rounded-lg border border-error/40 bg-error/10 px-3.5 py-3 text-sm text-error"
+            className="border-y border-error/25 bg-error/4 py-4"
           >
-            {apiError}
+            <p className="text-sm leading-5 text-error">
+              {apiError}
+            </p>
           </div>
         )}
 
+        {/* Full name */}
         <div className="space-y-2">
           <label
             htmlFor="name"
-            className="block text-sm font-medium text-text-primary"
+            className={labelClassName}
           >
             Full name
           </label>
@@ -99,12 +129,16 @@ const Register = () => {
             autoComplete="name"
             placeholder="John Doe"
             aria-invalid={Boolean(errors.name)}
-            aria-describedby={errors.name ? "name-error" : undefined}
+            aria-describedby={
+              errors.name ? "name-error" : undefined
+            }
             className={fieldClassName(Boolean(errors.name))}
             {...register("name", {
               required: "Full name is required",
               onChange: () => {
-                if (apiError) setApiError("")
+                if (apiError) {
+                  setApiError("")
+                }
               },
             })}
           />
@@ -113,17 +147,18 @@ const Register = () => {
             <p
               id="name-error"
               role="alert"
-              className="text-sm text-error"
+              className="text-sm leading-5 text-error"
             >
               {errors.name.message}
             </p>
           )}
         </div>
 
+        {/* Email */}
         <div className="space-y-2">
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-text-primary"
+            className={labelClassName}
           >
             Email address
           </label>
@@ -134,7 +169,9 @@ const Register = () => {
             autoComplete="email"
             placeholder="you@example.com"
             aria-invalid={Boolean(errors.email)}
-            aria-describedby={errors.email ? "email-error" : undefined}
+            aria-describedby={
+              errors.email ? "email-error" : undefined
+            }
             className={fieldClassName(Boolean(errors.email))}
             {...register("email", {
               required: "Email address is required",
@@ -143,7 +180,9 @@ const Register = () => {
                 message: "Please enter a valid email address",
               },
               onChange: () => {
-                if (apiError) setApiError("")
+                if (apiError) {
+                  setApiError("")
+                }
               },
             })}
           />
@@ -152,17 +191,18 @@ const Register = () => {
             <p
               id="email-error"
               role="alert"
-              className="text-sm text-error"
+              className="text-sm leading-5 text-error"
             >
               {errors.email.message}
             </p>
           )}
         </div>
 
+        {/* Password */}
         <div className="space-y-2">
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-text-primary"
+            className={labelClassName}
           >
             Password
           </label>
@@ -173,16 +213,21 @@ const Register = () => {
             autoComplete="new-password"
             placeholder="Create a password"
             aria-invalid={Boolean(errors.password)}
-            aria-describedby={errors.password ? "password-error" : undefined}
+            aria-describedby={
+              errors.password ? "password-error" : undefined
+            }
             className={fieldClassName(Boolean(errors.password))}
             {...register("password", {
               required: "Password is required",
               minLength: {
                 value: 6,
-                message: "Password must be at least 6 characters",
+                message:
+                  "Password must be at least 6 characters",
               },
               onChange: () => {
-                if (apiError) setApiError("")
+                if (apiError) {
+                  setApiError("")
+                }
               },
             })}
           />
@@ -191,17 +236,18 @@ const Register = () => {
             <p
               id="password-error"
               role="alert"
-              className="text-sm text-error"
+              className="text-sm leading-5 text-error"
             >
               {errors.password.message}
             </p>
           )}
         </div>
 
+        {/* Submit */}
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting ? (
             <>

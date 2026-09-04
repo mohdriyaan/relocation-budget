@@ -1,6 +1,12 @@
+import { Link, useLocation } from "react-router-dom"
 import Navbar from "../components/Navbar.jsx"
 
 const AppLayout = ({ children }) => {
+  const location = useLocation()
+
+  const isAuthRoute =
+    location.pathname === "/login" ||
+    location.pathname === "/register"
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background text-text-primary">
       <svg
@@ -26,7 +32,20 @@ const AppLayout = ({ children }) => {
       </svg>
 
       <div className="relative z-0">
-        <Navbar />
+        {isAuthRoute ? (
+          <header className="border-b border-white/5">
+            <div className="mx-auto flex h-14 max-w-lg items-center px-4 sm:px-6">
+              <Link
+                to="/login"
+                className="text-sm font-semibold tracking-tight"
+              >
+                Relocation Budget
+              </Link>
+            </div>
+          </header>
+        ) : (
+          <Navbar />
+        )}
 
         {children}
       </div>
