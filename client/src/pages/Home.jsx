@@ -2,6 +2,8 @@ import { Link } from "react-router-dom"
 import useAuth from "../hooks/useAuth.js"
 import useDashboardData from "../hooks/useDashboardData.js"
 import formatCurrency from "../utils/formatCurrency.js"
+import getBudgetStatus from "../utils/getBudgetStatus.js"
+
 
 const Home = () => {
   const { user } = useAuth()
@@ -40,8 +42,6 @@ const Home = () => {
     convertedExpenses !== null &&
     remainingBudget !== null
 
-  const isOverBudget = hasActiveBudget && remainingBudget < 0
-
   const plannedPercentage =
     hasActiveBudget && convertedSavings > 0
       ? (convertedExpenses / convertedSavings) * 100
@@ -57,8 +57,12 @@ const Home = () => {
       ? Math.max(remainingBudget / convertedSavings, 0)
       : 0
 
-  const statusLabel =
-    remainingBudget < 0 ? "Over budget" : "Healthy"
+  const budgetStatus = hasActiveBudget
+    ? getBudgetStatus(remainingBudget)
+    : null
+
+  const isOverBudget = budgetStatus?.key === "over-budget"
+  const statusLabel = budgetStatus?.label
 
   return (
     <main className="min-h-[calc(100vh-4rem)] bg-canvas px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
@@ -256,8 +260,8 @@ const Home = () => {
                   <div className="flex flex-wrap items-center gap-2">
                     <p
                       className={`text-2xl font-semibold tracking-tight tabular-nums sm:text-3xl ${isOverBudget
-                          ? "text-error"
-                          : "text-success"
+                        ? "text-error"
+                        : "text-success"
                         }`}
                     >
                       {formatMoney(
@@ -268,8 +272,8 @@ const Home = () => {
 
                     <span
                       className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs font-semibold ${isOverBudget
-                          ? "border-error/40 bg-error/10 text-error"
-                          : "border-success/40 bg-success/10 text-success"
+                        ? "border-error/40 bg-error/10 text-error"
+                        : "border-success/40 bg-success/10 text-success"
                         }`}
                     >
                       <span aria-hidden="true">
@@ -324,8 +328,8 @@ const Home = () => {
                   >
                     <div
                       className={`h-full rounded-full transition-[width] duration-300 ${isOverBudget
-                          ? "bg-error"
-                          : "bg-primary"
+                        ? "bg-error"
+                        : "bg-primary"
                         }`}
                       style={{ width: `${progressPercentage}%` }}
                     />
@@ -340,8 +344,8 @@ const Home = () => {
 
                 <section
                   className={`rounded-xl border p-6 ${isOverBudget
-                      ? "border-error/40 bg-error/10"
-                      : "border-divider bg-surface"
+                    ? "border-error/40 bg-error/10"
+                    : "border-divider bg-surface"
                     }`}
                 >
                   <p className="text-sm font-semibold text-text-primary">
@@ -408,7 +412,7 @@ const Home = () => {
                       to="/calculator"
                       className="w-fit text-sm font-semibold text-primary underline-offset-4 transition-colors hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-canvas"
                     >
-                      View all {expenses.length} expenses 
+                      View all {expenses.length} expenses
                     </Link>
                   )}
 

@@ -1,4 +1,5 @@
-// components/CalculatorSummary.jsx
+import formatCurrency from "../utils/formatCurrency.js"
+import getBudgetStatus from "../utils/getBudgetStatus.js"
 
 const CalculatorSummary = ({
   originCurrency,
@@ -10,150 +11,149 @@ const CalculatorSummary = ({
   oneTimeExpenses,
   monthlyExpenses,
   runway,
-  rate
+  rate,
 }) => {
-  const isOverBudget = remainingBudget < 0
+  const budgetStatus = getBudgetStatus(remainingBudget)
+  const hasKnownStatus = budgetStatus.key !== "unknown"
+  const isOverBudget = budgetStatus.key === "over-budget"
 
-  // Format runway text & visual state dynamically
   const getRunwayDisplay = () => {
-    if (typeof runway === "number") {
-      return {
-        text: `${runway.toFixed(1)} months`,
-        style: "text-indigo-400 bg-indigo-500/10 border-indigo-500/30"
-      }
+    if (typeof runway === "number" && Number.isFinite(runway)) {
+      return `${runway.toFixed(1)} months`
+    }
+
+    if (runway === Infinity) {
+      return "Not limited by monthly costs"
     }
 
     if (runway === "Over Budget" || isOverBudget) {
-      return {
-        text: "Over Budget",
-        style: "text-rose-400 bg-rose-500/10 border-rose-500/30"
-      }
+      return "Over Budget"
     }
 
-    return {
-      text: runway || "N/A",
-      style: "text-slate-400 bg-slate-900 border-slate-800"
-    }
+    return runway || "N/A"
   }
 
   const runwayDisplay = getRunwayDisplay()
 
+  const formatMoney = (currency, amount) =>
+    `${currency} ${formatCurrency(Number(amount))}`
+
   return (
-    <div
-      className={`bg-slate-950 rounded-2xl p-6 border shadow-xl text-center space-y-6 transition-colors ${isOverBudget ? "border-rose-500/40" : "border-indigo-500/30"
-        }`}
-    >
-      {/* 1. Conversion Result Section */}
-      <div className="space-y-3">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-400">
-          Conversion Result
+    <section className="rounded-xl border border-divider bg-surface p-6 sm:p-8">
+      <div className="space-y-2">
+        <h2 className="text-xl font-semibold text-text-primary">
+          Budget result
         </h2>
 
-        <div>
-          <span className="text-xs text-slate-400 block mb-1">Savings</span>
-          <p className="text-xl sm:text-2xl font-bold text-slate-100 font-mono tracking-tight">
-            {savings} {originCurrency}
-          </p>
-        </div>
-
-        <div className="inline-block bg-slate-900 border border-slate-800 text-slate-400 text-xs px-3.5 py-1.5 rounded-full font-mono">
-          1 {originCurrency} = {rate} {destinationCurrency}
-        </div>
-
-        <div className="bg-slate-900/80 rounded-xl p-4 border border-slate-800">
-          <span className="text-xs text-slate-400 block mb-1">Converted Savings</span>
-          <p className="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono tracking-tight">
-            ≈ {destinationCurrency} {result}
-          </p>
-        </div>
+        <p className="text-sm text-text-muted">
+          Your estimated relocation position based on the current inputs.
+        </p>
       </div>
 
-      <div className="border-t border-slate-800"></div>
+      <div className="mt-7 border-y border-divider py-6">
+        <p className="text-sm font-medium text-text-muted">
+          Converted savings
+        </p>
 
-      {/* 2. Budget Summary Section */}
-      <div className="space-y-4">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-400">
-          Budget Summary
-        </h2>
+        <p className="mt-2 text-3xl font-semibold tracking-tight tabular-nums text-text-primary sm:text-4xl">
+          {formatMoney(destinationCurrency, result)}
+        </p>
 
-        {/* Over-Budget Warning Banner */}
-        {isOverBudget && (
-          <div
-            role="alert"
-            className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs sm:text-sm flex items-center justify-center gap-2 font-medium"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 shrink-0 text-rose-400"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <span>Your estimated expenses exceed your current savings</span>
-          </div>
-        )}
+        <p className="mt-2 text-sm text-text-muted">
+          {formatMoney(originCurrency, savings)} at 1 {originCurrency} ={" "}
+          {rate} {destinationCurrency}
+        </p>
+      </div>
 
-        {/* 2x2 Grid for Core Budget Metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-          {/* Total Expenses Card */}
-          <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex flex-col items-center justify-center">
-            <span className="text-xs text-slate-400 mb-1">Total Expenses</span>
-            <span className="font-mono text-slate-100 font-bold text-base">
-              {destinationCurrency} {totalExpenses}
-            </span>
+      <div className="mt-7">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <h3 className="text-base font-semibold text-text-primary">
+              Budget position
+            </h3>
+
+            <p className="mt-1 text-sm text-text-muted">
+              Planned expenses against your converted savings.
+            </p>
           </div>
 
-          {/* One-Time Costs Card */}
-          <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex flex-col items-center justify-center">
-            <span className="text-xs text-slate-400 mb-1">One-Time Costs</span>
-            <span className="font-mono text-slate-100 font-bold text-base">
-              {destinationCurrency} {oneTimeExpenses}
-            </span>
-          </div>
-
-          {/* Monthly Living Costs Card */}
-          <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex flex-col items-center justify-center">
-            <span className="text-xs text-slate-400 mb-1">Monthly Living Costs</span>
-            <span className="font-mono text-slate-100 font-bold text-base">
-              {destinationCurrency} {monthlyExpenses}
-            </span>
-          </div>
-
-          {/* Remaining Budget Card */}
-          <div
-            className={`p-3.5 rounded-xl border flex flex-col items-center justify-center ${isOverBudget
-                ? "bg-rose-500/10 border-rose-500/30"
-                : "bg-slate-900 border-slate-800"
-              }`}
-          >
-            <span className="text-xs text-slate-400 mb-1">Remaining Budget</span>
+          {hasKnownStatus && (
             <span
-              className={`font-mono font-bold text-base ${isOverBudget ? "text-rose-400" : "text-emerald-400"
+              className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold ${isOverBudget
+                  ? "border-error/40 bg-error/10 text-error"
+                  : "border-success/40 bg-success/10 text-success"
                 }`}
             >
-              {destinationCurrency} {remainingBudget}
+              <span aria-hidden="true">
+                {isOverBudget ? "!" : "✓"}
+              </span>
+              <span>{budgetStatus.label}</span>
             </span>
-          </div>
+          )}
         </div>
 
-        {/* Highlighted Estimated Runway Card */}
-        <div
-          className={`p-4 rounded-xl border flex flex-col items-center justify-center transition-colors ${runwayDisplay.style}`}
-        >
-          <span className="text-xs text-slate-400 mb-1 font-medium uppercase tracking-wider">
-            Estimated Runway
-          </span>
-          <span className="font-mono text-lg sm:text-xl font-bold">
-            {runwayDisplay.text}
+        <dl className="mt-5 divide-y divide-divider border-y border-divider">
+          <div className="flex items-center justify-between gap-4 py-4">
+            <dt className="text-sm text-text-muted">Total expenses</dt>
+            <dd className="text-sm font-semibold tabular-nums text-text-primary">
+              {formatMoney(destinationCurrency, totalExpenses)}
+            </dd>
+          </div>
+
+          <div className="flex items-center justify-between gap-4 py-4">
+            <dt className="text-sm text-text-muted">One-time expenses</dt>
+            <dd className="text-sm font-semibold tabular-nums text-text-primary">
+              {formatMoney(destinationCurrency, oneTimeExpenses)}
+            </dd>
+          </div>
+
+          <div className="flex items-center justify-between gap-4 py-4">
+            <dt className="text-sm text-text-muted">Monthly expenses</dt>
+            <dd className="text-sm font-semibold tabular-nums text-text-primary">
+              {formatMoney(destinationCurrency, monthlyExpenses)}
+            </dd>
+          </div>
+
+          <div className="flex items-center justify-between gap-4 py-4">
+            <dt className="text-sm font-medium text-text-primary">
+              Remaining budget
+            </dt>
+            <dd
+              className={`text-sm font-semibold tabular-nums ${isOverBudget ? "text-error" : "text-success"
+                }`}
+            >
+              {formatMoney(destinationCurrency, remainingBudget)}
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <div className="mt-7 rounded-lg border border-divider bg-canvas px-5 py-4">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <p className="text-sm font-medium text-text-muted">
+              Estimated runway
+            </p>
+            <p className="mt-1 text-lg font-semibold tabular-nums text-text-primary">
+              {runwayDisplay}
+            </p>
+          </div>
+
+          <span className="text-sm text-text-muted">
+            Based on monthly expenses
           </span>
         </div>
       </div>
-    </div>
+
+      {isOverBudget && (
+        <div
+          role="alert"
+          className="mt-5 rounded-lg border border-error/40 bg-error/10 px-4 py-3 text-sm text-error"
+        >
+          Your estimated expenses exceed your current savings.
+        </div>
+      )}
+    </section>
   )
 }
 

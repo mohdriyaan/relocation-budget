@@ -140,18 +140,20 @@ const Calculator = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <div className="min-h-[calc(100vh-4rem)] bg-canvas px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+      <div className="mx-auto max-w-6xl space-y-10">
 
         {/* Header Section */}
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Exchange & Budget Calculator
+        <header className="max-w-2xl space-y-3">
+          <h1 className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl">
+            Relocation budget calculator
           </h1>
-          <p className="text-slate-400 text-sm sm:text-base max-w-lg mx-auto">
-            Convert currency savings and track upcoming trip or relocation expenses in one place.
+
+          <p className="text-sm leading-6 text-text-muted sm:text-base">
+            Convert your savings, estimate your planned costs, and understand your
+            remaining budget before you relocate.
           </p>
-        </div>
+        </header>
 
         {/* 2-Column Responsive Dashboard Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -164,6 +166,7 @@ const Calculator = () => {
               calculationError={calculationError}
               isCalculating={isCalculating}
               initialBudget={initialBudget}
+              hasCalculated={showSummary && result!== null}
             />
 
             {/* Direct Summary Render */}
@@ -187,7 +190,7 @@ const Calculator = () => {
                     to="/"
                     className="text-sm font-semibold text-indigo-400 transition-colors hover:text-indigo-300"
                   >
-                    Back to Dashboard →
+                    Back to Dashboard 
                   </Link>
                 </div>
               </div>
