@@ -96,7 +96,7 @@ const ExpenseForm = ({
       "text-text-primary",
       "placeholder:text-text-muted",
       "transition-colors",
-      hasError ? "!border-error" : "",
+      hasError ? "border-error!" : "",
     ]
       .filter(Boolean)
       .join(" ")
@@ -286,10 +286,10 @@ const ExpenseForm = ({
       {submitError && (
         <div
           role="alert"
-          className="border-y border-error/25 bg-error/4 py-4"
+          className="border-y border-error/25 bg-error/4 px-4 py-4"
         >
           <div className="flex items-start justify-between gap-4">
-            <p className="text-sm leading-5 text-error px-4 py-2">
+            <p className="text-sm leading-5 text-error">
               {submitError}
             </p>
 
