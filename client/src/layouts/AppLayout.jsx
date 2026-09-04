@@ -33,7 +33,7 @@ const AppLayout = ({ children }) => {
 
       <div className="relative z-0">
         {isAuthRoute ? (
-          <header className="border-b border-white/5">
+          <header className="border-b border-border-subtle">
             <div className="mx-auto flex h-14 max-w-lg items-center px-4 sm:px-6">
               <Link
                 to="/login"

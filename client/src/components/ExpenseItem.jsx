@@ -53,10 +53,9 @@ const ExpenseItem = ({
   }
 
   return (
-    <article className="group border-b border-white/5 transition-colors hover:bg-white/2">
+    <article className="group border-b border-border-subtle transition-colors hover:bg-surface-raised">
       {!isConfirmingDelete ? (
         <div className="grid grid-cols-1 gap-5 px-1 py-6 sm:grid-cols-[minmax(0,1fr)_4rem_8rem_4.5rem] sm:items-center sm:gap-5">
-
           {/* Details */}
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
@@ -66,7 +65,7 @@ const ExpenseItem = ({
 
               <span
                 aria-hidden="true"
-                className="text-xs text-white/20"
+                className="text-xs text-text-muted"
               >
                 ·
               </span>
@@ -105,7 +104,7 @@ const ExpenseItem = ({
               type="button"
               onClick={() => onEditExpense(expense)}
               aria-label={`Edit ${name}`}
-              className="rounded-md p-2 text-text-muted transition-colors hover:bg-white/5 hover:text-text-primary"
+              className="rounded-md p-2 text-text-muted transition-colors hover:bg-surface-raised hover:text-text-primary"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -171,7 +170,7 @@ const ExpenseItem = ({
                 ref={cancelButtonRef}
                 type="button"
                 onClick={handleCancelDelete}
-                className="rounded-lg border border-white/10 px-3 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-white/5"
+                className="rounded-lg border border-border-standard px-3 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-surface-raised"
               >
                 Cancel
               </button>

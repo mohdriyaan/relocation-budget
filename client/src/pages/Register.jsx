@@ -34,27 +34,18 @@ const Register = () => {
 
   const fieldClassName = (hasError) =>
     [
+      "control-surface",
       "w-full",
-      "rounded-lg",
-      "border",
-      "bg-white/[0.02]",
       "px-3",
       "py-2.5",
       "text-sm",
       "text-text-primary",
       "placeholder:text-text-muted",
-      "shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]",
       "transition-colors",
-      "focus:outline-none",
-      "focus-visible:outline-none",
-      "focus-visible:ring-1",
-      "focus-visible:ring-white/20",
-      "focus-visible:ring-offset-2",
-      "focus-visible:ring-offset-background",
-      hasError
-        ? "border-error focus-visible:border-error"
-        : "border-white/10 focus-visible:border-white/20",
-    ].join(" ")
+      hasError ? "!border-error" : "",
+    ]
+      .filter(Boolean)
+      .join(" ")
 
   const labelClassName =
     "block text-sm font-medium text-text-muted"
@@ -78,13 +69,11 @@ const Register = () => {
           <div className="mt-7">
             <Link
               to="/login"
-              className="flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
             >
               Proceed to login
             </Link>
           </div>
-
-
         </div>
       </AuthPage>
     )
@@ -108,7 +97,7 @@ const Register = () => {
             role="alert"
             className="border-y border-error/25 bg-error/4 py-4"
           >
-            <p className="text-sm leading-5 text-error">
+            <p className="text-sm leading-5 text-error px-4">
               {apiError}
             </p>
           </div>
@@ -247,7 +236,7 @@ const Register = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting ? (
             <>

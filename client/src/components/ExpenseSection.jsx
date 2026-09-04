@@ -25,7 +25,7 @@ function ExpenseSection({
   return (
     <div className="space-y-12">
       {/* Add expense */}
-      <section className="border-y border-white/5 py-8">
+      <section className="border-y border-border-subtle py-8">
         <div className="max-w-2xl space-y-2">
           <p className="text-sm font-medium text-text-muted">
             Expense planning

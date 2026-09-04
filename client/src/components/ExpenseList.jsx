@@ -15,27 +15,29 @@ const ExpenseList = ({
       <div
         role="status"
         aria-label="Loading expenses"
-        className="border-y border-white/5"
+        className="border-y border-border-subtle"
       >
-        <div className="flex items-center justify-between border-b border-white/5 py-5">
-          <div className="h-5 w-32 animate-pulse bg-white/5" />
-          <div className="h-4 w-16 animate-pulse bg-white/5" />
+        <div className="flex items-center justify-between border-b border-border-subtle py-5">
+          <div className="h-5 w-32 animate-pulse bg-border-subtle" />
+          <div className="h-4 w-16 animate-pulse bg-border-subtle" />
         </div>
 
-        <div className="divide-y divide-white/5">
+        <div className="divide-y divide-divider">
           {[1, 2, 3].map((item) => (
             <div
               key={item}
               className="grid grid-cols-[minmax(0,1fr)_3rem_7rem_auto] items-center gap-4 py-5"
             >
               <div className="space-y-2">
-                <div className="h-4 w-32 animate-pulse bg-white/5" />
-                <div className="h-3 w-24 animate-pulse bg-white/5" />
+                <div className="h-4 w-32 animate-pulse bg-border-subtle" />
+                <div className="h-3 w-24 animate-pulse bg-border-subtle" />
               </div>
 
-              <div className="h-3 w-8 justify-self-end animate-pulse bg-white/5" />
-              <div className="h-4 w-20 justify-self-end animate-pulse bg-white/5" />
-              <div className="h-8 w-16 justify-self-end animate-pulse bg-white/5" />
+              <div className="h-3 w-8 justify-self-end animate-pulse bg-border-subtle" />
+
+              <div className="h-4 w-20 justify-self-end animate-pulse bg-border-subtle" />
+
+              <div className="h-8 w-16 justify-self-end animate-pulse bg-border-subtle" />
             </div>
           ))}
         </div>
@@ -57,7 +59,7 @@ const ExpenseList = ({
   return (
     <div>
       {/* Ledger header */}
-      <div className="flex flex-col gap-3 border-b border-white/5 py-6 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-3 border-b border-border-subtle py-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2
             ref={headingRef}
@@ -90,7 +92,7 @@ const ExpenseList = ({
 
       {/* Empty state */}
       {expenses.length === 0 ? (
-        <div className="border-b border-white/5 py-16 text-center">
+        <div className="border-b border-border-subtle py-16 text-center">
           <p className="text-sm font-medium text-text-primary">
             No expenses yet
           </p>
@@ -100,7 +102,7 @@ const ExpenseList = ({
           </p>
         </div>
       ) : (
-        <div className="divide-y divide-white/5">
+        <div className="divide-y divide-divider">
           {expenses.map((expense) => (
             <ExpenseItem
               key={expense._id}

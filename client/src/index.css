@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
 @import "tailwindcss";
 
 @theme {
@@ -8,41 +9,41 @@
   --leading-tighter: 1.05;
 
   /* Surfaces */
-  --color-canvas: ...;
-  --color-background: ...;
-  --color-surface: ...;
-  --color-surface-raised: ...;
+  --color-canvas: #f8fafc;
+  --color-background: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-raised: #f8fafc;
 
   /* Text */
-  --color-text-primary: ...;
-  --color-text-muted: ...;
+  --color-text-primary: #0f172a;
+  --color-text-muted: #64748b;
 
   /* Structure */
-  --color-divider: ...;
-  --color-border-subtle: ...;
-  --color-border-standard: ...;
+  --color-divider: #e2e8f0;
+  --color-border-subtle: #e2e8f0;
+  --color-border-standard: #cbd5e1;
 
   /* Controls */
-  --color-input-background: ...;
-  --color-input-border: ...;
-  --color-focus-ring: ...;
-  --shadow-input-inset: ...;
+  --color-input-background: #f8fafc;
+  --color-input-border: #cbd5e1;
+  --color-focus-ring: #4f46e5;
+  --shadow-input-inset: inset 0 1px 2px rgba(15, 23, 42, 0.06);
 
   /* Semantic */
-  --color-primary: ...;
-  --color-primary-hover: ...;
-  --color-success: ...;
-  --color-error: ...;
-  --color-information: ...;
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-success: #15803d;
+  --color-error: #dc2626;
+  --color-information: #0f766e;
 }
 
 @utility control-surface {
-  @apply rounded-lg border bg-input-background;
+  @apply rounded-lg border border-input-border bg-input-background;
   box-shadow: var(--shadow-input-inset);
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html {
@@ -57,14 +58,12 @@ body {
 }
 
 *:focus-visible {
-  @apply outline-none ring-1 ring-white/20 ring-offset-2 ring-offset-background;
+  outline: none;
+  box-shadow:
+    0 0 0 1px var(--color-focus-ring),
+    0 0 0 3px var(--color-background);
 }
 
 select {
-  color-scheme: dark;
-}
-
-select option {
-  background: #10172a;
-  color: #f8fafc;
+  color-scheme: light;
 }

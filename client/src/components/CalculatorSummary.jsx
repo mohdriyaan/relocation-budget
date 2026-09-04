@@ -79,9 +79,9 @@ const CalculatorSummary = ({
   }
 
   return (
-    <section className="border-y border-white/5 bg-surface">
+    <section className="border-y border-border-subtle bg-surface">
       {/* Summary header */}
-      <div className="border-b border-white/5 px-5 py-7 sm:px-7 sm:py-8">
+      <div className="border-b border-border-subtle px-5 py-7 sm:px-7 sm:py-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-2">
             <p className="text-sm font-medium text-text-muted">
@@ -122,9 +122,8 @@ const CalculatorSummary = ({
       {/* Budget Bridge */}
       <div className="px-5 py-7 sm:px-7 sm:py-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-0">
-
           {/* Available */}
-          <div className="space-y-3 sm:border-r sm:border-white/5 sm:pr-8">
+          <div className="space-y-3 sm:border-r sm:border-border-subtle sm:pr-8">
             <p className="text-sm font-medium text-text-muted">
               Available
             </p>
@@ -145,7 +144,7 @@ const CalculatorSummary = ({
           </div>
 
           {/* Planned */}
-          <div className="space-y-3 sm:border-r sm:border-white/5 sm:px-8">
+          <div className="space-y-3 sm:border-r sm:border-border-subtle sm:px-8">
             <p className="text-sm font-medium text-text-muted">
               Planned
             </p>
@@ -194,7 +193,7 @@ const CalculatorSummary = ({
         </div>
 
         {/* Allocation */}
-        <div className="mt-9 border-t border-white/5 pt-7">
+        <div className="mt-9 border-t border-border-subtle pt-7">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-sm font-medium text-text-primary">
@@ -203,7 +202,7 @@ const CalculatorSummary = ({
 
               <p className="mt-1 text-sm text-text-muted">
                 {planned.value} planned{" "}
-                <span className="text-white/30">/</span>{" "}
+                <span className="text-text-muted">/</span>{" "}
                 {remaining.value} remaining
               </p>
             </div>
@@ -214,7 +213,7 @@ const CalculatorSummary = ({
           </div>
 
           <div
-            className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/5"
+            className="mt-5 h-1.5 overflow-hidden rounded-full bg-border-subtle"
             role="progressbar"
             aria-label={`${Math.round(
               progressPercentage
@@ -249,7 +248,7 @@ const CalculatorSummary = ({
       </div>
 
       {/* Breakdown */}
-      <div className="border-t border-white/5 px-5 py-7 sm:px-7">
+      <div className="border-t border-border-subtle px-5 py-7 sm:px-7">
         <div className="space-y-2">
           <h3 className="text-base font-semibold leading-tight text-text-primary">
             Expense breakdown
@@ -260,7 +259,7 @@ const CalculatorSummary = ({
           </p>
         </div>
 
-        <dl className="mt-6 divide-y divide-white/5 border-y border-white/5">
+        <dl className="mt-6 divide-y divide-divider border-y border-border-subtle">
           {/* Total */}
           <div className="grid grid-cols-[minmax(0,1fr)_4rem_8rem] items-center gap-5 py-4">
             <dt className="text-sm font-medium text-text-primary">
@@ -330,7 +329,7 @@ const CalculatorSummary = ({
       </div>
 
       {/* Runway insight */}
-      <div className="border-t border-white/5 px-5 py-7 sm:px-7">
+      <div className="border-t border-border-subtle px-5 py-7 sm:px-7">
         <div className="max-w-xl">
           <p className="text-xs font-medium text-text-muted">
             Derived insight

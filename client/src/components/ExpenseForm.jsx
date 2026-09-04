@@ -88,27 +88,18 @@ const ExpenseForm = ({
 
   const fieldClassName = (hasError) =>
     [
+      "control-surface",
       "w-full",
-      "rounded-lg",
-      "border",
-      "bg-white/[0.025]",
       "px-3",
       "py-2.5",
       "text-sm",
       "text-text-primary",
       "placeholder:text-text-muted",
-      "shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]",
       "transition-colors",
-      "focus:outline-none",
-      "focus-visible:outline-none",
-      "focus-visible:ring-1",
-      "focus-visible:ring-white/20",
-      "focus-visible:ring-offset-2",
-      "focus-visible:ring-offset-background",
-      hasError
-        ? "border-error focus-visible:border-error"
-        : "border-white/10 focus-visible:border-white/20",
-    ].join(" ")
+      hasError ? "!border-error" : "",
+    ]
+      .filter(Boolean)
+      .join(" ")
 
   const labelClassName =
     "block text-sm font-medium text-text-muted"
@@ -124,7 +115,7 @@ const ExpenseForm = ({
     >
       {/* Edit mode */}
       {editingExpense !== null && (
-        <div className="flex flex-col gap-3 border-y border-information/25 bg-information/4 px-4 py-4 sm:px-5 sm:py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 border-y border-information/25 bg-information/4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
           <p className="text-sm text-text-muted">
             Editing{" "}
             <span className="font-medium text-text-primary">
@@ -135,7 +126,7 @@ const ExpenseForm = ({
           <button
             type="button"
             onClick={handleCancel}
-            className="w-fit text-sm font-medium text-primary transition-colors hover:text-primary/80 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="w-fit text-sm font-medium text-primary transition-colors hover:text-primary-hover"
           >
             Cancel
           </button>
@@ -228,7 +219,7 @@ const ExpenseForm = ({
           <input
             {...register("amount", {
               setValueAs: (value) =>
-                value === "" ? undefined : Number(value)
+                value === "" ? undefined : Number(value),
             })}
             id="amount"
             type="number"
@@ -298,7 +289,7 @@ const ExpenseForm = ({
           className="border-y border-error/25 bg-error/4 py-4"
         >
           <div className="flex items-start justify-between gap-4">
-            <p className="text-sm leading-5 text-error">
+            <p className="text-sm leading-5 text-error px-4 py-2">
               {submitError}
             </p>
 
@@ -306,7 +297,7 @@ const ExpenseForm = ({
               type="button"
               onClick={() => setSubmitError("")}
               aria-label="Dismiss error"
-              className="shrink-0 rounded-md p-1 text-error transition-colors hover:bg-error/10 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="shrink-0 rounded-md p-1 text-error transition-colors hover:bg-error/10"
             >
               ×
             </button>
@@ -319,7 +310,7 @@ const ExpenseForm = ({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting ? "Saving..." : "Add expense"}
         </button>
@@ -328,7 +319,7 @@ const ExpenseForm = ({
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex-1 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex-1 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSubmitting ? "Saving..." : "Update expense"}
           </button>
@@ -337,7 +328,7 @@ const ExpenseForm = ({
             type="button"
             onClick={handleCancel}
             disabled={isSubmitting}
-            className="flex-1 rounded-lg border border-white/10 px-4 py-2.5 text-sm font-medium text-text-primary transition-colors hover:bg-white/5 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex-1 rounded-lg border border-border-standard px-4 py-2.5 text-sm font-medium text-text-primary transition-colors hover:bg-surface-raised disabled:cursor-not-allowed disabled:opacity-60"
           >
             Cancel
           </button>

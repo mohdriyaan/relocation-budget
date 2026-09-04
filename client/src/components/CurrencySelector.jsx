@@ -24,27 +24,17 @@ const CurrencySelector = ({
         aria-invalid={Boolean(error)}
         aria-describedby={error ? `${name}-error` : undefined}
         className={[
+          "control-surface",
           "w-full",
-          "rounded-lg",
-          "border",
-          "bg-white/2",
           "px-3",
           "py-2.5",
           "text-sm",
           "text-text-primary",
-          "shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]",
           "transition-colors",
-          "focus:outline-none",
-          "focus-visible:outline-none",
-          "focus-visible:ring-1",
-          "focus-visible:ring-white/20",
-          "focus-visible:ring-offset-2",
-          "color-scheme-dark",
-          "focus-visible:ring-offset-background",
-          error
-            ? "border-error focus-visible:border-error"
-            : "border-white/10 focus-visible:border-white/20",
-        ].join(" ")}
+          error ? "border-error!" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
       >
         {currencyList.map((currency) => (
           <option key={currency} value={currency}>

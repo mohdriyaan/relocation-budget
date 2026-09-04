@@ -12,10 +12,6 @@ const AuthPage = ({
     <main className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center px-4 py-14 sm:px-6 sm:py-20">
       <section className="w-full max-w-lg">
         <div className="mx-auto max-w-md">
-          <p className="text-sm font-medium text-text-muted">
-            Welcome back
-          </p>
-
           <h1 className="text-3xl font-semibold leading-tighter tracking-tightest text-text-primary sm:text-4xl">
             {title}
           </h1>
@@ -30,11 +26,11 @@ const AuthPage = ({
         </div>
 
         {footerText && footerLink && footerLabel && (
-          <p className="mt-8 border-t border-white/5 pt-6 text-sm text-text-muted">
+          <p className="mt-8 border-t border-border-subtle pt-6 text-sm text-text-muted">
             {footerText}{" "}
             <Link
               to={footerLink}
-              className="text-sm text-text-muted underline-offset-4 transition-colors hover:text-text-primary hover:underline focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="text-text-muted underline-offset-4 transition-colors hover:text-text-primary hover:underline"
             >
               {footerLabel}
             </Link>

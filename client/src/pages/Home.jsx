@@ -87,7 +87,6 @@ const Home = () => {
     <main className="min-h-[calc(100vh-4rem)] bg-canvas">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
         <div className="space-y-14">
-
           {/* Header */}
           <header className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-2xl space-y-3">
@@ -107,7 +106,7 @@ const Home = () => {
 
             <Link
               to="/calculator"
-              className="inline-flex w-fit items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90"
+              className="inline-flex w-fit items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
             >
               Open Calculator
             </Link>
@@ -143,25 +142,25 @@ const Home = () => {
                 aria-label="Loading dashboard"
                 className="space-y-8"
               >
-                <div className="border-y border-white/5 py-8">
+                <div className="border-y border-border-subtle py-8">
                   <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
                     {[1, 2, 3].map((item) => (
                       <div key={item} className="space-y-3">
-                        <div className="h-3 w-20 animate-pulse bg-white/5" />
-                        <div className="h-7 w-32 animate-pulse bg-white/5" />
-                        <div className="h-3 w-28 animate-pulse bg-white/5" />
+                        <div className="h-3 w-20 animate-pulse bg-border-subtle" />
+                        <div className="h-7 w-32 animate-pulse bg-border-subtle" />
+                        <div className="h-3 w-28 animate-pulse bg-border-subtle" />
                       </div>
                     ))}
                   </div>
 
-                  <div className="mt-8 h-1.5 animate-pulse bg-white/5" />
+                  <div className="mt-8 h-1.5 animate-pulse bg-border-subtle" />
                 </div>
 
-                <div className="border-y border-white/5 py-8">
-                  <div className="h-4 w-24 animate-pulse bg-white/5" />
-                  <div className="mt-4 h-12 animate-pulse bg-white/5" />
-                  <div className="mt-4 h-12 animate-pulse bg-white/5" />
-                  <div className="mt-4 h-12 animate-pulse bg-white/5" />
+                <div className="border-y border-border-subtle py-8">
+                  <div className="h-4 w-24 animate-pulse bg-border-subtle" />
+                  <div className="mt-4 h-12 animate-pulse bg-border-subtle" />
+                  <div className="mt-4 h-12 animate-pulse bg-border-subtle" />
+                  <div className="mt-4 h-12 animate-pulse bg-border-subtle" />
                 </div>
               </div>
             )}
@@ -186,7 +185,7 @@ const Home = () => {
                   <button
                     type="button"
                     onClick={fetchDashboardData}
-                    className="inline-flex items-center justify-center rounded-lg border border-white/10 px-4 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-white/5"
+                    className="inline-flex items-center justify-center rounded-lg border border-border-standard px-4 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-surface-raised"
                   >
                     Try again
                   </button>
@@ -196,7 +195,7 @@ const Home = () => {
 
             {/* No Budget */}
             {!loading && !error && !budget && (
-              <section className="border-y border-white/5 py-12">
+              <section className="border-y border-border-subtle py-12">
                 <div className="max-w-xl space-y-5">
                   <p className="text-sm font-medium text-information">
                     Getting started
@@ -213,7 +212,7 @@ const Home = () => {
 
                   <Link
                     to="/calculator"
-                    className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90"
+                    className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
                   >
                     Set up budget
                   </Link>
@@ -224,15 +223,12 @@ const Home = () => {
             {/* Active Budget */}
             {hasActiveBudget && (
               <div className="space-y-10">
-
                 {/* Budget Bridge */}
-                <section className="border-y border-white/5 bg-surface">
+                <section className="border-y border-border-subtle bg-surface">
                   <div className="px-5 py-7 sm:px-7 sm:py-8">
-
                     {/* Financial Summary */}
                     <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-0">
-
-                      <div className="space-y-3 sm:border-r sm:border-white/5 sm:pr-8">
+                      <div className="space-y-3 sm:border-r sm:border-border-subtle sm:pr-8">
                         <p className="text-sm font-medium text-text-muted">
                           Available
                         </p>
@@ -252,7 +248,7 @@ const Home = () => {
                         </p>
                       </div>
 
-                      <div className="space-y-3 sm:px-8 sm:border-r sm:border-white/5">
+                      <div className="space-y-3 sm:border-r sm:border-border-subtle sm:px-8">
                         <p className="text-sm font-medium text-text-muted">
                           Planned
                         </p>
@@ -283,10 +279,11 @@ const Home = () => {
                           </span>
 
                           <span
-                            className={`text-xl font-medium tabular-nums ${isOverBudget
+                            className={`text-xl font-medium tabular-nums ${
+                              isOverBudget
                                 ? "text-error"
                                 : "text-success"
-                              }`}
+                            }`}
                           >
                             {remaining.value}
                           </span>
@@ -303,7 +300,7 @@ const Home = () => {
                     </div>
 
                     {/* Allocation Bridge */}
-                    <div className="mt-9 border-t border-white/5 pt-7">
+                    <div className="mt-9 border-t border-border-subtle pt-7">
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                         <div>
                           <p className="text-sm font-medium text-text-primary">
@@ -311,9 +308,9 @@ const Home = () => {
                           </p>
 
                           <p className="mt-1 text-sm text-text-muted">
-                            {planned.currency} {planned.value} planned{" "}
-                            <span className="text-white/30">/</span>{" "}
-                            {remaining.currency} {remaining.value} remaining
+                            {planned.value} planned{" "}
+                            <span className="text-text-muted">/</span>{" "}
+                            {remaining.value} remaining
                           </p>
                         </div>
 
@@ -323,7 +320,7 @@ const Home = () => {
                       </div>
 
                       <div
-                        className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/5"
+                        className="mt-5 h-1.5 overflow-hidden rounded-full bg-border-subtle"
                         role="progressbar"
                         aria-label={`${Math.round(
                           progressPercentage
@@ -333,10 +330,11 @@ const Home = () => {
                         aria-valuemax="100"
                       >
                         <div
-                          className={`h-full rounded-full transition-[width] duration-300 ${isOverBudget
+                          className={`h-full rounded-full transition-[width] duration-300 ${
+                            isOverBudget
                               ? "bg-error"
                               : "bg-primary"
-                            }`}
+                          }`}
                           style={{
                             width: `${progressPercentage}%`,
                           }}
@@ -346,17 +344,17 @@ const Home = () => {
                       <p className="mt-3 text-xs leading-5 text-text-muted">
                         {isOverBudget
                           ? `${Math.abs(
-                            Math.round(plannedPercentage - 100)
-                          )}% above available savings`
+                              Math.round(plannedPercentage - 100)
+                            )}% above available savings`
                           : `${Math.round(
-                            remainingPercentage
-                          )}% of your savings remains unplanned`}
+                              remainingPercentage
+                            )}% of your savings remains unplanned`}
                       </p>
                     </div>
                   </div>
 
                   {/* Internal Insight Division */}
-                  <div className="border-t border-white/5 px-5 py-6 sm:px-7">
+                  <div className="border-t border-border-subtle px-5 py-6 sm:px-7">
                     <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                       <div className="max-w-2xl">
                         <p className="text-xs font-medium text-text-muted">
@@ -382,7 +380,7 @@ const Home = () => {
 
                       <Link
                         to="/calculator"
-                        className="inline-flex w-fit shrink-0 items-center justify-center rounded-lg border border-white/10 px-4 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-white/5"
+                        className="inline-flex w-fit shrink-0 items-center justify-center rounded-lg border border-border-standard px-4 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-surface-raised"
                       >
                         Manage expenses
                       </Link>
@@ -391,8 +389,8 @@ const Home = () => {
                 </section>
 
                 {/* Expenses */}
-                <section className="border-y border-white/5">
-                  <div className="flex flex-col gap-3 border-b border-white/5 py-6 sm:flex-row sm:items-end sm:justify-between">
+                <section className="border-y border-border-subtle">
+                  <div className="flex flex-col gap-3 border-b border-border-subtle py-6 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                       <h3 className="text-xl font-semibold leading-tighter tracking-tightest text-text-primary">
                         Expenses
@@ -427,7 +425,7 @@ const Home = () => {
                       </Link>
                     </div>
                   ) : (
-                    <div className="divide-y divide-white/5">
+                    <div className="divide-y divide-divider">
                       {displayedExpenses.map((expense) => (
                         <div
                           key={expense._id}
@@ -453,7 +451,9 @@ const Home = () => {
                             </span>
 
                             <span className="text-sm font-medium tabular-nums text-text-primary">
-                              {formatCurrency(Number(expense.amount) || 0)}
+                              {formatCurrency(
+                                Number(expense.amount) || 0
+                              )}
                             </span>
                           </div>
                         </div>
