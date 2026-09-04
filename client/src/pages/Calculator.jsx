@@ -102,6 +102,7 @@ const Calculator = () => {
       invalidateCalculation()
     } catch (error) {
       setDeleteError(error.message || "Unable to delete expense")
+      throw error
     }
   }
 
