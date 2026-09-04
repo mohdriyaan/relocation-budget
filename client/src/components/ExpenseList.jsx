@@ -64,7 +64,7 @@ const ExpenseList = ({
           <h2
             ref={headingRef}
             tabIndex="-1"
-            className="text-xl font-semibold leading-tighter tracking-tightest text-text-primary focus:outline-none"
+            className="text-xl font-semibold leading-tight tracking-tight text-text-primary focus:outline-none"
           >
             Planned expenses
           </h2>

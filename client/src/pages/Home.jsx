@@ -85,7 +85,7 @@ const Home = () => {
 
   return (
     <main className="min-h-[calc(100vh-4rem)] bg-canvas">
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8 lg:py-14">
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8 lg:py-12">
         <div className="space-y-12">
           {/* Header */}
           <header className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
@@ -94,7 +94,7 @@ const Home = () => {
                 Relocation budget
               </p>
 
-              <h1 className="text-3xl font-semibold leading-tighter tracking-tightest text-text-primary sm:text-4xl">
+              <h1 className="text-3xl font-semibold leading-tight tracking-tight text-text-primary sm:text-4xl">
                 Welcome back, {user?.name || "User"}.
               </h1>
 
@@ -116,7 +116,7 @@ const Home = () => {
           <section className="space-y-7">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <h2 className="text-xl font-semibold leading-tight tracking-tightest text-text-primary">
+                <h2 className="text-xl font-semibold leading-tight tracking-tight text-text-primary">
                   Budget overview
                 </h2>
 
@@ -201,7 +201,7 @@ const Home = () => {
                     Getting started
                   </p>
 
-                  <h3 className="text-2xl font-semibold leading-tight tracking-tightest text-text-primary">
+                  <h3 className="text-2xl font-semibold leading-tight tracking-tight text-text-primary">
                     Set up your relocation budget
                   </h3>
 
@@ -225,7 +225,7 @@ const Home = () => {
               <div className="space-y-10">
                 {/* Budget Bridge */}
                 <section className="border-y border-border-subtle bg-surface">
-                  <div className="px-5 py-7 sm:px-7 sm:py-8">
+                  <div className="px-5 py-6 sm:px-7 sm:py-8">
                     {/* Financial Summary */}
                     <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-0">
                       <div className="space-y-3 sm:border-r sm:border-border-subtle sm:pr-8">
@@ -279,17 +279,24 @@ const Home = () => {
                           </span>
 
                           <span
-                            className={`text-xl font-medium tabular-nums ${
-                              isOverBudget
-                                ? "text-error"
-                                : "text-success"
-                            }`}
+                            className={`text-xl font-medium tabular-nums ${isOverBudget
+                              ? "text-error"
+                              : "text-success"
+                              }`}
                           >
                             {remaining.value}
                           </span>
 
-                          <span className="text-xs font-medium text-text-muted">
-                            {budgetStatus?.label}
+                          <span
+                            className={`inline-flex items-center gap-1.5 text-xs font-medium 
+                              ${isOverBudget ? "text-error" : "text-success"
+                              }`}>
+                            
+                            <span aria-hidden="true">
+                              {isOverBudget ? "!" : "✓"}
+                            </span>
+
+                            <span>{budgetStatus?.label}</span>
                           </span>
                         </div>
 
@@ -330,11 +337,10 @@ const Home = () => {
                         aria-valuemax="100"
                       >
                         <div
-                          className={`h-full rounded-full transition-[width] duration-300 ${
-                            isOverBudget
-                              ? "bg-error"
-                              : "bg-primary"
-                          }`}
+                          className={`h-full rounded-full transition-[width] duration-300 ${isOverBudget
+                            ? "bg-error"
+                            : "bg-primary"
+                            }`}
                           style={{
                             width: `${progressPercentage}%`,
                           }}
@@ -344,11 +350,11 @@ const Home = () => {
                       <p className="mt-3 text-xs leading-5 text-text-muted">
                         {isOverBudget
                           ? `${Math.abs(
-                              Math.round(plannedPercentage - 100)
-                            )}% above available savings`
+                            Math.round(plannedPercentage - 100)
+                          )}% above available savings`
                           : `${Math.round(
-                              remainingPercentage
-                            )}% of your savings remains unplanned`}
+                            remainingPercentage
+                          )}% of your savings remains unplanned`}
                       </p>
                     </div>
                   </div>
@@ -392,7 +398,7 @@ const Home = () => {
                 <section className="border-y border-border-subtle">
                   <div className="flex flex-col gap-3 border-b border-border-subtle py-6 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                      <h3 className="text-xl font-semibold leading-tight tracking-tightest text-text-primary">
+                      <h3 className="text-xl font-semibold leading-tight tracking-tight text-text-primary">
                         Expenses
                       </h3>
 

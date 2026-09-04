@@ -12,7 +12,7 @@ const AuthPage = ({
     <main className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center px-4 py-12 sm:px-6 sm:py-16">
       <section className="w-full max-w-lg">
         <div className="mx-auto max-w-md">
-          <h1 className="text-4xl font-semibold leading-tighter tracking-tightest text-text-primary sm:text-5xl">
+          <h1 className="text-4xl font-semibold leading-tight tracking-tight text-text-primary sm:text-5xl">
             {title}
           </h1>
 

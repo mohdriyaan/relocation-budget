@@ -286,7 +286,7 @@ const ExpenseForm = ({
       {submitError && (
         <div
           role="alert"
-          className="border-y border-error/25 bg-error/4 px-4 py-4"
+          className="border-y border-error/25 bg-error/10 px-4 py-4"
         >
           <div className="flex items-start justify-between gap-4">
             <p className="text-sm leading-5 text-error">

@@ -141,11 +141,11 @@ const Calculator = () => {
   }
 
   return (
-    <main className="min-h-[calc(100vh-4rem)] bg-canvas px-4 py-10 sm:px-6 sm:py-12 lg:px-8 lg:py-14">
+    <main className="min-h-[calc(100vh-4rem)] bg-canvas px-4 py-10 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
       <div className="mx-auto max-w-6xl space-y-14">
         {/* Header */}
         <header className="max-w-3xl space-y-4">
-          <h1 className="text-4xl font-semibold leading-tighter tracking-tightest text-text-primary sm:text-5xl">
+          <h1 className="text-4xl font-semibold leading-tight tracking-tight text-text-primary sm:text-5xl">
             Relocation budget calculator
           </h1>
 

@@ -81,14 +81,14 @@ const CalculatorSummary = ({
   return (
     <section className="border-y border-border-subtle bg-surface">
       {/* Summary header */}
-      <div className="border-b border-border-subtle px-5 py-7 sm:px-7 sm:py-8">
+      <div className="border-b border-border-subtle px-5 py-8 sm:px-7 sm:py-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-2">
             <p className="text-sm font-medium text-text-muted">
               Financial summary
             </p>
 
-            <h2 className="text-xl font-semibold leading-tighter tracking-tightest text-text-primary">
+            <h2 className="text-xl font-semibold leading-tight tracking-tight text-text-primary">
               Budget result
             </h2>
 
@@ -100,13 +100,16 @@ const CalculatorSummary = ({
 
           {hasKnownStatus && (
             <span
-              className={`w-fit text-sm font-medium ${
-                isOverBudget
+              className={`w-fit text-sm font-medium ${isOverBudget
                   ? "text-error"
                   : "text-success"
-              }`}
+                }`}
             >
-              {budgetStatus.label}
+              <span aria-hidden="true">
+                {isOverBudget ? "!" : "✓"}
+              </span>
+
+              <span>{budgetStatus?.label}</span>
             </span>
           )}
         </div>
@@ -120,7 +123,7 @@ const CalculatorSummary = ({
       </div>
 
       {/* Budget Bridge */}
-      <div className="px-5 py-7 sm:px-7 sm:py-8">
+      <div className="px-5 py-8 sm:px-7 sm:py-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-0">
           {/* Available */}
           <div className="space-y-3 sm:border-r sm:border-border-subtle sm:pr-8">
@@ -176,11 +179,10 @@ const CalculatorSummary = ({
               </span>
 
               <span
-                className={`text-xl font-medium tabular-nums ${
-                  isOverBudget
+                className={`text-xl font-medium tabular-nums ${isOverBudget
                     ? "text-error"
                     : "text-success"
-                }`}
+                  }`}
               >
                 {remaining.value}
               </span>
@@ -193,7 +195,7 @@ const CalculatorSummary = ({
         </div>
 
         {/* Allocation */}
-        <div className="mt-9 border-t border-border-subtle pt-7">
+        <div className="mt-8 border-t border-border-subtle pt-7">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-sm font-medium text-text-primary">
@@ -223,11 +225,10 @@ const CalculatorSummary = ({
             aria-valuemax="100"
           >
             <div
-              className={`h-full rounded-full transition-[width] duration-300 ${
-                isOverBudget
+              className={`h-full rounded-full transition-[width] duration-300 ${isOverBudget
                   ? "bg-error"
                   : "bg-primary"
-              }`}
+                }`}
               style={{
                 width: `${progressPercentage}%`,
               }}
@@ -237,18 +238,18 @@ const CalculatorSummary = ({
           <p className="mt-3 text-xs leading-5 text-text-muted">
             {isOverBudget
               ? `${Math.abs(
-                  Math.round(plannedPercentage - 100)
-                )}% above available savings`
+                Math.round(plannedPercentage - 100)
+              )}% above available savings`
               : `${Math.max(
-                  Math.round(100 - plannedPercentage),
-                  0
-                )}% of available savings remains unplanned`}
+                Math.round(100 - plannedPercentage),
+                0
+              )}% of available savings remains unplanned`}
           </p>
         </div>
       </div>
 
       {/* Breakdown */}
-      <div className="border-t border-border-subtle px-5 py-7 sm:px-7">
+      <div className="border-t border-border-subtle px-5 py-8 sm:px-7">
         <div className="space-y-2">
           <h3 className="text-base font-semibold leading-tight text-text-primary">
             Expense breakdown
@@ -316,11 +317,10 @@ const CalculatorSummary = ({
             </span>
 
             <dd
-              className={`justify-self-end text-sm font-medium tabular-nums ${
-                isOverBudget
+              className={`justify-self-end text-sm font-medium tabular-nums ${isOverBudget
                   ? "text-error"
                   : "text-success"
-              }`}
+                }`}
             >
               {remaining.value}
             </dd>
@@ -329,7 +329,7 @@ const CalculatorSummary = ({
       </div>
 
       {/* Runway insight */}
-      <div className="border-t border-border-subtle px-5 py-7 sm:px-7">
+      <div className="border-t border-border-subtle px-5 py-8 sm:px-7">
         <div className="max-w-xl">
           <p className="text-xs font-medium text-text-muted">
             Derived insight
@@ -351,7 +351,7 @@ const CalculatorSummary = ({
       {isOverBudget && (
         <div
           role="alert"
-          className="border-t border-error/20 bg-error/4 px-5 py-4 text-sm text-error sm:px-7"
+          className="border-t border-error/20 bg-error/10 px-5 py-4 text-sm text-error sm:px-7"
         >
           Your estimated expenses exceed your current savings.
         </div>

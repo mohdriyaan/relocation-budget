@@ -31,7 +31,7 @@ function ExpenseSection({
             Expense planning
           </p>
 
-          <h2 className="text-xl font-semibold leading-tighter tracking-tightest text-text-primary">
+          <h2 className="text-xl font-semibold leading-tight tracking-tight text-text-primary">
             Add an expense
           </h2>
 
