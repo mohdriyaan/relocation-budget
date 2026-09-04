@@ -1,4 +1,3 @@
-import { BrowserRouter } from "react-router-dom"
 import AppLayout from "./layouts/AppLayout.jsx"
 import AppRoutes from "./AppRoutes.jsx"
 

@@ -1,7 +1,8 @@
+import Navbar from "../components/Navbar.jsx"
+
 const AppLayout = ({ children }) => {
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background text-white">
-      {/* Static material texture */}
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-text-primary">
       <svg
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 z-50 h-full w-full opacity-[0.0125]"
@@ -24,8 +25,9 @@ const AppLayout = ({ children }) => {
         />
       </svg>
 
-      {/* Application content */}
       <div className="relative z-0">
+        <Navbar />
+
         {children}
       </div>
     </div>
