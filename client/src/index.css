@@ -1,38 +1,42 @@
-@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
   /* Typography */
-  --font-public-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-inter: "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  /* Foundation */
-  --color-canvas: #f7f9fc;
-  --color-surface: #ffffff;
-  --color-text-primary: #172033;
-  --color-text-muted: #647084;
-  --color-divider: #d9e0ea;
-  --color-input-border: #7a8ca1;
+  --tracking-tightest: -0.03em;
 
-  /* Interaction */
-  --color-primary: #4338ca;
+  --leading-tighter: 1.05;
 
-  /* Semantic */
-  --color-information: #147d92;
-  --color-success: #16845b;
-  --color-error: #c94b3c;
+  /* Core canvas */
+  --color-background: #0b1020;
+  --color-surface: #10172a;
+
+  /* Optional semantic border tokens */
+  --color-border-subtle: rgba(255, 255, 255, 0.05);
+  --color-border-standard: rgba(255, 255, 255, 0.1);
+
+  /* Existing brand tokens can remain here */
+  --color-primary: #6366f1;
 }
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 html {
-  font-family: var(--font-public-sans);
+  font-family: var(--font-inter);
 }
 
 body {
   margin: 0;
   min-width: 320px;
-  background: var(--color-canvas);
-  color: var(--color-text-primary);
+  background: var(--color-background);
+  color: white;
+}
+
+/* Precision focus system */
+*:focus-visible {
+  @apply outline-none ring-1 ring-offset-2 ring-white/20 ring-offset-background;
 }
