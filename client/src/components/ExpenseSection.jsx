@@ -1,5 +1,6 @@
-import ExpenseForm from "./ExpenseForm"
-import ExpenseList from "./ExpenseList"
+import { useRef } from "react"
+import ExpenseForm from "./ExpenseForm.jsx"
+import ExpenseList from "./ExpenseList.jsx"
 
 function ExpenseSection({
   addExpense,
@@ -13,43 +14,55 @@ function ExpenseSection({
   onEditExpense,
   isLoading,
   error,
-  deleteError
+  deleteError,
 }) {
-  return (
-    <>
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
-        <h2 className="text-xl font-bold text-white tracking-wide border-b border-slate-800 pb-4">
-          2. Add Expense
-        </h2>
-        <ExpenseForm 
-          addExpense={addExpense}        destinationCurrency={destinationCurrency}
-          editingExpense={editingExpense}
-          onUpdateExpense={onUpdateExpense}
-          onEditComplete={onEditComplete}
-          onCancelEdit={onCancelEdit}
-        />
-      </div>
+  const expenseHeadingRef = useRef(null)
 
-      {/* Expense List Card */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-          <h2 className="text-xl font-bold text-white tracking-wide">
-            Planned Expenses
+  const focusExpenseHeading = () => {
+    expenseHeadingRef.current?.focus()
+  }
+
+  return (
+    <div className="space-y-8">
+      {/* Add expense */}
+      <section className="rounded-xl border border-divider bg-surface p-6 sm:p-8">
+        <div className="space-y-1">
+          <h2 className="text-xl font-semibold text-text-primary">
+            Add an expense
           </h2>
-          <span className="text-xs font-mono px-3 py-1 bg-slate-800 text-slate-300 rounded-full border border-slate-700">
-            Total Items: {expenses.length}
-          </span>
+
+          <p className="text-sm leading-6 text-text-muted">
+            Track a relocation cost in its original currency.
+          </p>
         </div>
-        <ExpenseList 
-          expenses={expenses} 
+
+        <div className="mt-6">
+          <ExpenseForm
+            addExpense={addExpense}
+            destinationCurrency={destinationCurrency}
+            editingExpense={editingExpense}
+            onUpdateExpense={onUpdateExpense}
+            onEditComplete={onEditComplete}
+            onCancelEdit={onCancelEdit}
+          />
+        </div>
+      </section>
+
+      {/* Planned expenses */}
+      <section className="rounded-xl border border-divider bg-surface p-6 sm:p-8">
+        <ExpenseList
+          expenses={expenses}
           onDeleteExpense={onDeleteExpense}
           onEditExpense={onEditExpense}
           isLoading={isLoading}
+          error={error}
           deleteError={deleteError}
-          error={error} 
+          headingRef={expenseHeadingRef}
+          onDeleteConfirmed={focusExpenseHeading}
         />
-      </div>
-    </>
+      </section>
+    </div>
   )
 }
+
 export default ExpenseSection

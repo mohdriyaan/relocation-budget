@@ -1,12 +1,21 @@
-// components/CurrencySelector.jsx
 import currencyList from "../data/currencies.js"
 
-const CurrencySelector = ({ name, label, value, onChange, error }) => {
+const CurrencySelector = ({
+  name,
+  label,
+  value,
+  onChange,
+  error,
+}) => {
+  const selectClassName = error
+    ? "border-error focus:border-error focus:ring-error/25"
+    : "border-input-border focus:border-primary focus:ring-primary/25"
+
   return (
-    <div className="flex flex-col w-full">
+    <div className="w-full space-y-2">
       <label
         htmlFor={name}
-        className="block text-sm font-medium text-slate-300 mb-2"
+        className="block text-sm font-medium text-text-primary"
       >
         {label}
       </label>
@@ -18,26 +27,26 @@ const CurrencySelector = ({ name, label, value, onChange, error }) => {
         onChange={onChange}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? `${name}-error` : undefined}
-        className={`w-full bg-slate-950 text-white text-sm rounded-lg p-3 transition-colors focus:outline-none focus:ring-2 ${error
-          ? "border border-rose-500 focus:border-rose-500 focus:ring-rose-500/40"
-          : "border border-slate-700 focus:border-indigo-500 focus:ring-indigo-500"
-          }`}
+        className={`w-full rounded-lg border bg-surface px-3 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 ${selectClassName}`}
       >
         {currencyList.map((currency) => (
-          <option key={currency} value={currency}>{currency}</option>
+          <option key={currency} value={currency}>
+            {currency}
+          </option>
         ))}
       </select>
 
       {error && (
-        <span
+        <p
           id={`${name}-error`}
           role="alert"
-          className="mt-2 text-xs sm:text-sm text-rose-400 font-medium"
+          className="text-sm text-error"
         >
           {error}
-        </span>
+        </p>
       )}
     </div>
   )
 }
+
 export default CurrencySelector

@@ -1,100 +1,156 @@
 import { Link } from "react-router-dom"
 import useAuth from "../hooks/useAuth.js"
 import useDashboardData from "../hooks/useDashboardData.js"
+import formatCurrency from "../utils/formatCurrency.js"
 
 const Home = () => {
   const { user } = useAuth()
 
   const {
+    expenses,
     budget,
     convertedSavings,
     convertedExpenses,
     remainingBudget,
     loading,
     error,
-    fetchDashboardData
+    fetchDashboardData,
+    convertedExpenseDetails
   } = useDashboardData()
 
+  const formatMoney = (currency, amount) => {
+    const numericAmount = Number(amount)
+
+    if (!Number.isFinite(numericAmount)) {
+      return `${currency} 0.00`
+    }
+
+    return `${currency} ${formatCurrency(numericAmount)}`
+  }
+
+  const displayedExpenses = [...convertedExpenseDetails]
+    .sort((a, b) => Number(b.amount) - Number(a.amount))
+    .slice(0, 5)
+
+  const hasActiveBudget =
+    !loading &&
+    !error &&
+    budget &&
+    convertedSavings !== null &&
+    convertedExpenses !== null &&
+    remainingBudget !== null
+
+  const isOverBudget = hasActiveBudget && remainingBudget < 0
+
+  const plannedPercentage =
+    hasActiveBudget && convertedSavings > 0
+      ? (convertedExpenses / convertedSavings) * 100
+      : 0
+
+  const progressPercentage = Math.min(
+    Math.max(plannedPercentage, 0),
+    100
+  )
+
+  const remainingPercentage =
+    hasActiveBudget && convertedSavings > 0
+      ? Math.max(remainingBudget / convertedSavings, 0)
+      : 0
+
+  const statusLabel =
+    remainingBudget < 0 ? "Over budget" : "Healthy"
+
   return (
-    <div className="min-h-screen bg-slate-950 px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl space-y-8">
+    <main className="min-h-[calc(100vh-4rem)] bg-canvas px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+      <div className="mx-auto max-w-6xl space-y-10">
 
-        {/* Welcome Section */}
-        <section className="space-y-3">
-          <p className="text-sm font-medium text-indigo-400">
-            Relocation Dashboard
-          </p>
+        {/* Welcome */}
+        <section className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+          <div className="max-w-2xl space-y-3">
+            <h1 className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl">
+              Welcome back, {user?.name || "User"}
+            </h1>
 
-          <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-            Welcome back, {user?.name || "User"} 👋
-          </h1>
-
-          <p className="max-w-2xl text-sm text-slate-400 sm:text-base">
-            Keep track of your savings, planned expenses, and relocation budget
-            from one place.
-          </p>
-
-          <div className="pt-2">
-            <Link
-              to="/calculator"
-              className="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-colors hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-950"
-            >
-              Open Calculator
-            </Link>
+            <p className="text-sm leading-6 text-text-muted sm:text-base">
+              See how much of your relocation budget is available,
+              planned, and remaining.
+            </p>
           </div>
+
+          <Link
+            to="/calculator"
+            className="inline-flex w-fit items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-canvas"
+          >
+            Open Calculator
+          </Link>
         </section>
 
         {/* Budget Overview */}
-        <section className="space-y-4">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <section className="space-y-6">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-xl font-bold text-white">
-                Budget Overview
+              <h2 className="text-xl font-semibold text-text-primary">
+                Budget overview
               </h2>
 
-              <p className="mt-1 text-sm text-slate-400">
-                Track your planned relocation expenses at a glance.
+              <p className="mt-1 text-sm text-text-muted">
+                Your current relocation budget position.
               </p>
             </div>
 
-            {!loading && !error && budget && (
+            {hasActiveBudget && (
               <Link
                 to="/calculator"
-                className="text-sm font-semibold text-indigo-400 transition-colors hover:text-indigo-300"
+                className="w-fit text-sm font-semibold text-primary underline-offset-4 transition-colors hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-canvas"
               >
-                Manage expenses →
+                Manage expenses
               </Link>
             )}
           </div>
 
-          {/* Loading State */}
+          {/* Loading */}
           {loading && (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {[1, 2, 3].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl"
-                >
-                  <div className="h-4 w-28 animate-pulse rounded bg-slate-800" />
+            <div
+              aria-label="Loading dashboard"
+              className="space-y-8"
+            >
+              <div className="grid grid-cols-1 gap-6 border-y border-divider py-6 sm:grid-cols-3">
+                {[1, 2, 3].map((item) => (
+                  <div key={item} className="space-y-3">
+                    <div className="h-4 w-24 animate-pulse rounded bg-divider" />
+                    <div className="h-8 w-36 animate-pulse rounded bg-divider" />
+                    <div className="h-3 w-32 animate-pulse rounded bg-divider" />
+                  </div>
+                ))}
+              </div>
 
-                  <div className="mt-4 h-8 w-24 animate-pulse rounded bg-slate-800" />
+              <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+                <div className="h-40 animate-pulse rounded-xl bg-divider" />
+                <div className="h-40 animate-pulse rounded-xl bg-divider" />
+              </div>
 
-                  <div className="mt-3 h-3 w-40 animate-pulse rounded bg-slate-800" />
-                </div>
-              ))}
+              <div className="space-y-4">
+                <div className="h-5 w-28 animate-pulse rounded bg-divider" />
+                <div className="h-16 animate-pulse rounded-lg bg-divider" />
+                <div className="h-16 animate-pulse rounded-lg bg-divider" />
+                <div className="h-16 animate-pulse rounded-lg bg-divider" />
+              </div>
             </div>
           )}
 
-          {/* Error State */}
+          {/* Error */}
           {!loading && error && (
-            <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-6">
+            <div
+              role="alert"
+              className="rounded-xl border border-error/40 bg-error/10 p-5"
+            >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h3 className="text-sm font-semibold text-red-300">
+                  <h3 className="text-sm font-semibold text-text-primary">
                     Unable to load dashboard
                   </h3>
 
-                  <p className="mt-1 text-sm text-slate-400">
+                  <p className="mt-1 text-sm text-text-muted">
                     {error}
                   </p>
                 </div>
@@ -102,265 +158,312 @@ const Home = () => {
                 <button
                   type="button"
                   onClick={fetchDashboardData}
-                  className="inline-flex items-center justify-center rounded-xl border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="inline-flex items-center justify-center rounded-lg border border-input-border bg-surface px-4 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-divider/40 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-canvas"
                 >
-                  Try Again
+                  Try again
                 </button>
               </div>
             </div>
           )}
 
-          {/* Empty State */}
+          {/* No Budget */}
           {!loading && !error && !budget && (
-            <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/70 p-8 sm:p-10">
-              <div className="mx-auto flex max-w-xl flex-col items-center text-center">
-                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-500/10 ring-1 ring-indigo-500/20">
+            <div className="rounded-xl border border-divider bg-surface px-6 py-10 text-center sm:px-10">
+              <div className="mx-auto max-w-lg space-y-4">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-information/30 bg-information/10 text-information">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="1.8"
-                    className="h-7 w-7 text-indigo-400"
+                    className="h-6 w-6"
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M12 6v12m6-6H6"
+                      d="M12 6v12M6 12h12"
                     />
                   </svg>
                 </div>
 
-                <h3 className="text-xl font-semibold text-white sm:text-2xl">
-                  No budget yet
-                </h3>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-semibold text-text-primary">
+                    Set up your relocation budget
+                  </h3>
 
-                <p className="mt-2 max-w-md text-sm leading-6 text-slate-400 sm:text-base">
-                  Set up your savings and destination currency to start building your
-                  relocation budget.
-                </p>
+                  <p className="text-sm leading-6 text-text-muted sm:text-base">
+                    Add your savings and destination currency to start
+                    planning your relocation costs.
+                  </p>
+                </div>
 
                 <Link
                   to="/calculator"
-                  className="mt-6 inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all hover:bg-indigo-500 hover:shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-950"
+                  className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface"
                 >
-                  Set Up Budget
+                  Set up budget
                 </Link>
               </div>
             </div>
           )}
 
-          {/* Budget Metrics */}
-          {!loading && !error && budget && convertedSavings !== null && convertedExpenses !== null && (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {/* Active Budget */}
+          {hasActiveBudget && (
+            <>
+              {/* Financial Snapshot */}
+              <div className="grid grid-cols-1 gap-6 border-y border-divider py-6 sm:grid-cols-3">
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-text-muted">
+                    Available
+                  </p>
 
-              {/* Total Savings */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-slate-400">
-                      Total Savings
-                    </p>
+                  <p className="text-2xl font-semibold tracking-tight tabular-nums text-text-primary sm:text-3xl">
+                    {formatMoney(
+                      budget.destinationCurrency,
+                      convertedSavings
+                    )}
+                  </p>
 
-                    <p className="mt-3 text-3xl font-bold tracking-tight text-white">
-                      {convertedSavings.toFixed(2)}
-                    </p>
-
-                    <p className="mt-1 text-xs text-slate-500">
-                      {budget.destinationCurrency} after conversion
-                    </p>
-                  </div>
-
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/10 ring-1 ring-indigo-500/20">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      className="h-5 w-5 text-indigo-400"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M3 7.5A2.5 2.5 0 0 1 5.5 5h13A2.5 2.5 0 0 1 21 7.5v9a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 16.5v-9Z"
-                      />
-
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M16 13h2.5"
-                      />
-                    </svg>
-                  </div>
+                  <p className="text-xs text-text-muted">
+                    Savings converted
+                  </p>
                 </div>
-              </div>
 
-              {/* Planned Expenses */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-slate-400">
-                      Planned Expenses
-                    </p>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-text-muted">
+                    Planned
+                  </p>
 
-                    <p className="mt-3 text-3xl font-bold tracking-tight text-white">
-                      {convertedExpenses.toFixed(2)}
-                    </p>
+                  <p className="text-2xl font-semibold tracking-tight tabular-nums text-text-primary sm:text-3xl">
+                    {formatMoney(
+                      budget.destinationCurrency,
+                      convertedExpenses
+                    )}
+                  </p>
 
-                    <p className="mt-1 text-xs text-slate-500">
-                      {budget.destinationCurrency} converted total
-                    </p>
-                  </div>
-
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 ring-1 ring-amber-500/20">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      className="h-5 w-5 text-amber-400"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 14.25 11.25 17l3.75-5.25"
-                      />
-
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M4.5 19.5h15M6 4.5h12M6 4.5v15"
-                      />
-                    </svg>
-                  </div>
+                  <p className="text-xs text-text-muted">
+                    Planned expenses
+                  </p>
                 </div>
-              </div>
 
-              {/* Remaining Budget */}
-              <div
-                className={`rounded-2xl border p-6 shadow-xl ${remainingBudget < 0
-                  ? "border-rose-500/20 bg-rose-500/5"
-                  : "border-emerald-500/20 bg-emerald-500/5"
-                  }`}
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-slate-400">
-                      Remaining Budget
-                    </p>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-text-muted">
+                    Remaining
+                  </p>
 
+                  <div className="flex flex-wrap items-center gap-2">
                     <p
-                      className={`mt-3 text-3xl font-bold tracking-tight ${remainingBudget < 0
-                        ? "text-rose-400"
-                        : "text-emerald-400"
+                      className={`text-2xl font-semibold tracking-tight tabular-nums sm:text-3xl ${isOverBudget
+                          ? "text-error"
+                          : "text-success"
                         }`}
                     >
-                      {remainingBudget.toFixed(2)}
+                      {formatMoney(
+                        budget.destinationCurrency,
+                        remainingBudget
+                      )}
                     </p>
 
-                    <p className="mt-1 text-xs text-slate-500">
-                      {budget.destinationCurrency} available
-                    </p>
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs font-semibold ${isOverBudget
+                          ? "border-error/40 bg-error/10 text-error"
+                          : "border-success/40 bg-success/10 text-success"
+                        }`}
+                    >
+                      <span aria-hidden="true">
+                        {isOverBudget ? "!" : "✓"}
+                      </span>
+
+                      <span>{statusLabel}</span>
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-text-muted">
+                    After planned expenses
+                  </p>
+                </div>
+              </div>
+
+              {/* Budget Position + Next Step */}
+              <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+                <section className="rounded-xl border border-divider bg-surface p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h3 className="text-base font-semibold text-text-primary">
+                        Budget position
+                      </h3>
+
+                      <p className="mt-1 text-sm text-text-muted">
+                        {formatMoney(
+                          budget.destinationCurrency,
+                          convertedExpenses
+                        )}{" "}
+                        of{" "}
+                        {formatMoney(
+                          budget.destinationCurrency,
+                          convertedSavings
+                        )}{" "}
+                        planned
+                      </p>
+                    </div>
+
+                    <span className="shrink-0 text-sm font-semibold tabular-nums text-text-primary">
+                      {Math.round(plannedPercentage)}%
+                    </span>
                   </div>
 
                   <div
-                    className={`flex h-10 w-10 items-center justify-center rounded-xl ring-1 ${remainingBudget < 0
-                      ? "bg-rose-500/10 ring-rose-500/20"
-                      : "bg-emerald-500/10 ring-emerald-500/20"
-                      }`}
+                    className="mt-5 h-2.5 overflow-hidden rounded-full bg-divider"
+                    aria-label={`${Math.round(plannedPercentage)} percent of available savings planned`}
+                    role="progressbar"
+                    aria-valuenow={Math.round(progressPercentage)}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
                   >
-                    {remainingBudget < 0 ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        className="h-5 w-5 text-rose-400"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M12 9v4"
-                        />
-
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M12 17h.01"
-                        />
-
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m5.25 18.75 5.29-14.03a1.55 1.55 0 0 1 2.92 0l5.29 14.03A1.55 1.55 0 0 1 17.3 21H6.7a1.55 1.55 0 0 1-1.45-2.25Z"
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        className="h-5 w-5 text-emerald-400"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m5 12 4 4L19 6"
-                        />
-                      </svg>
-                    )}
+                    <div
+                      className={`h-full rounded-full transition-[width] duration-300 ${isOverBudget
+                          ? "bg-error"
+                          : "bg-primary"
+                        }`}
+                      style={{ width: `${progressPercentage}%` }}
+                    />
                   </div>
-                </div>
 
-                <p
-                  className={`mt-4 text-xs font-medium ${remainingBudget < 0
-                    ? "text-rose-300"
-                    : "text-emerald-300"
+                  <p className="mt-3 text-sm text-text-muted">
+                    {isOverBudget
+                      ? `${Math.abs(Math.round(plannedPercentage - 100))}% above available savings`
+                      : `${Math.round(remainingPercentage * 100)}% of your savings remains unplanned`}
+                  </p>
+                </section>
+
+                <section
+                  className={`rounded-xl border p-6 ${isOverBudget
+                      ? "border-error/40 bg-error/10"
+                      : "border-divider bg-surface"
                     }`}
                 >
-                  {remainingBudget < 0
-                    ? "You're over your available savings"
-                    : "You're within your available savings"}
-                </p>
+                  <p className="text-sm font-semibold text-text-primary">
+                    What to do next
+                  </p>
+
+                  <div className="mt-3 space-y-2">
+                    {isOverBudget ? (
+                      <>
+                        <h3 className="text-lg font-semibold text-text-primary">
+                          Review your expenses
+                        </h3>
+
+                        <p className="text-sm leading-6 text-text-muted">
+                          Your planned expenses are above your available
+                          savings. Review the largest costs and adjust your
+                          plan.
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <h3 className="text-lg font-semibold text-text-primary">
+                          {remainingBudget === 0
+                            ? "Your budget is fully planned"
+                            : "Keep your estimate current"}
+                        </h3>
+
+                        <p className="text-sm leading-6 text-text-muted">
+                          {remainingBudget === 0
+                            ? "Your available savings are fully allocated to planned expenses."
+                            : `You have ${formatMoney(
+                              budget.destinationCurrency,
+                              remainingBudget
+                            )} remaining. Add or review expenses as your relocation plans change.`}
+                        </p>
+                      </>
+                    )}
+                  </div>
+
+                  <Link
+                    to="/calculator"
+                    className="mt-5 inline-flex items-center justify-center rounded-lg border border-input-border bg-surface px-4 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-divider/40 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface"
+                  >
+                    Manage expenses
+                  </Link>
+                </section>
               </div>
 
-            </div>
+              {/* Expense Overview */}
+              <section className="space-y-4">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                  <div>
+                    <h3 className="text-xl font-semibold text-text-primary">
+                      Expenses
+                    </h3>
+
+                    <p className="mt-1 text-sm text-text-muted">
+                      Your largest planned relocation costs.
+                    </p>
+                  </div>
+
+                  {expenses.length > 5 && (
+                    <Link
+                      to="/calculator"
+                      className="w-fit text-sm font-semibold text-primary underline-offset-4 transition-colors hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-canvas"
+                    >
+                      View all {expenses.length} expenses 
+                    </Link>
+                  )}
+
+                </div>
+
+                {displayedExpenses.length === 0 ? (
+                  <div className="rounded-xl border border-dashed border-divider bg-surface px-6 py-8">
+                    <p className="text-sm text-text-muted">
+                      No expenses have been added yet.
+                    </p>
+
+                    <Link
+                      to="/calculator"
+                      className="mt-3 inline-flex text-sm font-semibold text-primary underline-offset-4 transition-colors hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface"
+                    >
+                      Add an expense
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="divide-y divide-divider rounded-xl border border-divider bg-surface">
+                    {displayedExpenses.map((expense) => (
+                      <div
+                        key={expense._id}
+                        className="flex items-center justify-between gap-4 px-5 py-4"
+                      >
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-semibold text-text-primary">
+                            {expense.name}
+                          </p>
+
+                          <p className="mt-1 text-xs text-text-muted">
+                            {expense.category || "General"}
+                            {" · "}
+                            {expense.frequency === "monthly"
+                              ? "Monthly"
+                              : "One-time"}
+                          </p>
+                        </div>
+
+                        <p className="shrink-0 text-sm font-semibold tabular-nums text-text-primary">
+                          {formatMoney(
+                            expense.currency,
+                            expense.amount
+                          )}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </section>
+            </>
           )}
-
         </section>
-
-        {/* Getting Started */}
-        <section className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl sm:p-8">
-          <div className="max-w-2xl space-y-3">
-            <p className="text-sm font-semibold uppercase tracking-wider text-indigo-400">
-              Getting Started
-            </p>
-
-            <h2 className="text-2xl font-bold text-white">
-              Build your relocation budget
-            </h2>
-
-            <p className="text-sm text-slate-400 sm:text-base">
-              Start by converting your savings into your destination currency,
-              then add your expected relocation and living expenses.
-            </p>
-
-            <Link
-              to="/calculator"
-              className="inline-flex text-sm font-semibold text-indigo-400 transition-colors hover:text-indigo-300"
-            >
-              Go to Calculator →
-            </Link>
-          </div>
-        </section>
-
       </div>
-    </div>
+    </main>
   )
 }
 

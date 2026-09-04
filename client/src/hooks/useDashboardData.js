@@ -14,6 +14,7 @@ const useDashboardData = () => {
   const [convertedExpenses, setConvertedExpenses] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [convertedExpenseDetails, setConvertedExpenseDetails] = useState([])
 
   const fetchDashboardData = useCallback(async () => {
     try {
@@ -71,6 +72,8 @@ const useDashboardData = () => {
           rates
         )
 
+        setConvertedExpenseDetails(convertedExpenses)
+
         const totalConvertedExpenses =
           calculateTotalExpenses(convertedExpenses)
 
@@ -108,7 +111,8 @@ const useDashboardData = () => {
     remainingBudget,
     loading,
     error,
-    fetchDashboardData
+    fetchDashboardData,
+    convertedExpenseDetails
   }
 }
 

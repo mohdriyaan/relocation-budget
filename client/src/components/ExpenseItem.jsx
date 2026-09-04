@@ -1,78 +1,171 @@
-// components/ExpenseItem.jsx
+import { useEffect, useRef, useState } from "react"
+import formatCurrency from "../utils/formatCurrency.js"
 
-const ExpenseItem = ({ expense, onDeleteExpense, onEditExpense }) => {
-  const { _id, category, name, amount, currency, notes, frequency } = expense;
+const ExpenseItem = ({
+  expense,
+  onDeleteExpense,
+  onEditExpense,
+  onDeleteConfirmed,
+}) => {
+  const {
+    _id,
+    category,
+    name,
+    amount,
+    currency,
+    notes,
+    frequency,
+  } = expense
+
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false)
+  const cancelButtonRef = useRef(null)
+  const deleteButtonRef = useRef(null)
+
+  useEffect(() => {
+    if (isConfirmingDelete) {
+      cancelButtonRef.current?.focus()
+    }
+  }, [isConfirmingDelete])
+
+  const formattedAmount = `${currency} ${formatCurrency(Number(amount))}`
+
+  const handleDeleteClick = () => {
+    setIsConfirmingDelete(true)
+  }
+
+  const handleCancelDelete = () => {
+    setIsConfirmingDelete(false)
+  }
+
+  const handleConfirmDelete = async () => {
+    try {
+      await onDeleteExpense(_id)
+      setIsConfirmingDelete(false)
+      onDeleteConfirmed?.()
+    } catch {
+      setIsConfirmingDelete(false)
+
+      requestAnimationFrame(() => {
+        deleteButtonRef.current?.focus()
+      })
+    }
+  }
 
   return (
-    <div className="flex items-center justify-between p-4 bg-slate-900 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
-      {/* Category, Frequency, Name, and Notes */}
-      <div className="flex-1 min-w-0 mr-4">
-        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-          <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-            {category || "General"}
-          </span>
-          <span
-            className={`text-xs font-medium px-2.5 py-0.5 rounded-full border ${
-              frequency === "monthly"
-                ? "bg-purple-500/10 text-purple-400 border-purple-500/20"
-                : "bg-slate-800 text-slate-400 border-slate-700"
-            }`}
-          >
-            {frequency === "monthly" ? "Monthly" : "One-time"}
-          </span>
+    <article className="rounded-lg border border-divider bg-surface px-4 py-4 sm:px-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        {/* Expense details */}
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-medium text-text-muted">
+              {category || "General"}
+            </span>
+
+            <span aria-hidden="true" className="text-xs text-divider">
+              ·
+            </span>
+
+            <span className="text-xs text-text-muted">
+              {frequency === "monthly" ? "Monthly" : "One-time"}
+            </span>
+          </div>
+
+          <h3 className="mt-1 truncate text-sm font-semibold text-text-primary">
+            {name}
+          </h3>
+
+          {notes && (
+            <p className="mt-1 truncate text-sm text-text-muted">
+              {notes}
+            </p>
+          )}
         </div>
-        <h3 className="text-base font-semibold text-white truncate">{name}</h3>
-        {notes && (
-          <p className="text-xs text-slate-400 mt-1 truncate">{notes}</p>
-        )}
+
+        {/* Amount + actions */}
+        <div className="flex flex-col gap-3 sm:items-end">
+          <p className="text-sm font-semibold tabular-nums text-text-primary">
+            {formattedAmount}
+          </p>
+
+          {!isConfirmingDelete ? (
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => onEditExpense(expense)}
+                aria-label={`Edit ${name}`}
+                className="rounded-md p-2 text-text-muted transition-colors hover:bg-divider/40 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  className="h-4 w-4"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m16.862 4.487 2.651 2.65M5.25 18.75l.893-3.572a2.25 2.25 0 0 1 .62-1.053L15.6 5.288a2.121 2.121 0 0 1 3 3l-9.038 9.037a2.25 2.25 0 0 1-1.053.62L5.25 18.75Z"
+                  />
+                </svg>
+              </button>
+
+              <button
+                ref={deleteButtonRef}
+                type="button"
+                onClick={handleDeleteClick}
+                aria-label={`Delete ${name}`}
+                className="rounded-md p-2 text-text-muted transition-colors hover:bg-error/10 hover:text-error focus:outline-none focus:ring-2 focus:ring-error"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  className="h-4 w-4"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 7h12M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7m-7 0 .75 12h6.5L16 7M10 11v5m4-5v5"
+                  />
+                </svg>
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col items-start gap-2 sm:items-end">
+              <p className="text-sm font-medium text-text-primary">
+                Delete this expense?
+              </p>
+
+              <div className="flex items-center gap-2">
+                <button
+                  ref={cancelButtonRef}
+                  type="button"
+                  onClick={handleCancelDelete}
+                  className="rounded-lg border border-input-border bg-surface px-3 py-2 text-sm font-semibold text-text-primary transition-colors hover:bg-divider/40 focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleConfirmDelete}
+                  className="rounded-lg bg-error px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-error/90 focus:outline-none focus:ring-2 focus:ring-error focus:ring-offset-2 focus:ring-offset-surface"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+    </article>
+  )
+}
 
-      {/* Amount & Actions */}
-      <div className="flex items-center gap-1 sm:gap-2">
-        <span className="text-lg font-mono font-bold text-emerald-400 mr-2">
-          {currency} {amount}
-        </span>
-
-        {/* Edit Button */}
-        <button
-          onClick={() => onEditExpense(expense)}
-          type="button"
-          aria-label="Edit expense"
-          className="text-slate-400 hover:text-indigo-400 p-2 rounded-lg hover:bg-indigo-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-          </svg>
-        </button>
-
-        {/* Delete Button */}
-        <button
-          onClick={() => onDeleteExpense(_id)}
-          type="button"
-          aria-label="Delete expense"
-          className="text-slate-400 hover:text-rose-400 p-2 rounded-lg hover:bg-rose-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-rose-500/40"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
-      </div>
-    </div>
-  );
-};
-
-export default ExpenseItem;
+export default ExpenseItem

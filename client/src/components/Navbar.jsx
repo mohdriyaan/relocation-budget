@@ -6,7 +6,6 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   const { user, logout, loading } = useAuth()
-
   const navigate = useNavigate()
 
   const toggleMenu = () => {
@@ -27,215 +26,161 @@ const Navbar = () => {
     }
   }
 
-  // Main navigation links
   const navLinkStyles = ({ isActive }) =>
-    `px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200 block ${
+    `inline-flex items-center px-3 py-2 text-sm font-medium border-b-2 transition-colors ${
       isActive
-        ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/25"
-        : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
+        ? "border-primary text-text-primary"
+        : "border-transparent text-text-muted hover:border-divider hover:text-text-primary"
     }`
 
-  // Authentication links
   const authLinkStyles = ({ isActive }) =>
-    `px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 ${
+    `inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
       isActive
-        ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/25"
-        : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
+        ? "bg-primary text-white"
+        : "text-text-muted hover:bg-divider/40 hover:text-text-primary"
     }`
 
   return (
-    <nav className="bg-slate-900/90 border-b border-slate-800/80 backdrop-blur-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <nav className="sticky top-0 z-50 border-b border-divider bg-surface">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-8">
+          <Link
+            to="/"
+            onClick={closeMenu}
+            className="flex items-center gap-3 text-lg font-semibold tracking-tight text-text-primary"
+          >
+            <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-sm font-bold text-white">
+              RB
+            </span>
 
-          {/* Brand + Main Navigation */}
-          <div className="flex items-center gap-8">
-            <Link
+            <span>Relocation Budget</span>
+          </Link>
+
+          <div className="hidden items-center gap-1 md:flex">
+            <NavLink
               to="/"
-              onClick={closeMenu}
-              className="shrink-0 font-bold text-lg text-white tracking-tight flex items-center gap-2.5"
+              end
+              className={navLinkStyles}
             >
-              <span className="w-8 h-8 bg-indigo-600 rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-indigo-500/30">
-                ⚡
-              </span>
+              Dashboard
+            </NavLink>
 
-              <span className="bg-linear-to-r from-white to-slate-300 bg-clip-text text-transparent">
-                Relocation OS
-              </span>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-1.5">
-              <NavLink
-                to="/"
-                className={navLinkStyles}
-              >
-                Home
-              </NavLink>
-
-              <NavLink
-                to="/calculator"
-                className={navLinkStyles}
-              >
-                Calculator
-              </NavLink>
-            </div>
-          </div>
-
-          {/* Desktop Authentication */}
-          <div className="hidden md:flex items-center gap-3">
-            {loading ? (
-              <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-950 border border-slate-800/80 text-slate-400 text-xs font-mono">
-                <svg
-                  className="animate-spin h-3.5 w-3.5 text-indigo-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-
-                <span>Checking session...</span>
-              </div>
-            ) : user ? (
-              <div className="flex items-center gap-3">
-                <span className="text-xs sm:text-sm text-slate-300 font-medium">
-                  Hello,{" "}
-                  <strong className="text-white font-semibold">
-                    {user.name || "User"}
-                  </strong>
-                </span>
-
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="bg-slate-800 hover:bg-slate-700/80 text-slate-200 text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl border border-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-600"
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <NavLink
-                  to="/login"
-                  className={authLinkStyles}
-                >
-                  Login
-                </NavLink>
-
-                <NavLink
-                  to="/register"
-                  className={authLinkStyles}
-                >
-                  Register
-                </NavLink>
-              </div>
-            )}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={toggleMenu}
-              type="button"
-              aria-expanded={isOpen}
-              aria-label="Toggle navigation"
-              className="text-slate-300 hover:text-white p-2 rounded-xl hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            <NavLink
+              to="/calculator"
+              end
+              className={navLinkStyles}
             >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                {isOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
-            </button>
+              Calculator
+            </NavLink>
           </div>
         </div>
+
+        <div className="hidden items-center md:flex">
+          {loading ? (
+            <div className="flex items-center gap-2 text-sm text-text-muted">
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-divider border-t-primary" />
+              <span>Checking session...</span>
+            </div>
+          ) : user ? (
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-text-muted">
+                Hello,{" "}
+                <strong className="font-semibold text-text-primary">
+                  {user.name || "User"}
+                </strong>
+              </span>
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="rounded-md border border-input-border px-3 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-divider/40 focus:outline-none focus:ring-2 focus:ring-primary/30"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <NavLink
+                to="/login"
+                className={authLinkStyles}
+              >
+                Login
+              </NavLink>
+
+              <NavLink
+                to="/register"
+                className={authLinkStyles}
+              >
+                Register
+              </NavLink>
+            </div>
+          )}
+        </div>
+
+        <button
+          type="button"
+          onClick={toggleMenu}
+          aria-expanded={isOpen}
+          aria-label="Toggle navigation"
+          className="rounded-md p-2 text-text-muted hover:bg-divider/40 hover:text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30 md:hidden"
+        >
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="1.8"
+          >
+            {isOpen ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 6l12 12M18 6L6 18"
+              />
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            )}
+          </svg>
+        </button>
       </div>
 
-      {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden border-t border-slate-800 bg-slate-900/95 px-4 pt-3 pb-5 space-y-2 backdrop-blur-xl">
+        <div className="border-t border-divider bg-surface px-4 py-4 md:hidden">
+          <div className="flex flex-col gap-1">
+            <NavLink
+              to="/"
+              end
+              onClick={closeMenu}
+              className={navLinkStyles}
+            >
+              Dashboard
+            </NavLink>
 
-          {/* Main Navigation */}
-          <NavLink
-            to="/"
-            className={navLinkStyles}
-            onClick={closeMenu}
-          >
-            Home
-          </NavLink>
+            <NavLink
+              to="/calculator"
+              onClick={closeMenu}
+              end
+              className={navLinkStyles}
+            >
+              Calculator
+            </NavLink>
+          </div>
 
-          <NavLink
-            to="/calculator"
-            className={navLinkStyles}
-            onClick={closeMenu}
-          >
-            Calculator
-          </NavLink>
-
-          {/* Authentication */}
-          <div className="pt-2 border-t border-slate-800/80">
+          <div className="mt-4 border-t border-divider pt-4">
             {loading ? (
-              <div className="flex items-center gap-2 px-3 py-2 text-slate-400 text-xs font-mono">
-                <svg
-                  className="animate-spin h-3.5 w-3.5 text-indigo-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-
+              <div className="flex items-center gap-2 px-2 py-2 text-sm text-text-muted">
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-divider border-t-primary" />
                 <span>Checking session...</span>
               </div>
             ) : user ? (
-              <div className="space-y-2 pt-1">
-                <div className="px-3 py-1.5 text-xs text-slate-400 font-medium">
+              <div className="space-y-2">
+                <div className="px-2 py-1 text-sm text-text-muted">
                   Logged in as{" "}
-                  <strong className="text-white">
+                  <strong className="font-semibold text-text-primary">
                     {user.name || "User"}
                   </strong>
                 </div>
@@ -243,23 +188,17 @@ const Navbar = () => {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="w-full text-left px-4 py-2.5 rounded-xl bg-slate-800 text-rose-400 hover:bg-rose-500/10 text-sm font-semibold transition-colors"
+                  className="w-full rounded-md border border-input-border px-3 py-2 text-left text-sm font-medium text-text-primary transition-colors hover:bg-divider/40 focus:outline-none focus:ring-2 focus:ring-primary/30"
                 >
                   Logout
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-2 pt-1">
+              <div className="grid grid-cols-2 gap-2">
                 <NavLink
                   to="/login"
                   onClick={closeMenu}
-                  className={({ isActive }) =>
-                    `text-center py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                      isActive
-                        ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/20"
-                        : "text-slate-300 bg-slate-800/80 hover:bg-slate-800"
-                    }`
-                  }
+                  className={authLinkStyles}
                 >
                   Login
                 </NavLink>
@@ -267,13 +206,7 @@ const Navbar = () => {
                 <NavLink
                   to="/register"
                   onClick={closeMenu}
-                  className={({ isActive }) =>
-                    `text-center py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                      isActive
-                        ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/20"
-                        : "text-slate-300 bg-slate-800/80 hover:bg-slate-800"
-                    }`
-                  }
+                  className={authLinkStyles}
                 >
                   Register
                 </NavLink>

@@ -8,7 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute"
 
 function App() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+    <div className="min-h-screen bg-canvas text-text-primary flex flex-col">
       <Navbar />
       <main className="flex-1">
         <Routes>
