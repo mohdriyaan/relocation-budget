@@ -53,9 +53,9 @@ const ExpenseItem = ({
   }
 
   return (
-    <article className="group border-b border-white/5 transition-colors hover:bg-white/[0.02]">
+    <article className="group border-b border-white/5 transition-colors hover:bg-white/2">
       {!isConfirmingDelete ? (
-        <div className="grid grid-cols-1 gap-4 px-1 py-5 sm:grid-cols-[minmax(0,1fr)_3rem_7rem_auto] sm:items-center sm:gap-4">
+        <div className="grid grid-cols-1 gap-5 px-1 py-6 sm:grid-cols-[minmax(0,1fr)_4rem_8rem_4.5rem] sm:items-center sm:gap-5">
 
           {/* Details */}
           <div className="min-w-0">

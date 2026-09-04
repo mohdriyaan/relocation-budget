@@ -57,7 +57,7 @@ const ExpenseList = ({
   return (
     <div>
       {/* Ledger header */}
-      <div className="flex flex-col gap-2 border-b border-white/5 py-5 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-3 border-b border-white/5 py-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2
             ref={headingRef}

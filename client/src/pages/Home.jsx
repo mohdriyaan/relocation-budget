@@ -317,7 +317,7 @@ const Home = () => {
                         </div>
 
                         <span className="text-sm font-medium tabular-nums text-text-muted">
-                          {Math.round(plannedPercentage)}%
+                          {Math.round(progressPercentage)}%
                         </span>
                       </div>
 

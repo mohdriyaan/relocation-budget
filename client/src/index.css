@@ -49,3 +49,12 @@ body {
 *:focus-visible {
   @apply outline-none ring-1 ring-white/20 ring-offset-2 ring-offset-background;
 }
+
+select {
+  color-scheme: dark;
+}
+
+select option {
+  background: #10172a;
+  color: #f8fafc;
+}

@@ -40,7 +40,7 @@ function ExpenseSection({
           </p>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-8 max-w-3xl">
           <ExpenseForm
             addExpense={addExpense}
             destinationCurrency={destinationCurrency}

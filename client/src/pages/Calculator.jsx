@@ -199,7 +199,7 @@ const Calculator = () => {
 
           {/* Right Column: Expense Ledger */}
           <div className="lg:col-span-7 space-y-6">
-            {/* Add Expense Card */}
+            {/* Expense Ledger */}
             <ExpenseSection
               addExpense={addExpense}
               destinationCurrency={destinationCurrency}

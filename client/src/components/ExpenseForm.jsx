@@ -86,51 +86,66 @@ const ExpenseForm = ({
     }
   }
 
-  const inputClassName = (hasError) =>
-    `w-full rounded-lg border bg-surface px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 ${
+  const fieldClassName = (hasError) =>
+    [
+      "w-full",
+      "rounded-lg",
+      "border",
+      "bg-white/[0.025]",
+      "px-3",
+      "py-2.5",
+      "text-sm",
+      "text-text-primary",
+      "placeholder:text-text-muted",
+      "shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]",
+      "transition-colors",
+      "focus:outline-none",
+      "focus-visible:outline-none",
+      "focus-visible:ring-1",
+      "focus-visible:ring-white/20",
+      "focus-visible:ring-offset-2",
+      "focus-visible:ring-offset-background",
       hasError
-        ? "border-error focus:border-error focus:ring-error/25"
-        : "border-input-border focus:border-primary focus:ring-primary/25"
-    }`
+        ? "border-error focus-visible:border-error"
+        : "border-white/10 focus-visible:border-white/20",
+    ].join(" ")
 
-  const selectClassName = (hasError) =>
-    `w-full rounded-lg border bg-surface px-3 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 ${
-      hasError
-        ? "border-error focus:border-error focus:ring-error/25"
-        : "border-input-border focus:border-primary focus:ring-primary/25"
-    }`
+  const labelClassName =
+    "block text-sm font-medium text-text-muted"
+
+  const errorClassName =
+    "text-sm leading-5 text-error"
 
   return (
-    <form 
+    <form
       onSubmit={handleSubmit(submitHandler)}
       noValidate
-      className="space-y-5"
+      className="space-y-6"
     >
       {/* Edit mode */}
       {editingExpense !== null && (
-        <div className="flex flex-col gap-3 rounded-lg border border-information/35 bg-information/10 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm font-medium text-text-primary">
-            Editing expense:{" "}
-            <span className="font-semibold">{editingExpense.name}</span>
+        <div className="flex flex-col gap-3 border-y border-information/25 bg-information/4 px-4 py-4 sm:px-5 sm:py-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-text-muted">
+            Editing{" "}
+            <span className="font-medium text-text-primary">
+              {editingExpense.name}
+            </span>
           </p>
 
           <button
             type="button"
             onClick={handleCancel}
-            className="w-fit text-sm font-semibold text-primary underline-offset-4 transition-colors hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface"
+            className="w-fit text-sm font-medium text-primary transition-colors hover:text-primary/80 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             Cancel
           </button>
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        {/* Name */}
+      {/* Name + Category */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div className="space-y-2">
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-text-primary"
-          >
+          <label htmlFor="name" className={labelClassName}>
             Expense name
           </label>
 
@@ -142,22 +157,22 @@ const ExpenseForm = ({
             placeholder="e.g. Flight ticket"
             aria-invalid={Boolean(errors.name)}
             aria-describedby={errors.name ? "name-error" : undefined}
-            className={inputClassName(Boolean(errors.name))}
+            className={fieldClassName(Boolean(errors.name))}
           />
 
           {errors.name && (
-            <p id="name-error" role="alert" className="text-sm text-error">
+            <p
+              id="name-error"
+              role="alert"
+              className={errorClassName}
+            >
               {errors.name.message}
             </p>
           )}
         </div>
 
-        {/* Category */}
         <div className="space-y-2">
-          <label
-            htmlFor="category"
-            className="block text-sm font-medium text-text-primary"
-          >
+          <label htmlFor="category" className={labelClassName}>
             Category
           </label>
 
@@ -168,7 +183,7 @@ const ExpenseForm = ({
             aria-describedby={
               errors.category ? "category-error" : undefined
             }
-            className={selectClassName(Boolean(errors.category))}
+            className={fieldClassName(Boolean(errors.category))}
           >
             {expenseCategories.map((expenseCategory) => (
               <option key={expenseCategory} value={expenseCategory}>
@@ -181,14 +196,16 @@ const ExpenseForm = ({
             <p
               id="category-error"
               role="alert"
-              className="text-sm text-error"
+              className={errorClassName}
             >
               {errors.category.message}
             </p>
           )}
         </div>
+      </div>
 
-        {/* Currency */}
+      {/* Currency + Amount */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <Controller
           name="currency"
           control={control}
@@ -203,18 +220,15 @@ const ExpenseForm = ({
           )}
         />
 
-        {/* Amount */}
         <div className="space-y-2">
-          <label
-            htmlFor="amount"
-            className="block text-sm font-medium text-text-primary"
-          >
+          <label htmlFor="amount" className={labelClassName}>
             Amount
           </label>
 
           <input
             {...register("amount", {
-              valueAsNumber: true,
+              setValueAs: (value) =>
+                value === "" ? undefined : Number(value)
             })}
             id="amount"
             type="number"
@@ -223,12 +237,20 @@ const ExpenseForm = ({
             step="0.01"
             inputMode="decimal"
             aria-invalid={Boolean(errors.amount)}
-            aria-describedby={errors.amount ? "amount-error" : undefined}
-            className={inputClassName(Boolean(errors.amount))}
+            aria-describedby={
+              errors.amount ? "amount-error" : undefined
+            }
+            className={`${fieldClassName(
+              Boolean(errors.amount)
+            )} tabular-nums`}
           />
 
           {errors.amount && (
-            <p id="amount-error" role="alert" className="text-sm text-error">
+            <p
+              id="amount-error"
+              role="alert"
+              className={errorClassName}
+            >
               {errors.amount.message}
             </p>
           )}
@@ -237,17 +259,14 @@ const ExpenseForm = ({
 
       {/* Frequency */}
       <div className="space-y-2">
-        <label
-          htmlFor="frequency"
-          className="block text-sm font-medium text-text-primary"
-        >
+        <label htmlFor="frequency" className={labelClassName}>
           Frequency
         </label>
 
         <select
           {...register("frequency")}
           id="frequency"
-          className={selectClassName(false)}
+          className={fieldClassName(false)}
         >
           <option value="one-time">One-time</option>
           <option value="monthly">Monthly</option>
@@ -256,19 +275,19 @@ const ExpenseForm = ({
 
       {/* Notes */}
       <div className="space-y-2">
-        <label
-          htmlFor="notes"
-          className="block text-sm font-medium text-text-primary"
-        >
-          Notes <span className="font-normal text-text-muted">(Optional)</span>
+        <label htmlFor="notes" className={labelClassName}>
+          Notes{" "}
+          <span className="font-normal text-text-muted">
+            (Optional)
+          </span>
         </label>
 
         <textarea
           {...register("notes")}
           id="notes"
-          rows="3"
+          rows="4"
           placeholder="Add extra details..."
-          className={`${inputClassName(false)} resize-none`}
+          className={`${fieldClassName(false)} resize-none`}
         />
       </div>
 
@@ -276,18 +295,22 @@ const ExpenseForm = ({
       {submitError && (
         <div
           role="alert"
-          className="flex items-start justify-between gap-3 rounded-lg border border-error/40 bg-error/10 px-4 py-3 text-sm text-error"
+          className="border-y border-error/25 bg-error/4 py-4"
         >
-          <span>{submitError}</span>
+          <div className="flex items-start justify-between gap-4">
+            <p className="text-sm leading-5 text-error">
+              {submitError}
+            </p>
 
-          <button
-            type="button"
-            onClick={() => setSubmitError("")}
-            className="shrink-0 rounded-md p-1 text-error transition-colors hover:bg-error/10 focus:outline-none focus:ring-2 focus:ring-error"
-            aria-label="Dismiss error"
-          >
-            ×
-          </button>
+            <button
+              type="button"
+              onClick={() => setSubmitError("")}
+              aria-label="Dismiss error"
+              className="shrink-0 rounded-md p-1 text-error transition-colors hover:bg-error/10 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              ×
+            </button>
+          </div>
         </div>
       )}
 
@@ -296,7 +319,7 @@ const ExpenseForm = ({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting ? "Saving..." : "Add expense"}
         </button>
@@ -305,7 +328,7 @@ const ExpenseForm = ({
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex-1 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex-1 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSubmitting ? "Saving..." : "Update expense"}
           </button>
@@ -314,7 +337,7 @@ const ExpenseForm = ({
             type="button"
             onClick={handleCancel}
             disabled={isSubmitting}
-            className="flex-1 rounded-lg border border-input-border bg-surface px-4 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-divider/40 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex-1 rounded-lg border border-white/10 px-4 py-2.5 text-sm font-medium text-text-primary transition-colors hover:bg-white/5 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60"
           >
             Cancel
           </button>

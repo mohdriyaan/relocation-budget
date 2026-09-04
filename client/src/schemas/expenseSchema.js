@@ -16,7 +16,9 @@ const ExpenseSchema = z.object({
     ),
 
   amount : z
-    .number()
+    .number({
+      message : "Amount is required"
+    })
     .positive("Amount must be greater than 0"),
 
   currency : z
