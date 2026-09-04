@@ -156,65 +156,67 @@ const Calculator = () => {
         </header>
 
         {/* 2-Column Responsive Dashboard Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: Currency Conversion Form */}
-          <div className="lg:col-span-5 space-y-6">
-            <CalculatorForm
-              onCalculate={handleCalculate}
-              onDestinationCurrencyChange={setDestinationCurrency}
-              exchangeRateError={exchangeRateError}
-              calculationError={calculationError}
-              isCalculating={isCalculating}
-              initialBudget={initialBudget}
-              hasCalculated={showSummary && result !== null}
-            />
+        <div className="space-y-12">
+          {/* Working area */}
+          <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12">
+            {/* Calculator form */}
+            <div className="lg:col-span-5">
+              <CalculatorForm
+                onCalculate={handleCalculate}
+                onDestinationCurrencyChange={setDestinationCurrency}
+                exchangeRateError={exchangeRateError}
+                calculationError={calculationError}
+                isCalculating={isCalculating}
+                initialBudget={initialBudget}
+                hasCalculated={showSummary && result !== null}
+              />
+            </div>
 
-            {/* Direct Summary Render */}
-            {showSummary && result !== null && calculationData && (
-              <div className="pt-6 border-t border-slate-800">
-                <CalculatorSummary
-                  originCurrency={calculationData.originCurrency}
-                  destinationCurrency={calculationData.destinationCurrency}
-                  savings={calculationData.savings}
-                  result={result}
-                  totalExpenses={totalExpenses}
-                  rate={exchangeRate}
-                  remainingBudget={remainingBudget}
-                  oneTimeExpenses={oneTimeExpenses}
-                  monthlyExpenses={monthlyExpenses}
-                  runway={runway}
-                />
+            {/* Expense ledger */}
+            <div className="lg:col-span-7">
+              <ExpenseSection
+                addExpense={addExpense}
+                destinationCurrency={destinationCurrency}
+                editingExpense={editingExpense}
+                onUpdateExpense={handleUpdateExpense}
+                onEditComplete={onEditComplete}
+                onCancelEdit={handleCancelEdit}
+                expenses={expenses}
+                onDeleteExpense={handleDeleteExpense}
+                onEditExpense={handleEditExpense}
+                isLoading={isExpensesLoading}
+                error={expensesLoadError}
+                deleteError={deleteError}
+              />
+            </div>
+          </div>
 
-                <div className="mt-6 flex justify-end">
-                  <Link
-                    to="/"
-                    className="text-sm font-semibold text-indigo-400 transition-colors hover:text-indigo-300"
-                  >
-                    Back to Dashboard
-                  </Link>
-                </div>
+          {/* Financial report */}
+          {showSummary && result !== null && calculationData && (
+            <section className="border-t border-white/5 pt-10">
+              <CalculatorSummary
+                originCurrency={calculationData.originCurrency}
+                destinationCurrency={calculationData.destinationCurrency}
+                savings={calculationData.savings}
+                result={result}
+                totalExpenses={totalExpenses}
+                rate={exchangeRate}
+                remainingBudget={remainingBudget}
+                oneTimeExpenses={oneTimeExpenses}
+                monthlyExpenses={monthlyExpenses}
+                runway={runway}
+              />
+
+              <div className="mt-5 flex justify-end">
+                <Link
+                  to="/"
+                  className="text-sm font-medium text-primary transition-colors hover:text-primary/80"
+                >
+                  Back to Dashboard
+                </Link>
               </div>
-            )}
-          </div>
-
-          {/* Right Column: Expense Ledger */}
-          <div className="lg:col-span-7 space-y-6">
-            {/* Expense Ledger */}
-            <ExpenseSection
-              addExpense={addExpense}
-              destinationCurrency={destinationCurrency}
-              editingExpense={editingExpense}
-              onUpdateExpense={handleUpdateExpense}
-              onEditComplete={onEditComplete}
-              onCancelEdit={handleCancelEdit}
-              expenses={expenses}
-              onDeleteExpense={handleDeleteExpense}
-              onEditExpense={handleEditExpense}
-              isLoading={isExpensesLoading}
-              error={expensesLoadError}
-              deleteError={deleteError}
-            />
-          </div>
+            </section>
+          )}
         </div>
       </div>
     </div>

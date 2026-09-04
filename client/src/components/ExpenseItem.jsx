@@ -150,8 +150,8 @@ const ExpenseItem = ({
           </div>
         </div>
       ) : (
-        <div className="border-t border-error/20 bg-error/5 px-1 py-5">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="border-t border-error/20 bg-error/5 px-4 py-5 sm:px-5 sm:py-6">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-medium text-text-primary">
                 Delete this expense?
