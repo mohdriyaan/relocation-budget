@@ -7,28 +7,38 @@
   --tracking-tightest: -0.03em;
   --leading-tighter: 1.05;
 
-  /* Core surfaces */
-  --color-background: #0b1020;
-  --color-canvas: #0b1020;
-  --color-surface: #10172a;
+  /* Surfaces */
+  --color-canvas: ...;
+  --color-background: ...;
+  --color-surface: ...;
+  --color-surface-raised: ...;
 
   /* Text */
-  --color-text-primary: #f8fafc;
-  --color-text-muted: #94a3b8;
+  --color-text-primary: ...;
+  --color-text-muted: ...;
 
-  /* Borders / dividers */
-  --color-divider: rgba(255, 255, 255, 0.08);
-  --color-input-border: rgba(255, 255, 255, 0.12);
-  --color-border-subtle: rgba(255, 255, 255, 0.05);
-  --color-border-standard: rgba(255, 255, 255, 0.1);
+  /* Structure */
+  --color-divider: ...;
+  --color-border-subtle: ...;
+  --color-border-standard: ...;
 
-  /* Accent */
-  --color-primary: #6366f1;
+  /* Controls */
+  --color-input-background: ...;
+  --color-input-border: ...;
+  --color-focus-ring: ...;
+  --shadow-input-inset: ...;
 
   /* Semantic */
-  --color-information: #2a9d8f;
-  --color-success: #34d399;
-  --color-error: #f87171;
+  --color-primary: ...;
+  --color-primary-hover: ...;
+  --color-success: ...;
+  --color-error: ...;
+  --color-information: ...;
+}
+
+@utility control-surface {
+  @apply rounded-lg border bg-input-background;
+  box-shadow: var(--shadow-input-inset);
 }
 
 :root {

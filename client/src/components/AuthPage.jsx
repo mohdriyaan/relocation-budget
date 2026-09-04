@@ -13,7 +13,7 @@ const AuthPage = ({
       <section className="w-full max-w-lg">
         <div className="mx-auto max-w-md">
           <p className="text-sm font-medium text-text-muted">
-            Relocation budget
+            Welcome back
           </p>
 
           <h1 className="text-3xl font-semibold leading-tighter tracking-tightest text-text-primary sm:text-4xl">

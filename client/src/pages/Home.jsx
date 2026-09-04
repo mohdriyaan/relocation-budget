@@ -139,6 +139,7 @@ const Home = () => {
             {/* Loading */}
             {loading && (
               <div
+                role="status"
                 aria-label="Loading dashboard"
                 className="space-y-8"
               >
@@ -325,7 +326,7 @@ const Home = () => {
                         className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/5"
                         role="progressbar"
                         aria-label={`${Math.round(
-                          plannedPercentage
+                          progressPercentage
                         )}% of available savings planned`}
                         aria-valuenow={Math.round(progressPercentage)}
                         aria-valuemin="0"

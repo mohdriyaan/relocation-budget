@@ -202,9 +202,9 @@ const CalculatorSummary = ({
               </p>
 
               <p className="mt-1 text-sm text-text-muted">
-                {planned.currency} {planned.value} planned{" "}
+                {planned.value} planned{" "}
                 <span className="text-white/30">/</span>{" "}
-                {remaining.currency} {remaining.value} remaining
+                {remaining.value} remaining
               </p>
             </div>
 
