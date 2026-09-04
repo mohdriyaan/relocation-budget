@@ -93,7 +93,7 @@ const Navbar = () => {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="rounded-md border border-input-border px-3 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-divider/40 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className="rounded-md border border-input-border px-3 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-divider/40"
               >
                 Logout
               </button>
@@ -122,7 +122,7 @@ const Navbar = () => {
           onClick={toggleMenu}
           aria-expanded={isOpen}
           aria-label="Toggle navigation"
-          className="rounded-md p-2 text-text-muted hover:bg-divider/40 hover:text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30 md:hidden"
+          className="rounded-md p-2 text-text-muted hover:bg-divider/40 hover:text-text-primary md:hidden"
         >
           <svg
             className="h-6 w-6"
@@ -188,7 +188,7 @@ const Navbar = () => {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="w-full rounded-md border border-input-border px-3 py-2 text-left text-sm font-medium text-text-primary transition-colors hover:bg-divider/40 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="w-full rounded-md border border-input-border px-3 py-2 text-left text-sm font-medium text-text-primary transition-colors hover:bg-divider/40"
                 >
                   Logout
                 </button>

@@ -96,7 +96,7 @@ const ExpenseForm = ({
       "text-text-primary",
       "placeholder:text-text-muted",
       "transition-colors",
-      hasError ? "border-error!" : "",
+      hasError ? "!border-error" : "",
     ]
       .filter(Boolean)
       .join(" ")

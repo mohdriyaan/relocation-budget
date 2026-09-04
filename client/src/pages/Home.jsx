@@ -85,11 +85,11 @@ const Home = () => {
 
   return (
     <main className="min-h-[calc(100vh-4rem)] bg-canvas">
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-        <div className="space-y-14">
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8 lg:py-14">
+        <div className="space-y-12">
           {/* Header */}
           <header className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <div className="max-w-2xl space-y-3">
+            <div className="max-w-3xl space-y-4">
               <p className="text-sm font-medium text-text-muted">
                 Relocation budget
               </p>
@@ -98,7 +98,7 @@ const Home = () => {
                 Welcome back, {user?.name || "User"}.
               </h1>
 
-              <p className="max-w-xl text-sm leading-6 text-text-muted sm:text-base">
+              <p className="max-w-2xl text-sm leading-6 text-text-muted sm:text-base sm:leading-7">
                 Keep your relocation plan grounded in what you can
                 comfortably afford.
               </p>
@@ -113,14 +113,14 @@ const Home = () => {
           </header>
 
           {/* Budget Overview */}
-          <section className="space-y-8">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <section className="space-y-7">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <h2 className="text-xl font-semibold leading-tighter tracking-tightest text-text-primary">
+                <h2 className="text-xl font-semibold leading-tight tracking-tightest text-text-primary">
                   Budget overview
                 </h2>
 
-                <p className="mt-2 text-sm text-text-muted">
+                <p className="mt-2 text-sm leading-6 text-text-muted">
                   A clear view of what is available, planned, and left.
                 </p>
               </div>
@@ -128,7 +128,7 @@ const Home = () => {
               {hasActiveBudget && (
                 <Link
                   to="/calculator"
-                  className="w-fit text-sm font-medium text-primary underline-offset-4 transition-colors hover:underline"
+                  className="w-fit text-sm font-medium text-primary underline-offset-4 transition-colors hover:text-primary-hover hover:underline"
                 >
                   Manage expenses
                 </Link>
@@ -201,11 +201,11 @@ const Home = () => {
                     Getting started
                   </p>
 
-                  <h3 className="text-2xl font-semibold leading-tighter tracking-tightest text-text-primary">
+                  <h3 className="text-2xl font-semibold leading-tight tracking-tightest text-text-primary">
                     Set up your relocation budget
                   </h3>
 
-                  <p className="text-sm leading-6 text-text-muted sm:text-base">
+                  <p className="text-sm leading-6 text-text-muted sm:text-base sm:leading-7">
                     Add your savings and destination currency to begin
                     planning your relocation costs.
                   </p>
@@ -300,7 +300,7 @@ const Home = () => {
                     </div>
 
                     {/* Allocation Bridge */}
-                    <div className="mt-9 border-t border-border-subtle pt-7">
+                    <div className="mt-8 border-t border-border-subtle pt-6">
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                         <div>
                           <p className="text-sm font-medium text-text-primary">
@@ -392,11 +392,11 @@ const Home = () => {
                 <section className="border-y border-border-subtle">
                   <div className="flex flex-col gap-3 border-b border-border-subtle py-6 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                      <h3 className="text-xl font-semibold leading-tighter tracking-tightest text-text-primary">
+                      <h3 className="text-xl font-semibold leading-tight tracking-tightest text-text-primary">
                         Expenses
                       </h3>
 
-                      <p className="mt-2 text-sm text-text-muted">
+                      <p className="mt-2 text-sm leading-6 text-text-muted">
                         Your largest planned relocation costs.
                       </p>
                     </div>
@@ -404,7 +404,7 @@ const Home = () => {
                     {expenses.length > 5 && (
                       <Link
                         to="/calculator"
-                        className="w-fit text-sm font-medium text-primary underline-offset-4 transition-colors hover:underline"
+                        className="w-fit text-sm font-medium text-primary underline-offset-4 transition-colors hover:text-primary-hover hover:underline"
                       >
                         View all {expenses.length}
                       </Link>
@@ -419,7 +419,7 @@ const Home = () => {
 
                       <Link
                         to="/calculator"
-                        className="mt-3 inline-flex text-sm font-medium text-primary underline-offset-4 hover:underline"
+                        className="mt-3 inline-flex text-sm font-medium text-primary underline-offset-4 transition-colors hover:text-primary-hover hover:underline"
                       >
                         Add an expense
                       </Link>

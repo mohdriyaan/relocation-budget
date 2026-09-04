@@ -48,9 +48,9 @@ function CalculatorForm({
   return (
     <section className="rounded-xl border border-divider bg-surface p-6 sm:p-8">
       <div className="space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight text-text-primary">
+        <h2 className="text-2xl font-semibold tracking-tight text-text-primary">
           Calculate your relocation budget
-        </h1>
+        </h2>
 
         <p className="max-w-xl text-sm leading-6 text-text-muted">
           Convert your savings into your destination currency and see how much

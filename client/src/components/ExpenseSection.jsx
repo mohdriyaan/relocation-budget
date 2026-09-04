@@ -23,7 +23,7 @@ function ExpenseSection({
   }
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-10">
       {/* Add expense */}
       <section className="border-y border-border-subtle py-8">
         <div className="max-w-2xl space-y-2">
