@@ -260,72 +260,72 @@ const CalculatorSummary = ({
           </p>
         </div>
 
-        <div className="mt-6 divide-y divide-divider border-y border-border-subtle">
+        <dl className="mt-6 divide-y divide-divider border-y border-border-subtle">
           {/* Total */}
           <div className="grid grid-cols-[minmax(0,1fr)_3rem_auto] items-center gap-3 py-4 sm:grid-cols-[minmax(0,1fr)_4rem_8rem] sm:gap-5">
-            <div className="text-sm font-medium text-text-primary">
+            <dt className="text-sm font-medium text-text-primary">
               Total expenses
-            </div>
+            </dt>
 
             <span className="justify-self-end text-xs font-medium text-text-muted">
               {planned.currency}
             </span>
 
-            <div className="whitespace-nowrap justify-self-end text-sm font-medium tabular-nums text-text-primary">
+            <dd className="whitespace-nowrap justify-self-end text-sm font-medium tabular-nums text-text-primary">
               {planned.value}
-            </div>
+            </dd>
           </div>
 
           {/* One-time */}
           <div className="grid grid-cols-[minmax(0,1fr)_3rem_auto] items-center gap-3 py-4 sm:grid-cols-[minmax(0,1fr)_4rem_8rem] sm:gap-5">
-            <div className="text-sm text-text-muted">
+            <dt className="text-sm text-text-muted">
               One-time expenses
-            </div>
+            </dt>
 
             <span className="justify-self-end text-xs font-medium text-text-muted">
               {oneTime.currency}
             </span>
 
-            <div className="whitespace-nowrap justify-self-end text-sm font-medium tabular-nums text-text-primary">
+            <dd className="whitespace-nowrap justify-self-end text-sm font-medium tabular-nums text-text-primary">
               {oneTime.value}
-            </div>
+            </dd>
           </div>
 
           {/* Monthly */}
           <div className="grid grid-cols-[minmax(0,1fr)_3rem_auto] items-center gap-3 py-4 sm:grid-cols-[minmax(0,1fr)_4rem_8rem] sm:gap-5">
-            <div className="text-sm text-text-muted">
+            <dt className="text-sm text-text-muted">
               Monthly expenses
-            </div>
+            </dt>
 
             <span className="justify-self-end text-xs font-medium text-text-muted">
               {monthly.currency}
             </span>
 
-            <div className="whitespace-nowrap justify-self-end text-sm font-medium tabular-nums text-text-primary">
+            <dd className="whitespace-nowrap justify-self-end text-sm font-medium tabular-nums text-text-primary">
               {monthly.value}
-            </div>
+            </dd>
           </div>
 
           {/* Remaining */}
           <div className="grid grid-cols-[minmax(0,1fr)_3rem_auto] items-center gap-3 py-4 sm:grid-cols-[minmax(0,1fr)_4rem_8rem] sm:gap-5">
-            <div className="text-sm font-medium text-text-primary">
+            <dt className="text-sm font-medium text-text-primary">
               Remaining budget
-            </div>
+            </dt>
 
             <span className="justify-self-end text-xs font-medium text-text-muted">
               {remaining.currency}
             </span>
 
-            <div
-              className={`justify-self-end text-sm font-medium tabular-nums ${isOverBudget
+            <dd
+              className={`whitespace-nowrap justify-self-end text-sm font-medium tabular-nums ${isOverBudget
                 ? "text-error"
                 : "text-success"
                 }`}
             >
               {remaining.value}
-            </div>
+            </dd>
           </div>
-        </div>
+        </dl>
       </div>
 
       {/* Runway insight */}
