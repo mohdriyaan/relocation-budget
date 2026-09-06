@@ -9,13 +9,13 @@ import cors from "cors"
 import connectDB from "./config/db.js"
 import authRoute from "./routes/authRoutes.js"
 import cookieParser from "cookie-parser"
+import { PORT, CLIENT_ORIGIN } from "./config/env.js"
 
 const app = express()
-const PORT = process.env.PORT || 5000
 
 app.use(express.json())
 app.use(cors({
-  origin : "http://localhost:5173",
+  origin : CLIENT_ORIGIN,
   credentials : true
 }))
 app.use(cookieParser())

@@ -366,6 +366,7 @@ Create a `.env` file inside the `server` directory:
 PORT=5000
 DB_URL=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
+CLIENT_ORIGIN=http://localhost:5173
 ```
 
 > Do not commit real credentials or secrets to the repository.
