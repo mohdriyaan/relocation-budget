@@ -123,7 +123,7 @@ const Navbar = () => {
           aria-expanded={isOpen}
           aria-controls="mobile-navigation"
           aria-label={isOpen ? "Close navigation" : "Open navigation"}
-          className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-md p-2 text-text-muted hover:bg-divider/40 hover:text-text-primary"
+          className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-md p-2 text-text-muted hover:bg-divider/40 hover:text-text-primary md:hidden"
         >
           <svg
             className="h-6 w-6"
