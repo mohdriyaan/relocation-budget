@@ -27,7 +27,7 @@ const Navbar = () => {
   }
 
   const navLinkStyles = ({ isActive }) =>
-    `inline-flex items-center px-3 py-2 text-sm font-medium border-b-2 transition-colors ${
+    `inline-flex w-fit items-center px-3 py-2 text-sm font-medium border-b-2 transition-colors ${
       isActive
         ? "border-primary text-text-primary"
         : "border-transparent text-text-muted hover:border-divider hover:text-text-primary"
