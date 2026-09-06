@@ -262,7 +262,7 @@ const CalculatorSummary = ({
 
         <dl className="mt-6 divide-y divide-divider border-y border-border-subtle">
           {/* Total */}
-          <div className="grid grid-cols-[minmax(0,1fr)_4rem_8rem] items-center gap-5 py-4">
+          <div className="grid grid-cols-[minmax(0,1fr)_3rem_auto] items-center gap-3 py-4 sm:grid-cols-[minmax(0,1fr)_4rem_8rem] sm:gap-5">
             <dt className="text-sm font-medium text-text-primary">
               Total expenses
             </dt>
@@ -271,13 +271,13 @@ const CalculatorSummary = ({
               {planned.currency}
             </span>
 
-            <dd className="justify-self-end text-sm font-medium tabular-nums text-text-primary">
+            <dd className="whitespace-nowrap justify-self-end text-sm font-medium tabular-nums text-text-primary">
               {planned.value}
             </dd>
           </div>
 
           {/* One-time */}
-          <div className="grid grid-cols-[minmax(0,1fr)_4rem_8rem] items-center gap-5 py-4">
+          <div className="grid grid-cols-[minmax(0,1fr)_3rem_auto] items-center gap-3 py-4 sm:grid-cols-[minmax(0,1fr)_4rem_8rem] sm:gap-5">
             <dt className="text-sm text-text-muted">
               One-time expenses
             </dt>
@@ -286,13 +286,13 @@ const CalculatorSummary = ({
               {oneTime.currency}
             </span>
 
-            <dd className="justify-self-end text-sm font-medium tabular-nums text-text-primary">
+            <dd className="whitespace-nowrap justify-self-end text-sm font-medium tabular-nums text-text-primary">
               {oneTime.value}
             </dd>
           </div>
 
           {/* Monthly */}
-          <div className="grid grid-cols-[minmax(0,1fr)_4rem_8rem] items-center gap-5 py-4">
+          <div className="grid grid-cols-[minmax(0,1fr)_3rem_auto] items-center gap-3 py-4 sm:grid-cols-[minmax(0,1fr)_4rem_8rem] sm:gap-5">
             <dt className="text-sm text-text-muted">
               Monthly expenses
             </dt>
@@ -301,13 +301,13 @@ const CalculatorSummary = ({
               {monthly.currency}
             </span>
 
-            <dd className="justify-self-end text-sm font-medium tabular-nums text-text-primary">
+            <dd className="whitespace-nowrap justify-self-end text-sm font-medium tabular-nums text-text-primary">
               {monthly.value}
             </dd>
           </div>
 
           {/* Remaining */}
-          <div className="grid grid-cols-[minmax(0,1fr)_4rem_8rem] items-center gap-5 py-4">
+          <div className="grid grid-cols-[minmax(0,1fr)_3rem_auto] items-center gap-3 py-4 sm:grid-cols-[minmax(0,1fr)_4rem_8rem] sm:gap-5">
             <dt className="text-sm font-medium text-text-primary">
               Remaining budget
             </dt>
