@@ -204,7 +204,6 @@ const Calculator = () => {
                 destinationCurrency={
                   calculationData.destinationCurrency
                 }
-                savings={calculationData.savings}
                 result={result}
                 totalExpenses={totalExpenses}
                 rate={exchangeRate}

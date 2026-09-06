@@ -4,7 +4,6 @@ import getBudgetStatus from "../utils/getBudgetStatus.js"
 const CalculatorSummary = ({
   originCurrency,
   destinationCurrency,
-  savings,
   result,
   remainingBudget,
   totalExpenses,
@@ -45,11 +44,6 @@ const CalculatorSummary = ({
   const monthly = formatMoney(
     destinationCurrency,
     monthlyExpenses
-  )
-
-  const originalSavings = formatMoney(
-    originCurrency,
-    savings
   )
 
   const plannedPercentage =
