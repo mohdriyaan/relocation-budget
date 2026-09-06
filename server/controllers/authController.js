@@ -1,3 +1,4 @@
+import { IS_PRODUCTION, JWT_SECRET } from "../config/env.js"
 import User from "../models/User.js"
 import jwt from "jsonwebtoken"
 
@@ -82,19 +83,11 @@ const loginUser = async (req, res) => {
       })
     }
 
-    const secretJWT = process.env.JWT_SECRET
-
-    if (!secretJWT) {
-      return res.status(500).json({
-        error: "JWT secret is not configured"
-      })
-    }
-
     const token = jwt.sign(
       {
         id: user._id
       },
-      secretJWT,
+      JWT_SECRET,
       {
         expiresIn: "1d"
       }
@@ -102,8 +95,8 @@ const loginUser = async (req, res) => {
 
     res.cookie("accessToken", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: IS_PRODUCTION,
+      sameSite: IS_PRODUCTION ? "none" : "lax",
       maxAge: 24 * 60 * 60 * 1000
     })
 
@@ -127,8 +120,8 @@ const logoutUser = async (req, res) => {
   try {
     res.clearCookie("accessToken", {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax"
+      secure: IS_PRODUCTION,
+      sameSite: IS_PRODUCTION ? "none" : "lax"
     })
 
     return res.status(200).json({

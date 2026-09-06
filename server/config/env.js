@@ -24,8 +24,14 @@ if (!Number.isInteger(PORT) || PORT <= 0) {
 }
 
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN
+const JWT_SECRET = process.env.JWT_SECRET
+
+const NODE_ENV = process.env.NODE_ENV || "development"
+const IS_PRODUCTION = NODE_ENV === "production"
 
 export {
   PORT,
   CLIENT_ORIGIN,
+  JWT_SECRET,
+  IS_PRODUCTION
 }

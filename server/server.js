@@ -15,28 +15,40 @@ const app = express()
 
 app.use(express.json())
 app.use(cors({
-  origin : CLIENT_ORIGIN,
-  credentials : true
+  origin: CLIENT_ORIGIN,
+  credentials: true
 }))
 app.use(cookieParser())
 
-app.get("/",(req,res)=>{
+app.get("/", (req, res) => {
   res.send("Relocation Budget API")
 })
 
-app.use("/api/health",healthRoute)
-app.use("/api/currency",currencyRoute)
-app.use("/api/exchange-rate",exchangeRateRoute)
-app.use("/api/expenses",expenseRoute)
+app.use("/api/health", healthRoute)
+app.use("/api/currency", currencyRoute)
+app.use("/api/exchange-rate", exchangeRateRoute)
+app.use("/api/expenses", expenseRoute)
 app.use("/api/auth", authRoute)
-app.use("/api/budget",budgetRoute)
+app.use("/api/budget", budgetRoute)
 
-async function startServer(){
-  await connectDB()
-  
-  app.listen(PORT,()=>{
-    console.log(`Server started running on ${PORT}`)
+app.use((req,res)=>{
+  return res.status(404).json({
+    error : "Route not found"
   })
+})
+
+async function startServer() {
+  try {
+    await connectDB()
+
+    app.listen(PORT, () => {
+      console.log(`Server started running on ${PORT}`)
+    })
+  } catch (error) {
+    console.error(`Server startup failed: ${error.message}`)
+
+    process.exit(1)
+  }
 }
 
 startServer()
