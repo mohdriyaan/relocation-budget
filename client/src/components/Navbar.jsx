@@ -121,8 +121,9 @@ const Navbar = () => {
           type="button"
           onClick={toggleMenu}
           aria-expanded={isOpen}
-          aria-label="Toggle navigation"
-          className="rounded-md p-2 text-text-muted hover:bg-divider/40 hover:text-text-primary md:hidden"
+          aria-controls="mobile-navigation"
+          aria-label={isOpen ? "Close navigation" : "Open navigation"}
+          className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-md p-2 text-text-muted hover:bg-divider/40 hover:text-text-primary"
         >
           <svg
             className="h-6 w-6"
@@ -149,7 +150,10 @@ const Navbar = () => {
       </div>
 
       {isOpen && (
-        <div className="border-t border-divider bg-surface px-4 py-4 md:hidden">
+        <div 
+          id="mobile-navigation"
+          className="border-t border-divider bg-surface px-4 py-4 md:hidden"
+        >
           <div className="flex flex-col gap-1">
             <NavLink
               to="/"
