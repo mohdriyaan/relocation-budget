@@ -36,6 +36,10 @@ const ExpenseItem = ({
 
   const handleCancelDelete = () => {
     setIsConfirmingDelete(false)
+
+    requestAnimationFrame(() => {
+      deleteButtonRef.current?.focus()
+    })
   }
 
   const handleConfirmDelete = async () => {
