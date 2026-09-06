@@ -198,7 +198,7 @@ const Calculator = () => {
 
           {/* Financial report */}
           {showSummary && result !== null && calculationData && (
-            <section className="border-t border-border-subtle pt-12">
+            <section>
               <CalculatorSummary
                 originCurrency={calculationData.originCurrency}
                 destinationCurrency={
