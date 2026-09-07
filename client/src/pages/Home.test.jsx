@@ -48,7 +48,7 @@ describe("Home", () => {
   })
 
   it("renders the dashboard heading and user name", () => {
-    renderHome(<Home />)
+    renderHome()
 
     expect(
       screen.getByRole("heading", {
@@ -75,7 +75,7 @@ describe("Home", () => {
       loading: true,
     })
 
-    renderHome(<Home />)
+    renderHome()
 
     expect(
       screen.getByRole("status", {
@@ -89,7 +89,7 @@ describe("Home", () => {
   })
 
   it("renders the setup state when no budget exists", () => {
-    renderHome(<Home />)
+    renderHome()
 
     expect(
       screen.getByText("Getting started")
@@ -117,7 +117,7 @@ describe("Home", () => {
       fetchDashboardData,
     })
 
-    renderHome(<Home />)
+    renderHome()
 
     expect(
       screen.getByRole("alert")
@@ -148,7 +148,7 @@ describe("Home", () => {
       convertedExpenseDetails: [],
     })
 
-    renderHome(<Home />)
+    renderHome()
 
     expect(
       screen.getByText("Available")
@@ -236,7 +236,7 @@ describe("Home", () => {
       ],
     })
 
-    renderHome(<Home />)
+    renderHome()
 
     expect(
       screen.getByRole("heading", {
@@ -271,7 +271,7 @@ describe("Home", () => {
       convertedExpenseDetails: [],
     })
 
-    renderHome(<Home />)
+    renderHome()
 
     expect(
       screen.getByText("No expenses have been added yet.")
