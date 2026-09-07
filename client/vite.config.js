@@ -10,6 +10,6 @@ export default defineConfig({
   ],
 
   test : {
-    enviroment : "node"
+    environment : "node"
   }
 })
