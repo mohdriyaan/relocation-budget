@@ -1,28 +1,17 @@
 import {
-  afterEach,
-  beforeEach,
   describe,
   expect,
   it,
-  vi,
+  vi
 } from "vitest"
-import { render, screen, waitFor } from "@testing-library/react"
+import {
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 
 import ExpenseItem from "./ExpenseItem.jsx"
-
-beforeEach(() => {
-  vi.clearAllMocks()
-
-  vi.stubGlobal(
-    "requestAnimationFrame",
-    (callback) => setTimeout(callback, 0)
-  )
-})
-
-afterEach(() => {
-  vi.unstubAllGlobals()
-})
 
 describe("ExpenseItem", () => {
   const expense = {
@@ -41,18 +30,6 @@ describe("ExpenseItem", () => {
     onEditExpense: vi.fn(),
     onDeleteConfirmed: vi.fn(),
   }
-
-  beforeEach(() => {
-    vi.clearAllMocks()
-
-    vi.stubGlobal("requestAnimationFrame", (callback) => {
-      return setTimeout(callback, 0)
-    })
-  })
-
-  afterEach(() => {
-    vi.unstubAllGlobals()
-  })
 
   it("renders expense details", () => {
     render(<ExpenseItem {...defaultProps} />)

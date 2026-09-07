@@ -21,10 +21,17 @@ const ExpenseItem = ({
 
   const cancelButtonRef = useRef(null)
   const deleteButtonRef = useRef(null)
+  const shouldRestoreDeleteFocusRef = useRef(false)
 
   useEffect(() => {
     if (isConfirmingDelete) {
       cancelButtonRef.current?.focus()
+      return
+    }
+
+    if (shouldRestoreDeleteFocusRef.current) {
+      shouldRestoreDeleteFocusRef.current = false
+      deleteButtonRef.current?.focus()
     }
   }, [isConfirmingDelete])
 
@@ -35,24 +42,19 @@ const ExpenseItem = ({
   }
 
   const handleCancelDelete = () => {
+    shouldRestoreDeleteFocusRef.current = true
     setIsConfirmingDelete(false)
-
-    requestAnimationFrame(() => {
-      deleteButtonRef.current?.focus()
-    })
   }
 
   const handleConfirmDelete = async () => {
     try {
       await onDeleteExpense(_id)
+
       setIsConfirmingDelete(false)
       onDeleteConfirmed?.()
     } catch {
+      shouldRestoreDeleteFocusRef.current = true
       setIsConfirmingDelete(false)
-
-      requestAnimationFrame(() => {
-        deleteButtonRef.current?.focus()
-      })
     }
   }
 
@@ -60,7 +62,6 @@ const ExpenseItem = ({
     <article className="group border-b border-border-subtle transition-colors hover:bg-surface-raised">
       {!isConfirmingDelete ? (
         <div className="grid grid-cols-1 gap-5 px-1 py-6 sm:grid-cols-[minmax(0,1fr)_4rem_8rem_4.5rem] sm:items-center sm:gap-5">
-          {/* Details */}
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-medium text-text-muted">
@@ -92,17 +93,14 @@ const ExpenseItem = ({
             )}
           </div>
 
-          {/* Currency */}
           <span className="justify-self-end text-xs font-medium text-text-muted">
             {currency}
           </span>
 
-          {/* Amount */}
           <span className="justify-self-end text-sm font-medium tabular-nums text-text-primary">
             {formattedAmount}
           </span>
 
-          {/* Actions */}
           <div className="flex items-center justify-end gap-1">
             <button
               type="button"
@@ -146,7 +144,7 @@ const ExpenseItem = ({
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M6 7h12M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7m-7 0 .75 12h6.5L16 7M10 11v5m4-5v5"
+                  d="M6 7h12M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 7v-.75l-.75 12h6.5L16 7M10 11v5m4-5v5"
                 />
               </svg>
             </button>
