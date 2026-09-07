@@ -1,8 +1,28 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from "vitest"
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest"
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 
 import ExpenseItem from "./ExpenseItem.jsx"
+
+beforeEach(() => {
+  vi.clearAllMocks()
+
+  vi.stubGlobal(
+    "requestAnimationFrame",
+    (callback) => setTimeout(callback, 0)
+  )
+})
+
+afterEach(() => {
+  vi.unstubAllGlobals()
+})
 
 describe("ExpenseItem", () => {
   const expense = {
@@ -262,8 +282,9 @@ describe("ExpenseItem", () => {
 
     render(
       <ExpenseItem
-        {...defaultProps}
+        expense={expense}
         onDeleteExpense={onDeleteExpense}
+        onEditExpense={vi.fn()}
       />
     )
 
@@ -276,12 +297,15 @@ describe("ExpenseItem", () => {
     await user.click(
       screen.getByRole("button", {
         name: "Delete",
+        exact: true,
       })
     )
 
-    expect(
-      screen.queryByText("Delete this expense?")
-    ).not.toBeInTheDocument()
+    await waitFor(() => {
+      expect(onDeleteExpense).toHaveBeenCalledWith(
+        expense._id
+      )
+    })
 
     await waitFor(() => {
       expect(
