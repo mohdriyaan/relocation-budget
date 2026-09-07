@@ -86,9 +86,9 @@ function CalculatorForm({
                 name={field.name}
                 label="Destination currency"
                 value={field.value}
-                onChange={(value) => {
-                  field.onChange(value)
-                  onDestinationCurrencyChange(value)
+                onChange={(event) => {
+                  field.onChange(event)
+                  onDestinationCurrencyChange(event.target.value)
                 }}
                 error={fieldState.error?.message}
               />
