@@ -1,34 +1,37 @@
 # Relocation Budget
 
-A full-stack web application designed to help people planning an international relocation understand their savings, planned expenses, currency conversions, and remaining financial runway in one place.
+A full-stack MERN application for planning the financial side of an international relocation.
 
-> Built as a production-oriented MERN project with a focus on authentication, validation, reusable business logic, API integration, and maintainable application architecture.
+Relocation Budget helps users understand how their savings, planned expenses, currencies, and recurring costs affect their remaining budget and financial runway.
+
+> Built as a production-oriented portfolio project with authentication, REST APIs, MongoDB persistence, multi-currency calculations, validation, error handling, testing, and responsive UI.
 
 ---
 
 ## Overview
 
-Moving to another country involves more than estimating rent and travel costs. Expenses can exist in multiple currencies, occur at different frequencies, and quickly make it difficult to understand how much money will actually remain after relocation.
+Planning an international move often means dealing with expenses across different currencies and with very different payment frequencies.
 
-**Relocation Budget** brings these calculations together into a single application.
+Relocation Budget brings those calculations into one place.
 
 Users can:
 
-- Create an account and securely sign in
-- Record available savings
-- Select origin and destination currencies
+- Create an account and authenticate securely
+- Record their available savings
+- Choose origin and destination currencies
 - Add, edit, and delete relocation expenses
 - Convert expenses into the destination currency
 - Calculate total planned expenses
 - Calculate remaining budget
-- Estimate financial runway from recurring expenses
-- View a dashboard summarizing their overall relocation budget
+- Estimate monthly recurring expenses
+- Estimate financial runway
+- View an overall relocation budget dashboard
 
 ---
 
-## Features
+## Core Features
 
-### 🔐 Authentication
+### Authentication
 
 - User registration and login
 - JWT-based authentication
@@ -37,24 +40,23 @@ Users can:
 - Session restoration after page reload
 - Logout support
 
-### 💰 Budget Calculator
+### Budget Calculator
 
-- Savings input
-- Origin currency selection
-- Destination currency selection
-- Exchange-rate conversion
+- Savings input and validation
+- Origin and destination currency selection
+- Exchange-rate integration
 - Same-currency calculations
-- Total expense calculation
-- Remaining budget calculation
-- Monthly expense calculation
-- Financial runway calculation
+- Expense conversion into destination currency
+- Remaining-budget calculation
+- Monthly burn-rate calculation
+- Financial-runway calculation
 - Loading and error states
 
-### 🧾 Expense Management
+### Expense Management
 
-Users can create and manage expenses with:
+Expenses contain:
 
-- Expense name
+- Name
 - Category
 - Amount
 - Currency
@@ -72,7 +74,9 @@ Supported categories:
 - Insurance
 - Other
 
-### 🌍 Multi-Currency Support
+Users can create, edit, and delete their planned expenses.
+
+### Multi-Currency Support
 
 The application currently supports:
 
@@ -84,17 +88,35 @@ The application currently supports:
 - AUD
 - CAD
 
-Exchange rates are retrieved from an external exchange-rate service and used to normalize expenses into the selected destination currency.
+Exchange rates are retrieved from an external exchange-rate service and used to normalize financial calculations into the selected destination currency.
 
-### 📊 Dashboard
+### Dashboard
 
-The dashboard provides a high-level overview of:
+The dashboard provides a high-level view of:
 
 - Total savings in destination currency
-- Planned expenses
+- Total planned expenses
 - Remaining budget
 - Budget status
-- Quick access to the calculator and expense management
+- Monthly recurring expenses
+- Financial runway
+- Quick access to calculator and expense management
+
+---
+
+## Screenshots
+
+> Screenshots will be added after the final visual polish and deployment stage.
+
+<!--
+Add screenshots here later.
+
+Example:
+
+![Dashboard](./docs/images/dashboard.png)
+![Budget Calculator](./docs/images/calculator.png)
+![Expense Management](./docs/images/expenses.png)
+-->
 
 ---
 
@@ -109,6 +131,8 @@ The dashboard provides a high-level overview of:
 - React Hook Form
 - Zod
 - JavaScript
+- Vitest
+- React Testing Library
 
 ### Backend
 
@@ -120,12 +144,14 @@ The dashboard provides a high-level overview of:
 - bcryptjs
 - Cookie Parser
 - CORS
+- Vitest
+- Supertest
 
 ---
 
 ## Architecture
 
-The application follows a client/server architecture with a clear separation of responsibilities.
+Relocation Budget follows a client/server architecture with clear separation between presentation, business logic, API communication, authentication, and persistence.
 
 ```text
 relocation-budget/
@@ -134,28 +160,28 @@ relocation-budget/
 │   └── src/
 │       ├── components/     # Reusable UI components
 │       ├── config/         # Frontend configuration
-│       ├── context/        # React context
+│       ├── context/        # Authentication context
 │       ├── data/           # Static application data
 │       ├── hooks/          # Reusable React hooks
 │       ├── pages/          # Application pages
-│       ├── schemas/        # Form validation schemas
+│       ├── schemas/        # Validation schemas
 │       ├── services/       # API communication
-│       └── utils/          # Pure calculation/helper functions
+│       └── utils/          # Pure calculation utilities
 │
 ├── server/
 │   ├── config/             # Database configuration
-│   ├── constants/          # Shared backend constants
+│   ├── constants/          # Backend constants
 │   ├── controllers/        # Request handling
 │   ├── middleware/         # Authentication and middleware
 │   ├── models/             # Mongoose models
-│   ├── routes/             # API routes
+│   ├── routes/             # REST API routes
 │   ├── services/           # External service integrations
 │   └── utils/              # Backend utilities
 │
 └── README.md
 ```
 
-### High-Level Flow
+### Request Flow
 
 ```text
 ┌──────────────────────┐
@@ -164,7 +190,7 @@ relocation-budget/
            │
            ▼
 ┌──────────────────────┐
-│   React Frontend     │
+│    React Frontend    │
 │                       │
 │ • Authentication      │
 │ • Budget Calculator   │
@@ -177,12 +203,12 @@ relocation-budget/
 ┌──────────────────────┐
 │   Express Backend    │
 │                       │
-│ • Auth Routes         │
-│ • Budget Routes       │
-│ • Expense Routes      │
-│ • Exchange Rates      │
-│ • Auth Middleware     │
+│ • Authentication      │
+│ • Budget API          │
+│ • Expense API         │
+│ • Currency API        │
 │ • Validation          │
+│ • Authorization       │
 └──────────┬───────────┘
            │
            ▼
@@ -197,22 +223,28 @@ relocation-budget/
 
 ---
 
-## API Endpoints
+## API
+
+### Health
+
+```http
+GET /api/health
+```
 
 ### Authentication
 
 ```http
-POST   /api/auth/register
-POST   /api/auth/login
-POST   /api/auth/logout
-GET    /api/auth/me
+POST /api/auth/register
+POST /api/auth/login
+POST /api/auth/logout
+GET  /api/auth/me
 ```
 
 ### Budget
 
 ```http
-GET    /api/budget
-POST   /api/budget
+GET  /api/budget
+POST /api/budget
 ```
 
 ### Expenses
@@ -224,81 +256,96 @@ PATCH  /api/expenses/:id
 DELETE /api/expenses/:id
 ```
 
-### Exchange Rates
+### Currency
 
 ```http
-GET    /api/exchange-rate/:from/:to
+GET /api/currency/:code
+```
+
+### Exchange Rate
+
+```http
+GET /api/exchange-rate/:from/:to
 ```
 
 ---
 
 ## Validation & Security
 
-The application validates data at both the frontend and backend layers.
+Validation is performed at both the frontend and backend layers.
 
-### Frontend Validation
+### Frontend
 
 - React Hook Form for form state
-- Zod schemas for input validation
+- Zod validation schemas
 - Currency validation
+- Required-field validation
 - Positive savings validation
 - Positive expense validation
-- Required-field validation
+- Accessible validation messages
+- Loading and error states
 
-### Backend Validation
+### Backend
 
 - Mongoose schema validation
 - Supported currency validation
 - Authentication middleware
+- JWT verification
 - Password hashing with bcrypt
-- JWT authentication
-- HTTP-only cookies
+- HTTP-only authentication cookies
 - User-scoped database queries
 - Expense ownership checks
 - Explicit update fields
+- Centralized environment configuration
+- Production-aware CORS and cookie configuration
 
 ---
 
 ## Engineering Decisions
 
-This project is being developed with maintainability and real-world engineering practices in mind rather than focusing only on getting the UI to work.
+This project was developed with emphasis on maintainability and correctness rather than only feature completion.
 
 ### Separation of Concerns
 
-Application responsibilities are separated into:
+Responsibilities are separated across:
 
 - UI components
 - Pages
-- React hooks
+- Context
+- Custom hooks
 - API services
 - Validation schemas
-- Pure calculation utilities
+- Calculation utilities
 - Controllers
-- Database models
+- Models
 - Middleware
 - External services
 
 ### Reusable Business Logic
 
-Currency conversion and budget calculations are handled through reusable utilities and hooks instead of duplicating the same logic across different pages.
+Currency conversion and budget calculations are implemented as reusable utilities rather than duplicated across components.
 
-### Centralized Currency Configuration
+### Centralized Configuration
 
-Supported currencies are maintained from a shared backend source and reused by validation and database models.
+Application configuration such as API URLs, supported currencies, and server environment values is centralized to avoid scattering configuration throughout the codebase.
 
 ### Explicit Data Handling
 
-API requests use explicit fields rather than blindly passing entire request bodies into database operations.
+Backend updates use explicit fields instead of blindly passing complete request bodies into database operations.
 
-### Error and Loading States
+### User-Scoped Data
 
-The frontend provides dedicated loading, error, and empty states to make asynchronous operations easier for users to understand.
+Authenticated resources are queried using the authenticated user's identity, preventing users from accessing another user's budget or expenses.
+
+### Error & Loading States
+
+The UI explicitly handles loading, success, error, empty, and validation states for asynchronous operations.
 
 ---
 
 ## Budget Calculation
 
-The application converts savings and expenses into the selected destination currency before calculating the remaining budget.
+The application converts savings and expenses into the selected destination currency before calculating budget insights.
 
 ```text
 Savings
@@ -307,22 +354,65 @@ Savings
 Convert to destination currency
    │
    ▼
-Total available budget
+Available budget
    │
-   ├───────────────┐
-   │               │
-   ▼               ▼
-Expenses       Monthly expenses
-   │               │
-   ▼               ▼
-Converted total   Monthly burn rate
-   │               │
-   └───────┬───────┘
-           ▼
-      Budget insights
-           │
-           ├── Remaining Budget
-           └── Financial Runway
+   ├───────────────────┐
+   │                   │
+   ▼                   ▼
+Planned expenses    Monthly expenses
+   │                   │
+   ▼                   ▼
+Converted total     Monthly burn rate
+   │                   │
+   └─────────┬─────────┘
+             ▼
+        Budget insights
+             │
+             ├── Remaining budget
+             └── Financial runway
+```
+
+---
+
+## Testing
+
+The project includes automated frontend and backend tests covering core application behavior.
+
+### Frontend
+
+- Component rendering
+- Form validation
+- Form submission
+- Authentication flows
+- Dashboard states
+- Expense interactions
+- Protected routes
+- Calculation utilities
+- Currency normalization
+- API service behavior
+
+### Backend
+
+- Application configuration
+- Authentication API
+- Budget API
+- Expense CRUD API
+- Public API endpoints
+- Validation and authorization behavior
+
+### Test Results
+
+```text
+Frontend: 123 tests passing
+Backend:   45 tests passing
+Total:    168 tests passing
+```
+
+The client also passes:
+
+```bash
+npm run lint
+npm run build
 ```
 
 ---
@@ -331,36 +421,36 @@ Converted total   Monthly burn rate
 
 ### Prerequisites
 
-Make sure the following are installed:
+Make sure you have:
 
 - Node.js
 - npm
 - MongoDB
 
-### Clone the Repository
+### Clone
 
 ```bash
 git clone https://github.com/mohdriyaan/relocation-budget.git
 cd relocation-budget
 ```
 
-### Install Frontend Dependencies
+### Install frontend dependencies
 
 ```bash
 cd client
 npm install
 ```
 
-### Install Backend Dependencies
+### Install backend dependencies
 
 ```bash
 cd ../server
 npm install
 ```
 
-### Configure Environment Variables
+### Environment Variables
 
-Create a `.env` file inside the `server` directory:
+Create `server/.env` using:
 
 ```env
 PORT=5000
@@ -369,16 +459,22 @@ JWT_SECRET=your_jwt_secret
 CLIENT_ORIGIN=http://localhost:5173
 ```
 
-> Do not commit real credentials or secrets to the repository.
+For production, configure the frontend API URL through:
 
-### Start the Backend
+```env
+VITE_API_BASE_URL=your_production_api_url
+```
+
+> Never commit real credentials, secrets, or private connection strings.
+
+### Start the backend
 
 ```bash
 cd server
 npm run dev
 ```
 
-### Start the Frontend
+### Start the frontend
 
 Open another terminal:
 
@@ -386,6 +482,8 @@ Open another terminal:
 cd client
 npm run dev
 ```
+
+The development frontend runs on the Vite development server and communicates with the Express API.
 
 ---
 
@@ -398,6 +496,8 @@ npm run dev
 npm run build
 npm run lint
 npm run preview
+npm run test
+npm run test:run
 ```
 
 ### Server
@@ -405,117 +505,126 @@ npm run preview
 ```bash
 npm run dev
 npm start
+npm run test
+npm run test:run
 ```
 
 ---
 
-## Development Status
+## Project Status
 
 ### Completed
 
 - [x] User registration
-- [x] User login/logout
+- [x] User login and logout
 - [x] Protected routes
 - [x] Session restoration
 - [x] Budget persistence
 - [x] Expense CRUD
 - [x] Multi-currency calculations
 - [x] Exchange-rate integration
-- [x] Budget dashboard
-- [x] Form validation
+- [x] Dashboard
+- [x] Frontend validation
 - [x] Backend validation
-- [x] Currency validation
-- [x] Reusable calculation utilities
-- [x] Dashboard data refactoring
-- [x] Authentication context refactoring
-- [x] Centralized API configuration
-- [x] ESLint-clean frontend
+- [x] Authentication and authorization
+- [x] Error and loading states
+- [x] Business-logic refactoring
+- [x] Responsive UI
+- [x] Accessibility improvements
+- [x] Environment configuration
+- [x] Backend hardening
+- [x] Frontend and backend test coverage
+- [x] Lint and production build verification
 
-### In Progress
+### Remaining
 
-- [ ] Major UI/UX redesign
-- [ ] shadcn/ui integration
-- [ ] Production environment configuration
-- [ ] Backend hardening
-- [ ] Automated testing
 - [ ] Deployment
-- [ ] Expanded project documentation
-
----
-
-## Screenshots
-
-Screenshots and a live demo will be added as the application moves through the UI redesign and deployment stages.
+- [ ] Live demo
+- [ ] Production screenshots
+- [ ] Final repository polish
 
 ---
 
 ## Project Goals
 
-This project is being developed as a practical demonstration of full-stack development rather than a simple CRUD application.
+This project was built to demonstrate practical full-stack engineering rather than only CRUD functionality.
 
-The primary goals are to demonstrate the ability to:
+The project focuses on:
 
-- Identify and model a real-world problem
-- Design a frontend and backend architecture
-- Build and consume REST APIs
-- Implement authentication and protected resources
-- Validate and secure user input
-- Integrate external services
-- Handle asynchronous operations and errors
-- Refactor duplicated business logic
-- Maintain separation of concerns
-- Improve an application iteratively toward production readiness
+- Designing a real-world application
+- Building a React frontend
+- Designing and consuming REST APIs
+- Implementing authentication and authorization
+- Persisting user-owned data with MongoDB
+- Integrating external services
+- Handling validation and asynchronous operations
+- Refactoring business logic
+- Designing reusable application architecture
+- Writing automated tests
+- Improving an application iteratively toward production readiness
 
 ---
 
-## What I Learned
+## What This Project Demonstrates
 
-Through this project, I have strengthened my understanding of:
+### Frontend Engineering
 
-- Full-stack JavaScript development
-- React application architecture
+- Component-based React architecture
+- Form management with React Hook Form
+- Schema validation with Zod
+- Client-side routing
+- Authentication state management
+- Responsive UI development
+- Accessible interaction patterns
+- Automated component testing
+
+### Backend Engineering
+
 - REST API design
-- Authentication and authorization
-- JWT and HTTP-only cookies
+- Express middleware
+- JWT authentication
+- HTTP-only cookies
+- Password hashing
 - MongoDB and Mongoose
-- React Hook Form
-- Zod validation
-- Async API workflows
-- Currency conversion
-- Error handling
-- Loading states
-- Reusable custom hooks
-- Code refactoring
+- Authorization and ownership checks
+- External API integration
+- Automated API testing
+
+### Engineering Practices
+
 - Separation of concerns
-- Backend validation
-- Maintainable application structure
+- Reusable business logic
+- Environment-based configuration
+- Explicit data handling
+- Error handling
+- Loading and empty states
+- Test-driven verification
+- Refactoring toward maintainability
 
 ---
 
 ## Roadmap
 
-The project will continue evolving through the following stages:
-
 ```text
-✅ Core Application
+✅ Core application
         │
         ▼
-✅ Architecture & Refactoring
+✅ Architecture & refactoring
         │
         ▼
-🚧 UI/UX Overhaul
+✅ UI/UX overhaul
         │
         ▼
-🚧 Production Configuration
+✅ Production configuration
         │
         ▼
-🚧 Testing
+✅ Automated testing
         │
         ▼
 🚧 Deployment
         │
         ▼
-🚧 Final Documentation
+🚧 Final presentation
 ```
 
 ---
@@ -531,4 +640,4 @@ GitHub: [@mohdriyaan](https://github.com/mohdriyaan)
 
 ## License
 
-This project is currently intended as a portfolio and learning project.
+This project is currently maintained as a portfolio and learning project.
