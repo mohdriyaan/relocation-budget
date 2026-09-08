@@ -1,7 +1,8 @@
 {
-  "name": "client",
+  "name": "relocation-budget-client",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "React frontend for the Relocation Budget application.",
   "type": "module",
   "scripts": {
     "dev": "vite",

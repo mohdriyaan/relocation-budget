@@ -1,7 +1,7 @@
 {
-  "name": "server",
+  "name": "relocation-budget-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Express REST API for the Relocation Budget application.",
   "main": "server.js",
   "scripts": {
     "test": "vitest",
