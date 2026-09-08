@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/mohdriyaan/relocation-budget/actions/workflows/ci.yml/badge.svg)](https://github.com/mohdriyaan/relocation-budget/actions/workflows/ci.yml)
 
+**Live Demo:** https://relocation-budget.vercel.app/
+
 A full-stack MERN application for planning the financial side of an international relocation.
 
 Relocation Budget helps users understand how their savings, planned expenses, currencies, and recurring costs affect their remaining budget and financial runway.
@@ -108,17 +110,21 @@ The dashboard provides a high-level view of:
 
 ## Screenshots
 
-> Screenshots will be added after the final visual polish and deployment stage.
+### Dashboard
 
-<!--
-Add screenshots here later.
+![Relocation Budget Dashboard](./docs/images/dashboard.png)
 
-Example:
+### Budget Calculator
 
-![Dashboard](./docs/images/dashboard.png)
 ![Budget Calculator](./docs/images/calculator.png)
-![Expense Management](./docs/images/expenses.png)
--->
+
+### Financial Summary
+
+![Financial Summary](./docs/images/calculator-summary.png)
+
+### Authentication
+
+![Relocation Budget Authentication](./docs/images/authentication.png)
 
 ---
 
