@@ -27,14 +27,14 @@ const Navbar = () => {
   }
 
   const navLinkStyles = ({ isActive }) =>
-    `inline-flex w-fit items-center px-3 py-2 text-sm font-medium border-b-2 transition-colors ${
+    `inline-flex items-center border-b-2 px-3 py-2 text-[0.95rem] font-medium transition-colors ${
       isActive
         ? "border-primary text-text-primary"
         : "border-transparent text-text-muted hover:border-divider hover:text-text-primary"
     }`
 
   const authLinkStyles = ({ isActive }) =>
-    `inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+    `inline-flex items-center justify-center rounded-md px-3.5 py-2 text-[0.95rem] font-semibold transition-colors ${
       isActive
         ? "bg-primary text-white"
         : "text-text-muted hover:bg-divider/40 hover:text-text-primary"
@@ -42,12 +42,12 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 border-b border-divider bg-surface">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-17 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-8">
           <Link
             to="/"
             onClick={closeMenu}
-            className="flex items-center gap-3 text-lg font-semibold tracking-tight text-text-primary"
+            className="flex items-center gap-3 text-[1.05rem] font-semibold tracking-tight text-text-primary"
           >
             <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-sm font-bold text-white">
               RB
@@ -77,14 +77,14 @@ const Navbar = () => {
 
         <div className="hidden items-center md:flex">
           {loading ? (
-            <div className="flex items-center gap-2 text-sm text-text-muted">
+            <div className="flex items-center gap-2 text-[0.95rem] text-text-muted">
               <span className="h-4 w-4 animate-spin rounded-full border-2 border-divider border-t-primary" />
               <span>Checking session...</span>
             </div>
           ) : user ? (
             <div className="flex items-center gap-4">
-              <span className="text-sm text-text-muted">
-                Hello,{" "}
+              <span className="text-[0.95rem] text-text-muted">
+                Hello{" "}
                 <strong className="font-semibold text-text-primary">
                   {user.name || "User"}
                 </strong>
@@ -93,7 +93,7 @@ const Navbar = () => {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="rounded-md border border-input-border px-3 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-divider/40"
+                className="rounded-md border border-input-border px-3.5 py-2 text-[0.95rem] font-medium text-text-primary transition-colors hover:bg-divider/40"
               >
                 Logout
               </button>
@@ -123,7 +123,7 @@ const Navbar = () => {
           aria-expanded={isOpen}
           aria-controls="mobile-navigation"
           aria-label={isOpen ? "Close navigation" : "Open navigation"}
-          className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-md p-2 text-text-muted hover:bg-divider/40 hover:text-text-primary md:hidden"
+          className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-md p-2 text-text-muted transition-colors hover:bg-divider/40 hover:text-text-primary md:hidden"
         >
           <svg
             className="h-6 w-6"
@@ -131,6 +131,7 @@ const Navbar = () => {
             viewBox="0 0 24 24"
             stroke="currentColor"
             strokeWidth="1.8"
+            aria-hidden="true"
           >
             {isOpen ? (
               <path
@@ -150,7 +151,7 @@ const Navbar = () => {
       </div>
 
       {isOpen && (
-        <div 
+        <div
           id="mobile-navigation"
           className="border-t border-divider bg-surface px-4 py-4 md:hidden"
         >
@@ -166,8 +167,8 @@ const Navbar = () => {
 
             <NavLink
               to="/calculator"
-              onClick={closeMenu}
               end
+              onClick={closeMenu}
               className={navLinkStyles}
             >
               Calculator
@@ -176,13 +177,13 @@ const Navbar = () => {
 
           <div className="mt-4 border-t border-divider pt-4">
             {loading ? (
-              <div className="flex items-center gap-2 px-2 py-2 text-sm text-text-muted">
+              <div className="flex items-center gap-2 px-2 py-2 text-[0.95rem] text-text-muted">
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-divider border-t-primary" />
                 <span>Checking session...</span>
               </div>
             ) : user ? (
               <div className="space-y-2">
-                <div className="px-2 py-1 text-sm text-text-muted">
+                <div className="px-2 py-1 text-[0.95rem] text-text-muted">
                   Logged in as{" "}
                   <strong className="font-semibold text-text-primary">
                     {user.name || "User"}
@@ -192,7 +193,7 @@ const Navbar = () => {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="w-full rounded-md border border-input-border px-3 py-2 text-left text-sm font-medium text-text-primary transition-colors hover:bg-divider/40"
+                  className="w-full rounded-md border border-input-border px-3 py-2 text-left text-[0.95rem] font-medium text-text-primary transition-colors hover:bg-divider/40"
                 >
                   Logout
                 </button>

@@ -36,9 +36,9 @@ const Login = () => {
     [
       "control-surface",
       "w-full",
-      "px-3",
-      "py-2.5",
-      "text-sm",
+      "px-4",
+      "py-3",
+      "text-base",
       "text-text-primary",
       "placeholder:text-text-muted",
       "transition-colors",
@@ -48,7 +48,7 @@ const Login = () => {
       .join(" ")
 
   const labelClassName =
-    "block text-sm font-medium text-text-muted"
+    "block text-sm font-semibold text-text-primary"
 
   return (
     <AuthPage
@@ -61,7 +61,7 @@ const Login = () => {
       <form
         onSubmit={handleSubmit(onSubmit)}
         noValidate
-        className="space-y-6"
+        className="space-y-7"
       >
         {apiError && (
           <div
@@ -162,7 +162,7 @@ const Login = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting ? (
             <>

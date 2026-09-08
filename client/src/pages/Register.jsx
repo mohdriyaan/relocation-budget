@@ -36,9 +36,9 @@ const Register = () => {
     [
       "control-surface",
       "w-full",
-      "px-3",
-      "py-2.5",
-      "text-sm",
+      "px-4",
+      "py-3",
+      "text-base",
       "text-text-primary",
       "placeholder:text-text-muted",
       "transition-colors",
@@ -48,7 +48,7 @@ const Register = () => {
       .join(" ")
 
   const labelClassName =
-    "block text-sm font-medium text-text-muted"
+    "block text-sm font-semibold text-text-primary"
 
   if (isRegistered) {
     return (
@@ -90,7 +90,7 @@ const Register = () => {
       <form
         onSubmit={handleSubmit(onSubmit)}
         noValidate
-        className="space-y-6"
+        className="space-y-7"
       >
         {apiError && (
           <div
@@ -236,7 +236,7 @@ const Register = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting ? (
             <>
