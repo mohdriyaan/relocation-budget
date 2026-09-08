@@ -144,7 +144,7 @@ const ExpenseItem = ({
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M6 7h12M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 7v-.75l-.75 12h6.5L16 7M10 11v5m4-5v5"
+                  d="M9 7.5h6M10 10v6m4-6v6M6.75 7.5h10.5M9.5 7.5V6a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 14.5 6v1.5m-6.75 0 .75 10.5h7l.75-10.5"
                 />
               </svg>
             </button>
