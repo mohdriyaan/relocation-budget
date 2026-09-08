@@ -1,5 +1,7 @@
 # Relocation Budget
 
+[![CI](https://github.com/mohdriyaan/relocation-budget/actions/workflows/ci.yml/badge.svg)](https://github.com/mohdriyaan/relocation-budget/actions/workflows/ci.yml)
+
 A full-stack MERN application for planning the financial side of an international relocation.
 
 Relocation Budget helps users understand how their savings, planned expenses, currencies, and recurring costs affect their remaining budget and financial runway.
